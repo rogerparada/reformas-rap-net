@@ -1,0 +1,146 @@
+"use server";
+
+import z from "zod";
+
+import { clientSchema, editClientSchema } from "../validations/client-validator";
+import { ClientFormState, EditClientFormState } from "../types/forms";
+import { api, auth } from "../lib";
+import { redirect } from "next/navigation";
+import { ClientInfo } from "../types";
+import { updateTag } from "next/cache";
+
+export const createClientAction = async (prevState: ClientFormState, formData: FormData): Promise<ClientFormState> => {
+	const fields = {
+		name: formData.get("name") as string,
+		email: formData.get("email") as string,
+		phone: formData.get("phone") as string,
+		address: formData.get("address") as string,
+		city: formData.get("city") as string,
+		nif: formData.get("nif") as string,
+	};
+
+	const result = clientSchema.safeParse(fields);
+
+	if (!result.success) {
+		return {
+			...prevState,
+			success: false,
+			message: "Validation Error",
+			serverErrors: null,
+			errors: z.flattenError(result.error).fieldErrors,
+			data: fields,
+		};
+	}
+
+	const jwt = await auth.isAuthenticated();
+	if (!jwt) {
+		return redirect("/login");
+	}
+
+	const response = await api.client.createClient(jwt, result.data);
+
+	if (!response || response.error) {
+		return {
+			...prevState,
+			success: false,
+			message: "Create client error",
+			errors: null,
+			serverErrors: response.error,
+			data: fields,
+		};
+	}
+
+	updateTag("clientes");
+
+	return {
+		...prevState,
+		success: true,
+		message: "Create client successful",
+		errors: null,
+		serverErrors: response.error,
+		data: fields,
+	};
+};
+
+export const editClientAction = async (prevState: EditClientFormState, formData: FormData): Promise<EditClientFormState> => {
+	const fields = {
+		name: formData.get("name") as string,
+		email: formData.get("email") as string,
+		phone: formData.get("phone") as string,
+		address: formData.get("address") as string,
+		city: formData.get("city") as string,
+		nif: formData.get("nif") as string,
+		id: formData.get("id") as string,
+	};
+
+	const result = editClientSchema.safeParse(fields);
+
+	if (!result.success) {
+		return {
+			...prevState,
+			success: false,
+			message: "Validation Error",
+			serverErrors: null,
+			errors: z.flattenError(result.error).fieldErrors,
+			data: fields,
+		};
+	}
+
+	const jwt = await auth.isAuthenticated();
+	if (!jwt) {
+		return redirect("/login");
+	}
+
+	const response = await api.client.editClient(jwt, result.data);
+
+	if (!response || response.error) {
+		return {
+			...prevState,
+			success: false,
+			message: "Edit client error",
+			errors: null,
+			serverErrors: response.error,
+			data: fields,
+		};
+	}
+	updateTag("clientes");
+	updateTag("cliente");
+
+	return {
+		...prevState,
+		success: true,
+		message: "Edit client successful",
+		errors: null,
+		serverErrors: response.error,
+		data: fields,
+	};
+};
+
+export const deleteClientAction = async (id: ClientInfo["documentId"]) => {
+	if (id?.length !== 24) {
+		return {
+			success: false,
+			errors: `Error(${id?.length}): La id del cliente no es valida`,
+		};
+	}
+
+	const jwt = await auth.isAuthenticated();
+	if (!jwt) {
+		return redirect("/login");
+	}
+
+	const response = await api.client.deleteClient(jwt, id);
+
+	if (response?.status !== 204) {
+		return {
+			success: false,
+			errors: "Error eliminando documento",
+		};
+	}
+	updateTag("clientes");
+
+	return {
+		success: true,
+		errors: undefined,
+	};
+};

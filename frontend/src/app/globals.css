@@ -1,0 +1,536 @@
+@import "tailwindcss";
+@plugin "@iconify/tailwind4";
+
+:root {
+	--background: #ffffff;
+	--foreground: #171717;
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-geist-sans);
+	--font-mono: var(--font-geist-mono);
+}
+
+@theme {
+	--color-primary: #006630;
+	--color-primary-light: #008236;
+	--color-primary-extra-light: #00a63e;
+	--color-primary-dark: #0d542b;
+	--color-default-red: #fb2d36;
+	--color-default-dark-red: #991b1b;
+	--color-default-blue: #3b82f6;
+	--color-default-dark-blue: #1d4ed8;
+	--cols-sm: 3fr 1fr 1fr 1fr;
+	--cols-md: 3fr 1fr 1fr 1fr 0.2fr;
+	--cols-new-item: 3fr 0.2fr 1fr 1fr 1fr 0.2fr;
+	--cols-info: 0.5fr 2fr;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--background: #0a0a0a;
+		--foreground: #ededed;
+	}
+}
+
+body {
+	background: var(--background);
+	color: var(--foreground);
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.table {
+	@apply w-full border border-primary-light;
+}
+
+input[type="checkbox"] {
+	@apply w-4 h-4 accent-[#00c951] text-white;
+}
+
+textarea {
+	field-sizing: content;
+}
+
+.form-control {
+	@apply grid grid-cols-(--cols-info) gap-3 items-center;
+
+	label {
+		@apply font-bold text-right text-sm;
+	}
+
+	input,
+	select {
+		@apply border border-slate-400 rounded-sm px-2 py-1 read-only:bg-slate-100 read-only:dark:bg-transparent dark:bg-transparent dark:text-white;
+	}
+
+	input[type="checkbox"] {
+		@apply w-4 h-4 accent-primary text-white text-right;
+	}
+
+	> div {
+		@apply flex justify-between items-center;
+
+		> select {
+			@apply flex-1;
+		}
+	}
+}
+
+.title {
+	@apply font-bold text-base md:text-lg lg:text-xl text-primary-light;
+}
+
+.separator {
+	@apply border border-slate-400 mt-3;
+}
+
+.card {
+	@apply border p-4 rounded-md w-auto;
+}
+
+.listItem {
+	@apply flex flex-row gap-3 items-center;
+}
+
+.itemsList {
+	@apply grid grid-cols-(--cols-md);
+
+	.item:not(:first-child) {
+		> p {
+			@apply text-center pl-4;
+		}
+	}
+}
+
+.item_header {
+	@apply font-bold text-primary-light w-auto border-b-3 border-primary border-r-primary-dark text-center p-2 text-xs md:text-base;
+
+	.description {
+		@apply font-bold text-primary-light w-auto border-b-3 border-primary border-r-primary-dark text-left;
+	}
+}
+
+.item {
+	@apply border-b border-primary-extra-light p-2 text-xs md:text-base;
+
+	.description input {
+		@apply w-full h-10 pl-2 border border-slate-400 rounded-md text-left;
+	}
+
+	input {
+		@apply w-full h-10 text-right pr-2 border border-slate-400 rounded-md;
+	}
+
+	textarea {
+		@apply w-full h-10 p-2 border border-slate-400 rounded-md;
+	}
+}
+
+.infoLabel {
+	@apply flex items-center justify-between w-full px-2;
+
+	> span:first-child {
+		@apply font-bold;
+	}
+
+	> span:last-child {
+		@apply w-full text-right;
+	}
+}
+
+/* Tablas */
+
+.table {
+	@apply border-2 border-primary-light;
+
+	> thead {
+		@apply bg-primary text-center;
+
+		> tr {
+			@apply text-white h-10;
+
+			> th {
+				@apply border border-primary-dark;
+			}
+		}
+	}
+
+	.fila {
+		@apply text-center h-10;
+
+		> td {
+			@apply border border-primary-light;
+		}
+	}
+}
+
+.table_items {
+	@apply border-0;
+
+	.header {
+		@apply grid grid-cols-[2fr_0.5fr_0.2fr_0.5fr] h-10 border-primary bg-primary place-content-center;
+
+		> div {
+			@apply text-white font-bold h-10 p-2 md:border-r md:border-r-primary-dark min-w-16;
+
+			&:last-child {
+				@apply border-r-0 text-right min-w-30;
+			}
+		}
+	}
+
+	.items {
+		@apply border-r-2 border-2 border-primary-light;
+
+		.fila_items {
+			@apply grid grid-cols-[2fr_0.5fr_0.2fr_0.5fr];
+
+			> div {
+				@apply border-b border-primary-light text-center px-2 md:border-r min-w-16 p-2;
+
+				&:first-child {
+					@apply text-left;
+				}
+
+				&:last-child {
+					@apply border-r-0 text-right min-w-30;
+				}
+			}
+		}
+
+		.fila_totales {
+			@apply font-black flex justify-between;
+
+			> div {
+				@apply border-b border-b-primary px-2 h-10 flex items-center;
+
+				&:first-child {
+					@apply flex-1;
+				}
+			}
+		}
+	}
+}
+
+.flex-center {
+	@apply flex items-center justify-center;
+}
+
+.fila_item {
+	@apply border-b border-dashed border-primary-light h-8;
+
+	> td p {
+		@apply pb-2 text-left border-r-0;
+	}
+
+	> td {
+		@apply border border-primary-light text-right pr-2 pb-2;
+	}
+	& td p {
+		@apply pl-2;
+	}
+}
+.fila_total {
+	@apply border border-primary h-8;
+}
+
+.fila_total td {
+	@apply font-bold pl-2 py-2;
+}
+
+.login_form {
+	@apply flex flex-col items-center justify-center bg-white px-5 py-10 w-full lg:w-3xl rounded-xl gap-5;
+
+	.login_avatar > span {
+		@apply text-[10rem] text-blue-500;
+	}
+
+	div {
+		@apply flex flex-col text-slate-600;
+
+		input[type="text"],
+		input[type="password"] {
+			@apply p-2 border accent-green-500 w-96 rounded-sm;
+		}
+
+		label {
+			@apply text-left w-full mt-5 text-sm font-bold;
+		}
+
+		button {
+			@apply bg-blue-500 text-white font-bold p-4 rounded-sm;
+		}
+	}
+}
+.form_error {
+	@apply text-pink-500! text-xs! italic text-center;
+}
+
+.info_panel {
+	@apply grid md:grid-cols-2 grid-cols-1 gap-3;
+
+	> .card:last-child {
+		@apply md:col-span-2 lg:col-span-1;
+	}
+}
+
+.newItemsList {
+	@apply grid grid-cols-3 md:grid-cols-(--cols-new-item) gap-2 justify-center items-center;
+
+	.newItem {
+		input[type="text"],
+		input[type="number"],
+		select {
+			@apply w-full h-10 text-right pr-2 border border-slate-400 rounded-md;
+		}
+
+		textarea {
+			@apply w-full pl-2 pt-2 h-10 border border-slate-400 rounded-md;
+		}
+	}
+
+	.newItem:first-child {
+		@apply col-span-3 md:col-span-1 p-0!;
+	}
+	.newItem:last-child {
+		@apply col-span-3 md:col-span-1;
+		button {
+			@apply w-full! md:w-8! p-0!;
+			> span {
+				@apply hidden md:block;
+			}
+		}
+
+		button::after {
+			content: "Añadir";
+			@apply w-full block md:hidden font-bold!;
+		}
+	}
+}
+
+.action_button_group {
+	@apply flex items-center justify-center py-2 gap-1!;
+}
+
+.action_button {
+	@apply p-0! text-xs! w-8! h-8! rounded-full text-white flex items-center justify-center cursor-pointer;
+}
+
+.pillBox {
+	@apply w-full flex;
+
+	div {
+		@apply border border-slate-600 px-2 py-1 rounded-l-lg bg-primary-extra-light text-white font-bold;
+	}
+
+	input {
+		@apply rounded-l-none flex-1;
+	}
+}
+
+.navbar {
+	@apply w-full h-14 bg-primary fixed top-0 left-0 right-0 z-50 md:px-4;
+
+	.nav_container {
+		@apply container sticky md:mx-auto h-14 flex md:justify-between items-center;
+	}
+
+	.logo {
+		@apply flex h-fit justify-center items-center;
+
+		> span {
+			@apply h-fit text-white font-bold text-base md:text-2xl;
+		}
+	}
+}
+
+.navbar_dropdown {
+	@apply md:hidden flex flex-col transition-all duration-300 overflow-hidden max-w-dvw;
+
+	> div {
+		@apply bg-primary-extra-light w-full p-2 border border-primary-light first:border-t-0 last:border-b-0 transition-all duration-300;
+	}
+}
+
+.preview_document {
+	@apply container mx-auto min-w-56  border border-slate-500 min-h-screen bg-white text-black;
+}
+
+.options_button {
+	@apply font-bold bg-primary-light text-white px-4 py-3 flex items-center text-sm justify-center gap-2 w-48 rounded-md;
+
+	&.disabled {
+		@apply bg-transparent! text-slate-500 border-2 border-slate-500 cursor-not-allowed;
+	}
+}
+
+.email_form {
+	@apply flex flex-col gap-5;
+
+	.attach_field {
+		@apply flex w-full max-w-96;
+
+		> div:first-child {
+			@apply text-xl border border-slate-500 flex justify-center items-center w-10 h-10 border-r-0 bg-slate-400 text-white;
+		}
+
+		> div:nth-child(2) {
+			@apply text-xl border border-slate-500 flex justify-center items-center flex-1 h-10;
+		}
+	}
+
+	.input_field {
+		@apply flex gap-2 items-center;
+
+		> label {
+			@apply text-base font-bold;
+		}
+
+		> input {
+			@apply border border-slate-500 flex-1 px-2 py-2;
+		}
+
+		> textarea {
+			@apply w-full border border-slate-500 flex-1 min-h-56 p-2;
+		}
+	}
+
+	.input_field.col {
+		@apply flex flex-col gap-2 items-start;
+	}
+
+	.form_buttons {
+		@apply flex justify-center gap-2;
+
+		> button {
+			@apply w-40 p-2 text-white space-x-2 rounded-lg;
+		}
+
+		> span {
+			@apply font-bold;
+		}
+	}
+}
+
+.send_modal {
+	@apply fixed inset-0 z-60 flex justify-center items-center;
+
+	> div {
+		@apply bg-white  h-auto rounded-xl p-5 w-96 md:w-3xl lg:w-5xl relative text-black border border-white;
+		@apply dark:bg-black dark:text-white;
+	}
+}
+.close_modal_button {
+	@apply absolute bg-white top-2 right-2 w-8 h-8 text-red-500 flex justify-center items-center rounded-full border-2 border-red-500 transition-colors duration-300 ease-in-out;
+
+	&:hover {
+		@apply bg-red-500 text-white;
+	}
+}
+
+.table_cliente {
+	@apply w-full border-2 border-primary-light;
+
+	> .table_header {
+		@apply border-2 border-primary-light;
+
+		> tr {
+			@apply bg-primary;
+
+			> th {
+				@apply border-r-2 border-r-primary-dark last:border-r-primary-light text-white;
+			}
+		}
+	}
+
+	.fila_cliente {
+		@apply border-b border-dashed border-primary-light h-10;
+
+		> td {
+			@apply border border-primary-light text-center;
+
+			.link {
+				@apply w-9 h-10 bg-primary-extra-light flex items-center justify-center text-white border border-primary-dark;
+			}
+		}
+	}
+}
+
+.client_modal {
+	@apply mb-10 flex flex-row justify-end items-end;
+
+	.client_modal_button {
+		@apply bg-primary-extra-light  text-white w-56 h-12 p-2 rounded-lg flex items-center justify-center gap-3 hover:bg-primary transition-colors duration-150;
+	}
+}
+
+.client_modal_button {
+	@apply bg-primary-extra-light  text-white w-8 h-8  rounded-full flex items-center justify-center gap-3 hover:bg-primary transition-colors duration-150;
+}
+
+.bento {
+	@apply grid grid-rows-2 gap-4 md:grid-cols-4 md:grid-rows-1 rounded-lg shadow-md min-h-[600px] place-items-center justify-center;
+
+	> .bento_1 {
+		@apply flex flex-row gap-4 items-center justify-center col-span-2;
+		@apply md:flex-col w-full h-full;
+		@apply grid grid-cols-2;
+
+		> div {
+			@apply w-full col-span-1 row-span-1 rounded-lg shadow-md flex items-center justify-center;
+		}
+	}
+
+	> .bento_2 {
+		@apply col-span-2 w-full h-full rounded-lg shadow-md flex items-center justify-center flex-col gap-4 border-3 border-primary border-dashed text-2xl md:text-4xl text-primary-dark!;
+	}
+}
+
+.item_data {
+	@apply w-44 h-44 border-3 border-dashed border-primary rounded-xl flex flex-col gap-4 justify-center items-center;
+
+	@apply md:w-full md:min-h-96;
+
+	> span:first-child {
+		@apply text-5xl lg:text-9xl text-primary cursor-pointer;
+	}
+
+	> span {
+		@apply text-primary-light font-bold text-center text-xs md:text-base;
+	}
+}
+
+.wide_text_bold {
+	@apply w-full max-w-72 md:max-w-104 flex justify-between;
+
+	> span:first-child {
+		@apply font-bold;
+	}
+}
+
+.modal_message {
+	@apply flex flex-col justify-center items-center text-8xl p-10 gap-5;
+
+	> button {
+		@apply font-bold text-white px-4 py-3 flex items-center justify-center gap-2 w-48 rounded-lg text-sm!;
+	}
+}
+
+/* Colors */
+
+.animated-red {
+	@apply bg-default-red text-white;
+	@apply hover:bg-default-dark-red hover:font-bold transition-colors duration-300;
+}
+
+.animated-blue {
+	@apply bg-default-blue text-white;
+	@apply hover:bg-default-dark-blue hover:font-bold transition-colors duration-300;
+}
+
+.animated-primary {
+	@apply bg-primary-light text-white;
+	@apply hover:bg-primary-dark hover:font-bold transition-colors duration-300;
+}

@@ -1,0 +1,65 @@
+using System.Net;
+using ReformasRapBackend.Data.Dto;
+using ReformasRapBackend.Mappers;
+using ReformasRapBackend.Middleware;
+using ReformasRapBackend.Models;
+using ReformasRapBackend.Repository.Clientes;
+
+namespace ReformasRapBackend.Services.Clientes;
+
+public class ClientesService(IClientesRepository clientesRepository, IMapper mapper) : IClientesService
+{
+    public async Task<List<ClienteResponse>> GetAllClientes()
+    {
+        var clients = await clientesRepository.GetClientes();
+        var clientes = clients as IList<Cliente> ?? clients.ToList();
+        return !clientes.Any() ? [] : clientes.Select(mapper.ClienteEntityToResponse).ToList();
+    }
+
+    public async Task<ClienteResponse> GetClienteById(int id)
+    {
+        var client = await clientesRepository.GetCliente(id);
+
+        return client is null
+            ? throw new MiddlewareException(HttpStatusCode.NotFound, new { message = "No se ha encontrado el cliente" })
+            : mapper.ClienteEntityToResponse(client);
+    }
+
+    public async Task CreateCliente(ClienteRequest cliente)
+    {
+        var exist = await clientesRepository.FindByEmail(cliente.Email);
+        if (exist is not null)
+        {
+            throw new MiddlewareException(HttpStatusCode.BadRequest, new { message = "Email ya registrado" });
+        }
+        
+        await clientesRepository.AddCliente(mapper.ClienteRequestToEntity(cliente));
+    }
+    
+
+    public async Task UpdateCliente(int id, ClienteRequest cliente)
+    {
+        try
+        {
+            var cli = await clientesRepository.GetCliente(id);
+            if (cli is null)
+            {
+                throw new MiddlewareException(HttpStatusCode.NotFound, new { message = "Cliente no existe" });
+            }
+
+            var client = mapper.ClienteRequestToEntity(cliente);
+            await clientesRepository.UpdateCliente(id, client);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw new MiddlewareException(HttpStatusCode.InternalServerError, new { message = "Server Error" });
+        }
+    }
+
+    public async Task DeleteCliente(int id)
+    {
+        await GetClienteById(id);
+        await clientesRepository.DeleteCliente(id);
+    }
+}

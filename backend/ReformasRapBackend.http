@@ -1,0 +1,133 @@
+@Api_URL = http://localhost:5173
+@user_mail = "mail@mail.com"
+@user_pass = "ElPasswordMasLargoPosible2026!"
+
+### Create User
+POST {{Api_URL}}/api/Auth/register/
+Content-Type: application/json
+
+{
+  "email": {{user_mail}},
+  "password": {{user_pass}}
+}
+
+### Login
+POST {{Api_URL}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": {{user_mail}},
+  "password": {{user_pass}}
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+
+### Create cliente
+POST {{Api_URL}}/api/Client
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "email": "mail@mail2.com",
+  "name": "Roger",
+  "city": "Madrid",
+  "phone": "6633",
+  "address": "Calle Falsa",
+  "nif": null
+}
+
+### Get Documentos
+GET {{Api_URL}}/api/Document
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Create Documento
+POST {{Api_URL}}/api/Document
+Content-Type: application/json
+
+{
+  "numeroDocumento": "PRES-002",
+  "tipoDocumento": 1,
+  "fecha": null,
+  "estado": 1,
+  "iva": null,
+  "idCliente": 1
+}
+
+### Create Document whit Items
+
+POST {{Api_URL}}/api/Document
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "numeroDocumento": "PRE-001",
+  "tipoDocumento": 0,
+  "fecha": null,
+  "estado": 1,
+  "iva": null,
+  "idCliente": 1,
+  "items": [
+    {
+      "descripcion": "Llaves de paso",
+      "importe": 500
+    }
+  ]
+}
+
+### Create Documento con Items
+POST {{Api_URL}}/api/Document
+Content-Type: application/json
+
+{
+  "numeroDocumento": "PRES-001",
+  "tipoDocumento": 1,
+  "fecha": null,
+  "estado": 1,
+  "iva": null,
+  "idCliente": 1,
+  "items": [    
+    {
+      "descripcion": "Botes de pintura",
+      "importe": 500,
+      "precio": null,
+      "cantidad": null
+    },
+    {
+      "descripcion": "Paletinas",
+      "importe": null,
+      "precio": 12.5,
+      "cantidad": 12
+    }
+    
+  ]
+}
+
+### Edit Document
+@doc = 019d674d-53eb-75c1-8369-5f15cd4e92b6
+PUT {{Api_URL}}/api/Document/{{doc}}
+Content-Type: application/json
+
+{
+  "numeroDocumento": "FAC-001",
+  "tipoDocumento": 2,
+  "fecha": "2026-04-07T09:36:54.24196Z",
+  "estado": 1,
+  "iva": false,
+  "idCliente": 1,
+  "items": [
+    {
+      "id": 2,
+      "descripcion": "Maderas",
+      "precio": 500.0,
+      "cantidad": 2
+    },
+    {
+      "descripcion": "Maderas de roble",
+      "importe": 200.0
+    }
+  ]
+}
