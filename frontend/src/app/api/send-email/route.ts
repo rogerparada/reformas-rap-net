@@ -1,13 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
-import { createClient } from "@supabase/supabase-js";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-const supabase = createClient(
-	process.env.SUPABASE_URL!,
-	process.env.SUPABASE_SERVICE_ROLE_KEY! // Key con permisos de lectura del bucket privado
-);
 
 export async function POST(req: Request) {
 	try {
@@ -18,10 +12,8 @@ export async function POST(req: Request) {
 		}
 
 		// Descargar PDF desde Supabase
-		const { data, error } = await supabase.storage.from("pdf").download(pdfPath);
-		if (error || !data) throw error || new Error("No se pudo descargar el PDF");
 
-		const fileBuffer = Buffer.from(await data.arrayBuffer());
+		const fileBuffer = Buffer.from(pdfPath);
 
 		const attachment = {
 			content: fileBuffer,

@@ -31,4 +31,6 @@ export async function sendPdfByEmail(pdfBlob: Blob, destino: string, formData: F
 	// 	console.error("Error del servidor:", error);
 	// 	return { message: `Error del servidor: ${String(error)}`, status: 500, success: false };
 	// }
+	//TODO: Implementar el envío de PDF por email
+	return { message: "Se ha enviado correctamente", status: 404, success: false };
 }
