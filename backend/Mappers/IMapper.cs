@@ -10,6 +10,7 @@ public interface IMapper
     Documento DocumentoRequestToEntity(DocumentoRequest doc);
     DocumentoResponse DocumentoToResponse(Documento doc);
     FullDocumentoResponse FullDocumentoToResponse(Documento doc);
+    DocumentoInfoResponse DocumentoToInfoResponse(Documento doc);
     Item ItemRequestToEntity(ItemRequest item);
     ItemResponse ItemToResponse(Item item);
 }

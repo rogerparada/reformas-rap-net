@@ -50,7 +50,7 @@ public class Mapper : IMapper
         Iva = doc.Iva
     };
 
-    public FullDocumentoResponse FullDocumentoToResponse(Documento doc)=> new()
+    public FullDocumentoResponse FullDocumentoToResponse(Documento doc) => new()
     {
         IdDocumento = doc.IdDocumento,
         NumeroDocumento = doc.NumeroDocumento,
@@ -60,25 +60,38 @@ public class Mapper : IMapper
         Fecha = doc.Fecha,
         Iva = doc.Iva,
         Items = doc.Items.Select(ItemToResponse).ToList(),
-        Cliente = doc.Cliente != null ? ClienteEntityToResponse(doc.Cliente)  : null
+        Cliente = doc.Cliente != null ? ClienteEntityToResponse(doc.Cliente) : null
+    };
+
+    public DocumentoInfoResponse DocumentoToInfoResponse(Documento doc) => new()
+    {
+        IdDocumento = doc.IdDocumento,
+        NumeroDocumento = doc.NumeroDocumento,
+        TipoDocumento = doc.TipoDocumento,
+        IdCliente = doc.IdCliente,
+        Estado = doc.Estado,
+        Fecha = doc.Fecha,
+        Iva = doc.Iva,
+        Valor = doc.Items.Aggregate(0.0M,
+            (acc, item) => item.Importe > 0 ? acc + item.Importe : acc + (item.Price * item.Quantity)),
+        Cliente = doc.Cliente != null ? doc.Cliente.Name : string.Empty,
     };
 
     public Item ItemRequestToEntity(ItemRequest item) => new()
-    {  
-        Id =  item.Id ?? 0,
+    {
+        Id = item.Id ?? 0,
         Quantity = item.Cantidad ?? 0,
         Price = item.Precio ?? 0.0M,
         Importe = item.Importe ?? 0.0M,
         Descripcion = item.Descripcion,
     };
-    
+
     public ItemResponse ItemToResponse(Item item) => new()
-    {  
-        Id =  item.Id,
+    {
+        Id = item.Id,
         Cantidad = item.Quantity,
         Precio = item.Price,
         Importe = item.Importe,
         Descripcion = item.Descripcion,
     };
-    
 }

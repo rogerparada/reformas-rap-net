@@ -30,6 +30,24 @@ public class DocumentosService(
         var documentos = docs as IList<Documento> ?? docs.ToList();
         return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToResponse).ToList();
     }
+    public async Task<List<FullDocumentoResponse>> GetFullDocumentosByType(TipoDocumento tipoDocumento)
+    {
+        var docs = await documentosRepository.GetDocumentosByType(tipoDocumento);
+        var documentos = docs as IList<Documento> ?? docs.ToList();
+        return !documentos.Any() ? [] : documentos.Select(mapper.FullDocumentoToResponse).ToList();
+    }
+    public async Task<List<DocumentoInfoResponse>> GetDocumentosInfo()
+    {
+        var docs = await documentosRepository.GetFullDocumentos();
+        var documentos = docs as IList<Documento> ?? docs.ToList();
+        return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToInfoResponse).ToList();
+    }
+    public async Task<List<DocumentoInfoResponse>> GetDocumentosInfoByType(TipoDocumento tipoDocumento)
+    {
+        var docs = await documentosRepository.GetDocumentosByType(tipoDocumento);
+        var documentos = docs as IList<Documento> ?? docs.ToList();
+        return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToInfoResponse).ToList();
+    }
 
     public async Task<DocumentoResponse> GetDocumento(string idDocumento)
     {

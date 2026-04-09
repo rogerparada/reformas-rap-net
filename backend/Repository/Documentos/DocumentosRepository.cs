@@ -11,6 +11,16 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
 
     public async Task<IEnumerable<Documento>> GetDocumentosByType(TipoDocumento tipoDocumento) =>
         await context.Documentos.Where(d => d.TipoDocumento == tipoDocumento).ToListAsync();
+    public async Task<IEnumerable<Documento>> GetFullDocumentos() =>
+        await context.Documentos
+            .Include(d => d.Items)
+            .Include(d => d.Cliente)
+            .ToListAsync();
+    public async Task<IEnumerable<Documento>> GetFullDocumentosByType(TipoDocumento tipoDocumento) =>
+        await context.Documentos
+            .Include(d => d.Items)
+            .Include(d => d.Cliente)
+            .Where(d => d.TipoDocumento == tipoDocumento).ToListAsync();
 
     public async Task<IEnumerable<Documento>> GetDocumentosByIdCliente(int idLCliente) =>
         await context.Documentos.Where(d => d.IdCliente == idLCliente).ToListAsync();
