@@ -1,12 +1,12 @@
 import qs from "qs";
-import { DocumentFullResponse, DocumentInfo } from "@/types";
+import { DocumentFullResponse, DocumentResponse } from "@/types";
 import { DocumentInput } from "@/validations/document-validator";
 
 const STRAPI_URL = process.env.STRAPI_API_URL || "http://localhost:1337";
-const API_URL = `${STRAPI_URL}/api/documentos`;
+const API_URL = `${STRAPI_URL}/api/Document`;
 
-export const getDocuments = async (jwt: string): Promise<DocumentInfo[] | undefined> => {
-	if (!jwt) return;
+export const getDocuments = async (jwt: string): Promise<DocumentResponse[]> => {
+	if (!jwt) return [];
 
 	try {
 		const response = await fetch(API_URL, {
@@ -15,11 +15,15 @@ export const getDocuments = async (jwt: string): Promise<DocumentInfo[] | undefi
 				"Content-Type": "application/json",
 			},
 		});
-		const result = await response.json();
 
-		return result.data;
+		if (!response.ok) {
+			return [];
+		}
+
+		return await response.json();
 	} catch (error) {
 		console.error("Get Documents error: ", error);
+		throw new Error("Error al obtener los documentos");
 	}
 };
 
@@ -66,23 +70,7 @@ export const getFullDocuments = async (jwt: string): Promise<DocumentFullRespons
 	}
 };
 
-export const getFullDocumentsByType = async (jwt: string, tipo: DocumentInfo["tipoDocumento"]): Promise<DocumentFullResponse> => {
-	const queryString = {
-		sort: ["numeroDocumento:asc"],
-		filters: {
-			tipoDocumento: {
-				$eq: tipo,
-			},
-		},
-		populate: {
-			items: {
-				fields: ["total"],
-			},
-			cliente: {
-				fields: ["name"],
-			},
-		},
-	};
+export const getFullDocumentsByType = async (jwt: string, tipo: "Factura" | "Presupuesto" | "CuentaCobro"): Promise<DocumentFullResponse> => {
 	if (!jwt) {
 		return {
 			data: null,
@@ -90,12 +78,8 @@ export const getFullDocumentsByType = async (jwt: string, tipo: DocumentInfo["ti
 		};
 	}
 
-	const query = qs.stringify(queryString);
-
-	const url = `${API_URL}?${query}`;
-
 	try {
-		const response = await fetch(url, {
+		const response = await fetch(API_URL, {
 			headers: {
 				Authorization: `Bearer ${jwt}`,
 				"Content-Type": "application/json",
@@ -116,19 +100,7 @@ export const getFullDocumentsByType = async (jwt: string, tipo: DocumentInfo["ti
 };
 
 export const getDocumentById = async (jwt: string, id: string) => {
-	const queryString = {
-		populate: {
-			items: {
-				fields: ["id", "description", "price", "quantity", "total"],
-			},
-			cliente: {
-				fields: ["name", "phone", "city", "email", "address", "nif"],
-			},
-		},
-	};
-
-	const query = qs.stringify(queryString);
-	const url = `${API_URL}/${id}?${query}`;
+	const url = `${API_URL}/${id}`;
 
 	try {
 		const resp = await fetch(url, {
@@ -168,7 +140,7 @@ export const createDocument = async (jwt: string, data: DocumentInput) => {
 	}
 };
 
-export const editDocument = async (jwt: string, id: DocumentInfo["documentId"], data: DocumentInput) => {
+export const editDocument = async (jwt: string, id: string, data: DocumentInput) => {
 	const url = `${API_URL}/${id}`;
 
 	try {
@@ -189,7 +161,7 @@ export const editDocument = async (jwt: string, id: DocumentInfo["documentId"], 
 	}
 };
 
-export const deleteDocument = async (jwt: string, id: DocumentInfo["documentId"]) => {
+export const deleteDocument = async (jwt: string, id: string) => {
 	const url = `${API_URL}/${id}`;
 
 	try {
