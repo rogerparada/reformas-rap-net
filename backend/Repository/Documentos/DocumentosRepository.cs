@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ReformasRapBackend.Data;
+using ReformasRapBackend.Enums;
 using ReformasRapBackend.Models;
 
 namespace ReformasRapBackend.Repository.Documentos;
@@ -7,6 +8,9 @@ namespace ReformasRapBackend.Repository.Documentos;
 public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
 {
     public async Task<IEnumerable<Documento>> GetDocumentos() => await context.Documentos.ToListAsync();
+
+    public async Task<IEnumerable<Documento>> GetDocumentosByType(TipoDocumento tipoDocumento) =>
+        await context.Documentos.Where(d => d.TipoDocumento == tipoDocumento).ToListAsync();
 
     public async Task<IEnumerable<Documento>> GetDocumentosByIdCliente(int idLCliente) =>
         await context.Documentos.Where(d => d.IdCliente == idLCliente).ToListAsync();
@@ -16,8 +20,8 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
 
     public async Task<Documento?> GetDocumento(Guid idDocumento) =>
         await context.Documentos
-            .Include(d=> d.Items)
-            .Include(d=> d.Cliente)
+            .Include(d => d.Items)
+            .Include(d => d.Cliente)
             .AsNoTracking()
             .FirstOrDefaultAsync(d => d.IdDocumento == idDocumento);
 

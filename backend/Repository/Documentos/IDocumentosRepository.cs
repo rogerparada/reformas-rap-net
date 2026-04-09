@@ -1,3 +1,4 @@
+using ReformasRapBackend.Enums;
 using ReformasRapBackend.Models;
 
 namespace ReformasRapBackend.Repository.Documentos;
@@ -5,6 +6,7 @@ namespace ReformasRapBackend.Repository.Documentos;
 public interface IDocumentosRepository
 {
     Task<IEnumerable<Documento>> GetDocumentos();
+    Task<IEnumerable<Documento>> GetDocumentosByType(TipoDocumento tipoDocumento);
     Task<IEnumerable<Documento>> GetDocumentosByIdCliente(int idLCliente);
     Task<Documento?> GetDocumento(string numeroDocumento);
     Task<Documento?> GetDocumento(Guid idDocumento);

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReformasRapBackend.Data.Dto;
+using ReformasRapBackend.Enums;
 using ReformasRapBackend.Services.Documentos;
 
 namespace ReformasRapBackend.Controllers;
@@ -12,11 +13,14 @@ public class DocumentController(IDocumentosService documentosService) : Controll
 {
     [HttpGet]
     [EndpointSummary("Lista de Documentos")]
-    public async Task<List<DocumentoResponse>> Get() => await documentosService.GetDocumentos();
+    [EndpointDescription("Lista de Documentos, admite el filtrado por tipo")]
+    public async Task<List<DocumentoResponse>> GetByType([FromQuery] TipoDocumento? tipo) => tipo is null
+        ? await documentosService.GetDocumentos()
+        : await documentosService.GetDocumentosByType(tipo.Value);
 
     [HttpGet("{id}")]
     [EndpointSummary("Buscar documento")]
-    [ProducesResponseType(typeof(FullDocumentoResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(FullDocumentoResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(Guid id)
     {
@@ -45,7 +49,7 @@ public class DocumentController(IDocumentosService documentosService) : Controll
 
     [HttpDelete("{id}")]
     [EndpointSummary("Eliminar Documento")]
-    [ProducesResponseType(StatusCodes.Status200OK, Description =  "Se ha eliminado el documento")]
+    [ProducesResponseType(StatusCodes.Status200OK, Description = "Se ha eliminado el documento")]
     [ProducesResponseType(StatusCodes.Status404NotFound, Description = "No encontrado")]
     public async Task<IActionResult> Delete(string id)
     {

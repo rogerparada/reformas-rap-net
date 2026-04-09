@@ -1,5 +1,6 @@
 using System.Net;
 using ReformasRapBackend.Data.Dto;
+using ReformasRapBackend.Enums;
 using ReformasRapBackend.Mappers;
 using ReformasRapBackend.Middleware;
 using ReformasRapBackend.Models;
@@ -19,6 +20,13 @@ public class DocumentosService(
     public async Task<List<DocumentoResponse>> GetDocumentos()
     {
         var docs = await documentosRepository.GetDocumentos();
+        var documentos = docs as IList<Documento> ?? docs.ToList();
+        return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToResponse).ToList();
+    }
+
+    public async Task<List<DocumentoResponse>> GetDocumentosByType(TipoDocumento tipoDocumento)
+    {
+        var docs = await documentosRepository.GetDocumentosByType(tipoDocumento);
         var documentos = docs as IList<Documento> ?? docs.ToList();
         return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToResponse).ToList();
     }
