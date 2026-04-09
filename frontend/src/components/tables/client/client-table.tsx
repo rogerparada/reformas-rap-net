@@ -1,7 +1,7 @@
 import ClientItem from "./client-item";
-import { ClientResponse } from "@/types";
+import { ClienteResponse } from "@/types";
 
-export default function ClientTable({ data }: { data: ClientResponse[] }) {
+export default function ClientTable({ data }: { data: ClienteResponse[] }) {
 	return (
 		<>
 			<div className="w-full">

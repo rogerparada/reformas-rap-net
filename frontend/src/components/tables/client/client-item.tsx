@@ -1,9 +1,9 @@
 "use client";
-import { ClientResponse } from "@/types";
+import { ClienteResponse } from "@/types";
 import Link from "next/link";
 
-export default function ClientItem({ item }: { item: ClientResponse }) {
-	const { name, email, phone, documentId: id, documentos } = item;
+export default function ClientItem({ item }: { item: ClienteResponse }) {
+	const { name, email, phone, id, documentos } = item;
 	return (
 		<tr className="fila_cliente">
 			<td>
@@ -14,9 +14,9 @@ export default function ClientItem({ item }: { item: ClientResponse }) {
 					<span className="flex-1 pt-1">{name}</span>
 				</div>
 			</td>
-			<td>{email}</td>
-			<td>{phone}</td>
-			<td>{documentos.length}</td>
+			<td>{email ?? ""}</td>
+			<td>{phone ?? ""}</td>
+			<td>{documentos ?? 0}</td>
 		</tr>
 	);
 }

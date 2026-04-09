@@ -1,24 +1,18 @@
 import { cacheLife, cacheTag } from "next/cache";
 import { ClientInput, EditClientInput } from "@/validations/client-validator";
-import { ClientInfo, ClientResponse } from "../../types";
-import qs from "qs";
+import { ClienteResponse } from "@/types";
 
 const STRAPI_URL = process.env.STRAPI_API_URL || "http://localhost:1337";
 const API_URL = `${STRAPI_URL}/api/Client`;
 
-export const getClients = async (jwt: string): Promise<ClientInfo[] | undefined> => {
+export const getClients = async (jwt: string): Promise<ClienteResponse[] | undefined> => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("clientes");
 
 	if (!jwt) return;
-	const queryString = {
-		sort: ["name:asc"],
-	};
-	const query = qs.stringify(queryString);
 
-	const url = `${API_URL}?${query}`;
-	console.log(url);
+	const url = `${API_URL}`;
 
 	try {
 		const response = await fetch(url, {
@@ -27,35 +21,21 @@ export const getClients = async (jwt: string): Promise<ClientInfo[] | undefined>
 				"Content-Type": "application/json",
 			},
 		});
-		const result = await response.json();
-
-		return result.data;
+		return await response.json();
 	} catch (error) {
 		console.error("Get Clients error: ", error);
 	}
 };
 
-export const getClientsFullData = async (jwt: string): Promise<ClientResponse[] | undefined> => {
+export const getClientsFullData = async (jwt: string): Promise<ClienteResponse[] | undefined> => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("clientes");
 
-	const queryString = {
-		sort: ["name:asc"],
-		populate: {
-			documentos: {
-				fields: ["tipoDocumento"],
-			},
-		},
-	};
-
 	if (!jwt) return;
-	const query = qs.stringify(queryString);
-
-	const url = `${API_URL}?${query}`;
 
 	try {
-		const response = await fetch(url, {
+		const response = await fetch(API_URL, {
 			headers: {
 				Authorization: `Bearer ${jwt}`,
 				"Content-Type": "application/json",
@@ -63,13 +43,13 @@ export const getClientsFullData = async (jwt: string): Promise<ClientResponse[] 
 		});
 		const result = await response.json();
 
-		return result.data;
+		return result;
 	} catch (error) {
 		console.error("Get Clients error: ", error);
 	}
 };
 
-export const getClientById = async (jwt: string, clientId: string): Promise<ClientInfo | undefined> => {
+export const getClientById = async (jwt: string, clientId: string): Promise<ClienteResponse | undefined> => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("cliente");
@@ -93,29 +73,14 @@ export const getClientById = async (jwt: string, clientId: string): Promise<Clie
 	}
 };
 
-export const getClientFullDataById = async (jwt: string, clientId: string): Promise<ClientResponse | undefined> => {
+export const getClientFullDataById = async (jwt: string, clientId: string): Promise<ClienteResponse | undefined> => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("cliente");
 
 	if (!jwt) return;
-	const queryString = {
-		populate: {
-			documentos: {
-				fields: ["numeroDocumento", "tipoDocumento", "fecha", "estado", "iva"],
-				populate: {
-					items: {
-						fields: ["total"],
-					},
-				},
-			},
-		},
-	};
 
-	if (!jwt) return;
-	const query = qs.stringify(queryString);
-
-	const url = `${API_URL}/${clientId}?${query}`;
+	const url = `${API_URL}/${clientId}`;
 
 	try {
 		const response = await fetch(url, {
@@ -142,12 +107,22 @@ export const createClient = async (jwt: string, data: ClientInput) => {
 				Authorization: `Bearer ${jwt}`,
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ data }),
+			body: JSON.stringify(data),
 		});
 
-		const result = await response.json();
+		if (!response.ok) {
+			const data = await response.json();
+			return {
+				status: data.status,
+				error: data.errors,
+			};
+		}
 
-		return result;
+		return {
+			status: response.status,
+			message: "Cliente creado correctamente",
+			error: null,
+		};
 	} catch (error) {
 		console.error("Create client error: ", error);
 		throw error;
@@ -179,7 +154,7 @@ export const editClient = async (jwt: string, values: EditClientInput) => {
 	}
 };
 
-export const deleteClient = async (jwt: string, id: ClientInfo["documentId"]) => {
+export const deleteClient = async (jwt: string, id: ClienteResponse["id"]) => {
 	if (!jwt) return;
 
 	const url = `${API_URL}/${id}`;

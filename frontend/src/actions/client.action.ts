@@ -45,7 +45,7 @@ export const createClientAction = async (prevState: ClientFormState, formData: F
 			success: false,
 			message: "Create client error",
 			errors: null,
-			serverErrors: response.error,
+			serverErrors: response?.error,
 			data: fields,
 		};
 	}

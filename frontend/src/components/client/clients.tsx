@@ -9,7 +9,7 @@ export default async function Clients({ params }: { params: Promise<{ add: boole
 
 	const { add } = await params;
 
-	const data = await api.client.getClientsFullData(jwt);
+	const data = await api.client.getClients(jwt);
 	if (!data) {
 		return;
 	}
