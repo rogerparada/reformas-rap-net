@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.OpenApi;
 using ReformasRapBackend.Data;
 using ReformasRapBackend.Mappers;
 using ReformasRapBackend.Middleware;
@@ -72,6 +74,29 @@ builder.Services.AddOpenApi(options =>
             document.Info.Title = "ReformasRap API";
             document.Info.Version = "v1";
             document.Info.Description = "ReformasRap API para la gestion de clientes y documentación";
+
+            
+            var scheme = new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+            };
+
+            document.Components ??= new OpenApiComponents();
+            document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+            document.Components.SecuritySchemes.TryAdd("Bearer", scheme);
+
+            var securityRequirement = new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecuritySchemeReference("Bearer", document),
+                    []
+                }
+            };
+
+            document.Security = new List<OpenApiSecurityRequirement>{securityRequirement};
+            ;
             
             return Task.CompletedTask;
         });

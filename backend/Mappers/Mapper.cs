@@ -16,6 +16,7 @@ public class Mapper : IMapper
         City = cliente.City,
         Address = cliente.Address,
         Nif = cliente.Nif,
+        Documentos = cliente.Documentos.Count,
     };
 
     public Cliente ClienteRequestToEntity(ClienteRequest response) => new()
@@ -25,7 +26,7 @@ public class Mapper : IMapper
         Phone = response.Phone,
         City = response.City,
         Address = response.Address,
-        Nif = response.Nif,
+        Nif = response.Nif
     };
 
     public Documento DocumentoRequestToEntity(DocumentoRequest doc) => new()
