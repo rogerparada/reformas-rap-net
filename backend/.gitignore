@@ -57,3 +57,6 @@ appsettings.Development.json
 ## --- LOGS ---
 *.log
 logs/
+
+
+Migrations/
