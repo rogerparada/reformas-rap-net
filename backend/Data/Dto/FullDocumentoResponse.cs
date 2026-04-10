@@ -10,7 +10,7 @@ public class FullDocumentoResponse
     public DateTime Fecha { get; set; }
     public Estado Estado { get; set; }
     public bool Iva { get; set; }
-    public int IdCliente { get; set; }
+    public Guid IdCliente { get; set; }
     public List<ItemResponse> Items { get; set; } = [];
     
     public ClienteResponse? Cliente { get; set; }

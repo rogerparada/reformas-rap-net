@@ -19,6 +19,18 @@ public class Mapper : IMapper
         Documentos = cliente.Documentos.Count,
     };
 
+    public FullClienteResponse FullClienteEntityToResponse(Cliente cliente)=> new()
+    {
+        Id = cliente.Id,
+        Name = cliente.Name,
+        Email = cliente.Email,
+        Phone = cliente.Phone,
+        City = cliente.City,
+        Address = cliente.Address,
+        Nif = cliente.Nif,
+        Documentos = cliente.Documentos.Select(DocumentoToInfoResponse).ToList()
+    };
+
     public Cliente ClienteRequestToEntity(ClienteRequest response) => new()
     {
         Name = response.Name,

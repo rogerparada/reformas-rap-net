@@ -15,7 +15,7 @@ public class Documento
     public bool Iva { get; set; }
     
     public List<Item> Items { get; set; } = [];
-    public int IdCliente { get; set; }
+    public Guid IdCliente { get; set; }
 
     [ForeignKey("IdCliente")] public virtual Cliente? Cliente { get; set; }
 }

@@ -6,6 +6,7 @@ namespace ReformasRapBackend.Mappers;
 public interface IMapper
 {
     ClienteResponse ClienteEntityToResponse(Cliente cliente);
+    FullClienteResponse FullClienteEntityToResponse(Cliente cliente);
     Cliente ClienteRequestToEntity(ClienteRequest response);
     Documento DocumentoRequestToEntity(DocumentoRequest doc);
     DocumentoResponse DocumentoToResponse(Documento doc);

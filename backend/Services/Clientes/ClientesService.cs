@@ -16,13 +16,13 @@ public class ClientesService(IClientesRepository clientesRepository, IMapper map
         return !clientes.Any() ? [] : clientes.Select(mapper.ClienteEntityToResponse).ToList();
     }
 
-    public async Task<ClienteResponse> GetClienteById(int id)
+    public async Task<FullClienteResponse> GetClienteById(Guid id)
     {
         var client = await clientesRepository.GetCliente(id);
 
         return client is null
             ? throw new MiddlewareException(HttpStatusCode.NotFound, new { message = "No se ha encontrado el cliente" })
-            : mapper.ClienteEntityToResponse(client);
+            : mapper.FullClienteEntityToResponse(client);
     }
 
     public async Task CreateCliente(ClienteRequest cliente)
@@ -37,7 +37,7 @@ public class ClientesService(IClientesRepository clientesRepository, IMapper map
     }
     
 
-    public async Task UpdateCliente(int id, ClienteRequest cliente)
+    public async Task UpdateCliente(Guid id, ClienteRequest cliente)
     {
         try
         {
@@ -57,7 +57,7 @@ public class ClientesService(IClientesRepository clientesRepository, IMapper map
         }
     }
 
-    public async Task DeleteCliente(int id)
+    public async Task DeleteCliente(Guid id)
     {
         await GetClienteById(id);
         await clientesRepository.DeleteCliente(id);

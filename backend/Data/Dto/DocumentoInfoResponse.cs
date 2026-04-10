@@ -10,7 +10,7 @@ public class DocumentoInfoResponse
     public DateTime Fecha { get; set; }
     public Estado Estado { get; set; }
     public bool Iva { get; set; }
-    public int IdCliente { get; set; }
+    public Guid IdCliente { get; set; }
     public decimal Valor { get; set; } = 0.0M;
     public string Cliente { get; set; }
 }

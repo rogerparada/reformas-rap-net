@@ -29,6 +29,11 @@ GET {{Api_URL}}/api/Client
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
+### Get Cliente by Id
+GET {{Api_URL}}/api/Client/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
 ### Create cliente
 POST {{Api_URL}}/api/Client
 Content-Type: application/json

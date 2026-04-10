@@ -9,7 +9,10 @@ public class ClientesRepository(AppDbContext context) : IClientesRepository
     public async Task<IEnumerable<Cliente>> GetClientes() =>
         await context.Clientes.Include(c => c.Documentos).ToListAsync();
 
-    public async Task<Cliente?> GetCliente(int id) => await context.Clientes.FirstOrDefaultAsync(c => c.Id == id);
+    public async Task<Cliente?> GetCliente(Guid id) =>
+        await context.Clientes
+            .Include(c => c.Documentos)
+            .FirstOrDefaultAsync(c => c.Id == id);
 
     public async Task<Cliente?> FindByEmail(string email) =>
         await context.Clientes.FirstOrDefaultAsync(c => c.Email == email);
@@ -20,7 +23,7 @@ public class ClientesRepository(AppDbContext context) : IClientesRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task UpdateCliente(int id, Cliente cliente)
+    public async Task UpdateCliente(Guid id, Cliente cliente)
     {
         var client = await GetCliente(id);
         if (client is not null)
@@ -36,7 +39,7 @@ public class ClientesRepository(AppDbContext context) : IClientesRepository
         }
     }
 
-    public async Task DeleteCliente(int id)
+    public async Task DeleteCliente(Guid id)
     {
         var cliente = await GetCliente(id);
         if (cliente is not null)

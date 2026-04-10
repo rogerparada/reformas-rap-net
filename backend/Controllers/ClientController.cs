@@ -18,7 +18,7 @@ public class ClientController(IClientesService clientesService) : ControllerBase
     [EndpointSummary("Buscar cliente")]
     [ProducesResponseType(typeof(ClienteResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> Get(Guid id)
     {
         var client = await clientesService.GetClienteById(id);
         return Ok(client);
@@ -39,7 +39,7 @@ public class ClientController(IClientesService clientesService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Put(int id, ClienteRequest cliente)
+    public async Task<IActionResult> Put(Guid id, ClienteRequest cliente)
     {
         await clientesService.UpdateCliente(id, cliente);
         return Ok();
@@ -47,7 +47,7 @@ public class ClientController(IClientesService clientesService) : ControllerBase
 
     [HttpDelete("{id}")]
     [EndpointSummary("Eliminar cliente")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         await clientesService.DeleteCliente(id);
         return Ok();

@@ -22,8 +22,8 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
             .Include(d => d.Cliente)
             .Where(d => d.TipoDocumento == tipoDocumento).ToListAsync();
 
-    public async Task<IEnumerable<Documento>> GetDocumentosByIdCliente(int idLCliente) =>
-        await context.Documentos.Where(d => d.IdCliente == idLCliente).ToListAsync();
+    public async Task<IEnumerable<Documento>> GetDocumentosByIdCliente(Guid idCliente) =>
+        await context.Documentos.Where(d => d.IdCliente == idCliente).ToListAsync();
 
     public async Task<Documento?> GetDocumento(string numeroDocumento) => await
         context.Documentos.FirstOrDefaultAsync(d => d.NumeroDocumento == numeroDocumento);

@@ -12,7 +12,7 @@ public class DocumentoRequest
     public DateTime? Fecha { get; set; }
     [EnumDataType(typeof(Estado))] public Estado? Estado { get; set; } 
     public bool? Iva { get; set; }
-    public required int IdCliente { get; set; }
+    public required Guid IdCliente { get; set; }
 
     [MinLength(1, ErrorMessage = "Se requiere minimo un item para el documento")]
     public List<ItemRequest> Items { get; set; } = [];

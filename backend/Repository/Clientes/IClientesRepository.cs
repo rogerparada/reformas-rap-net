@@ -5,9 +5,9 @@ namespace ReformasRapBackend.Repository.Clientes;
 public interface IClientesRepository
 {
     Task<IEnumerable<Cliente>> GetClientes();
-    Task<Cliente?> GetCliente(int id);
+    Task<Cliente?> GetCliente(Guid id);
     Task<Cliente?> FindByEmail(string email); 
     Task AddCliente(Cliente cliente);
-    Task UpdateCliente(int id, Cliente cliente);
-    Task DeleteCliente(int id);
+    Task UpdateCliente(Guid id, Cliente cliente);
+    Task DeleteCliente(Guid id);
 }

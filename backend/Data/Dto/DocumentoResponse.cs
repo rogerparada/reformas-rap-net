@@ -15,5 +15,5 @@ public class DocumentoResponse
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public Estado Estado { get; set; }
     public bool Iva { get; set; }
-    public int IdCliente { get; set; }
+    public Guid IdCliente { get; set; }
 }
