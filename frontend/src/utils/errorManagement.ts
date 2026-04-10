@@ -1,6 +1,4 @@
-import { StrapiError } from "../types";
-
-export const processDetails = (error: Record<string, StrapiError[]>): string[] => {
+export const processDetails = (error: Record<string, string[]>): string[] => {
 	const records = Object.values(error);
 
 	if (!Array.isArray(records)) {
@@ -12,7 +10,8 @@ export const processDetails = (error: Record<string, StrapiError[]>): string[] =
 			return [processDetail(arr)];
 		}
 
-		return arr.map((i) => processDetail(i));
+		//return arr.map((i) => processDetail(i));
+		return arr;
 	});
 
 	const reduce = mapper.reduce((acc, arr) => [...acc, ...arr], []);

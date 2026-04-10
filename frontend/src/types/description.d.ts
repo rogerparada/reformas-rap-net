@@ -19,7 +19,7 @@ export type DocumentInfoResponse = {
 };
 
 export type ClienteResponse = {
-	id: number;
+	id: string;
 	email: string;
 	name: string;
 	city: string;
@@ -27,6 +27,16 @@ export type ClienteResponse = {
 	address: string;
 	nif: string | null;
 	documentos: number;
+};
+
+export type ClienteInfo = {
+	id: string;
+	email: string;
+	name: string;
+	city: string;
+	phone: string;
+	address: string;
+	nif: string | undefined;
 };
 
 export type ItemResponse = {
@@ -41,4 +51,15 @@ export type ItemResponse = {
 export type FullDocumentResponse = DocumentResponse & {
 	cliente: ClienteResponse;
 	items: ItemResponse[];
+};
+
+export type FullClienteResponse = {
+	id: string;
+	email: string;
+	name: string;
+	city: string;
+	phone: string;
+	address: string;
+	nif: string | undefined;
+	documentos: DocumentInfoResponse[];
 };

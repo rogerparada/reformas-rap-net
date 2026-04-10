@@ -5,12 +5,7 @@ export type FormState = {
 		username?: string;
 		password?: string;
 	};
-	serverErrors?: {
-		status: number;
-		name: string;
-		message: string;
-		details?: Record<string, string[]>;
-	} | null;
+	serverErrors?: string | string[] | null;
 	errors?: {
 		identifier?: string[];
 		username?: string[];
@@ -30,12 +25,7 @@ export type ClientFormState = {
 		city?: string;
 		nif?: string;
 	};
-	serverErrors?: {
-		status: number;
-		name: string;
-		message: string;
-		details?: Record<string, StrapiError[]>;
-	} | null;
+	serverErrors?: string | string[] | null;
 	errors?: {
 		name?: string[];
 		email?: string[];
@@ -50,11 +40,4 @@ export type EditClientFormState = Omit<ClientFormState, "data"> & {
 	data?: ClientFormState["data"] & {
 		id?: string;
 	};
-};
-
-export type StrapiError = {
-	path?: string[];
-	message: string;
-	name: string;
-	value: string;
 };

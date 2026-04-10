@@ -37,7 +37,7 @@ export const loginUserAction = async (prevState: FormState, formData: FormData):
 	}
 
 	const cookieStore = await cookies();
-	console.log(response);
+
 	cookieStore.set("jwt", response.token, {
 		maxAge: 60 * 60 * 24 * 7, // 1 week,
 		path: "/",

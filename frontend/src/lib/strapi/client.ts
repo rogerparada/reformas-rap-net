@@ -1,6 +1,6 @@
 import { cacheLife, cacheTag } from "next/cache";
 import { ClientInput, EditClientInput } from "@/validations/client-validator";
-import { ClienteResponse } from "@/types";
+import { ApiError, ClienteResponse, FullClienteResponse } from "@/types";
 
 const STRAPI_URL = process.env.STRAPI_API_URL || "http://localhost:1337";
 const API_URL = `${STRAPI_URL}/api/Client`;
@@ -73,12 +73,12 @@ export const getClientById = async (jwt: string, clientId: string): Promise<Clie
 	}
 };
 
-export const getClientFullDataById = async (jwt: string, clientId: string): Promise<ClienteResponse | undefined> => {
+export const getFullClientById = async (jwt: string, clientId: string): Promise<FullClienteResponse> => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("cliente");
 
-	if (!jwt) return;
+	if (!jwt) throw new Error("No autenticado");
 
 	const url = `${API_URL}/${clientId}`;
 
@@ -89,11 +89,11 @@ export const getClientFullDataById = async (jwt: string, clientId: string): Prom
 				"Content-Type": "application/json",
 			},
 		});
-		const result = await response.json();
 
-		return result.data;
+		return await response.json();
 	} catch (error) {
 		console.error("Get Client By ID error: ", error);
+		throw new Error("Error al obtener el cliente");
 	}
 };
 
@@ -129,8 +129,8 @@ export const createClient = async (jwt: string, data: ClientInput) => {
 	}
 };
 
-export const editClient = async (jwt: string, values: EditClientInput) => {
-	if (!jwt) return;
+export const editClient = async (jwt: string, values: EditClientInput): Promise<ApiError> => {
+	if (!jwt) throw new Error("No autenticado");
 
 	const { id, ...data } = values;
 	const url = `${API_URL}/${id}`;
@@ -142,12 +142,22 @@ export const editClient = async (jwt: string, values: EditClientInput) => {
 				Authorization: `Bearer ${jwt}`,
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ data }),
+			body: JSON.stringify(data),
 		});
 
-		const result = await response.json();
+		if (response.status === 200) {
+			return {
+				status: response.status,
+				error: null,
+			};
+		}
 
-		return result;
+		const responseData = await response.json();
+
+		return {
+			status: responseData.status,
+			error: responseData.errors.message,
+		};
 	} catch (error) {
 		console.error("Create client error: ", error);
 		throw error;

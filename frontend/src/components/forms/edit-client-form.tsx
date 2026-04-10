@@ -1,14 +1,15 @@
 "use client";
 import { actions } from "@/actions";
-import { ClientInfo } from "@/types/description";
+import { ClienteInfo } from "@/types/description";
 import { useActionState } from "react";
 import { EditClientFormState } from "@/types";
 import ClientForm from "./client-form";
 import ActionButton from "../ui/button/action-button";
 import Swal from "sweetalert2";
+import { FormError } from "../ui/form-error";
 
 type ClientFormProps = {
-	client: ClientInfo;
+	client: ClienteInfo;
 	reset: () => void;
 };
 
@@ -58,7 +59,8 @@ export default function EditClientForm({ client, reset }: ClientFormProps) {
 			</div>
 			<hr className="separator" />
 			<ClientForm {...formState} />
-			<input type="hidden" name="id" defaultValue={client?.documentId} />
+			<FormError error={formState.serverErrors ?? ""} />
+			<input type="hidden" name="id" defaultValue={client?.id} />
 		</form>
 	);
 }

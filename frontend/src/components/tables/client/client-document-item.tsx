@@ -1,13 +1,11 @@
 "use client";
 
-import { ClientDocument } from "@/types/description";
+import { DocumentInfoResponse } from "@/types";
 import { formatCurrency } from "@/utils";
 import Link from "next/link";
-import { useMemo } from "react";
 
-export default function ClientDocumentItem({ item }: { item: ClientDocument }) {
-	const { tipoDocumento: tipo, fecha, documentId: id, numeroDocumento: numero, items, iva } = item;
-	const total = useMemo(() => items.reduce((acc, item) => (acc += item.total), 0), [items]);
+export default function ClientDocumentItem({ item }: { item: DocumentInfoResponse }) {
+	const { tipoDocumento: tipo, fecha, idDocumento: id, numeroDocumento: numero, iva, valor } = item;
 
 	return (
 		<tr className="fila_cliente">
@@ -21,7 +19,7 @@ export default function ClientDocumentItem({ item }: { item: ClientDocument }) {
 			</td>
 			<td>{numero}</td>
 			<td>{fecha}</td>
-			<td>{iva ? formatCurrency(total + total * 0.21) : formatCurrency(total)}</td>
+			<td>{iva ? formatCurrency(valor + valor * 0.21) : formatCurrency(valor)}</td>
 		</tr>
 	);
 }

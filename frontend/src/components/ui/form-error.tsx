@@ -1,7 +1,6 @@
-import { StrapiError } from "@/types";
 import { processDetails } from "@/utils";
 
-export function FormError({ error }: { error?: string[] | string | Record<string, StrapiError[]> }) {
+export function FormError({ error }: { error?: string[] | string | Record<string, string[]> }) {
 	if (!error) return null;
 
 	if (typeof error !== "string") {

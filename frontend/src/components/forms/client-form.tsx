@@ -51,7 +51,7 @@ export default function ClientForm({ data, errors, serverErrors, disabled }: Cli
 				</div>
 			</div>
 			<div className="mt-5">
-				<FormError error={serverErrors?.message} />
+				<FormError error={serverErrors ?? ""} />
 			</div>
 		</>
 	);

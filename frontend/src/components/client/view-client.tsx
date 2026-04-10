@@ -6,7 +6,7 @@ export default async function ViewClient({ params }: { params: Promise<{ id: str
 	const token = await auth.isAuthenticated();
 	const { id } = await params;
 
-	const response = await api.client.getClientFullDataById(token || "", id);
+	const response = await api.client.getFullClientById(token || "", id);
 
 	if (!response) redirect("/gestion/clientes");
 

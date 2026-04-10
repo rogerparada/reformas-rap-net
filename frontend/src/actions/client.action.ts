@@ -6,7 +6,7 @@ import { clientSchema, editClientSchema } from "../validations/client-validator"
 import { ClientFormState, EditClientFormState } from "../types/forms";
 import { api, auth } from "../lib";
 import { redirect } from "next/navigation";
-import { ClientInfo } from "../types";
+import { ClienteResponse } from "../types";
 import { updateTag } from "next/cache";
 
 export const createClientAction = async (prevState: ClientFormState, formData: FormData): Promise<ClientFormState> => {
@@ -116,13 +116,13 @@ export const editClientAction = async (prevState: EditClientFormState, formData:
 	};
 };
 
-export const deleteClientAction = async (id: ClientInfo["documentId"]) => {
-	if (id?.length !== 24) {
-		return {
-			success: false,
-			errors: `Error(${id?.length}): La id del cliente no es valida`,
-		};
-	}
+export const deleteClientAction = async (id: ClienteResponse["id"]) => {
+	// if (id?.length !== 24) {
+	// 	return {
+	// 		success: false,
+	// 		errors: `Error(${id?.length}): La id del cliente no es valida`,
+	// 	};
+	// }
 
 	const jwt = await auth.isAuthenticated();
 	if (!jwt) {

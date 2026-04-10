@@ -1,6 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { LoginFormValues } from "../../validations/auth";
+import { validateToken } from "@/utils";
 
 const API_URL = process.env.STRAPI_API_URL || "http://localhost:1337";
 
@@ -24,5 +25,6 @@ export async function loginUserService(userData: LoginFormValues) {
 
 export async function isAuthenticated(): Promise<string | undefined> {
 	const cookiesStore = await cookies();
-	return cookiesStore.get("jwt")?.value;
+	const token = cookiesStore.get("jwt")?.value;
+	return validateToken(token) ? token : undefined;
 }

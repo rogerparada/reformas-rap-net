@@ -1,8 +1,8 @@
-import { ClientDocument } from "@/types";
+import { DocumentInfoResponse } from "@/types";
 import ClientDocumentItem from "./client-document-item";
 
 type Props = {
-	data: ClientDocument[];
+	data: DocumentInfoResponse[];
 	title: string;
 };
 
@@ -24,7 +24,7 @@ export default function ClientDocumentTable({ data, title }: Props) {
 						</thead>
 						<tbody className="">
 							{data.map((item) => (
-								<ClientDocumentItem key={item.id} item={item} />
+								<ClientDocumentItem key={item.idDocumento} item={item} />
 							))}
 						</tbody>
 					</table>

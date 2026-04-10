@@ -1,6 +1,6 @@
 "use client";
 
-import { ClientResponse } from "@/types";
+import { FullClienteResponse } from "@/types";
 import { useState } from "react";
 import EditClientForm from "../forms/edit-client-form";
 import ClientForm from "../forms/client-form";
@@ -11,13 +11,15 @@ import { useRouter } from "next/navigation";
 import ClientDocumentTable from "../tables/client/client-document-table";
 
 type ClientFormProps = {
-	client: ClientResponse;
+	client: FullClienteResponse;
 	destination: string;
 };
 
 export default function ClientEdit({ client }: ClientFormProps) {
 	const [edit, setEdit] = useState(false);
 	const router = useRouter();
+
+	const { documentos, ...clientData } = client;
 
 	const handleReset = () => {
 		setEdit(false);
@@ -35,7 +37,7 @@ export default function ClientEdit({ client }: ClientFormProps) {
 			cancelButtonText: "No",
 		}).then(async (result) => {
 			if (result.isConfirmed) {
-				const { success, errors } = await actions.client.deleteClientAction(client.documentId);
+				const { success, errors } = await actions.client.deleteClientAction(client.id);
 				if (!success) {
 					Swal.fire({
 						text: errors,
@@ -58,7 +60,7 @@ export default function ClientEdit({ client }: ClientFormProps) {
 	if (edit) {
 		return (
 			<div className="card">
-				<EditClientForm client={client} reset={handleReset} />
+				<EditClientForm client={clientData} reset={handleReset} />
 			</div>
 		);
 	}
@@ -74,8 +76,8 @@ export default function ClientEdit({ client }: ClientFormProps) {
 			</div>
 			<hr className="separator" />
 			<ClientForm data={client} disabled />
-			{client.documentos.length > 0 ? (
-				<ClientDocumentTable data={client.documentos} title="" />
+			{documentos.length > 0 ? (
+				<ClientDocumentTable data={documentos} title="" />
 			) : (
 				<div className="card text-center p-10! mt-12!">Este cliente no tienen ningún documento asociado.</div>
 			)}
