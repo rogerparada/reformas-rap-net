@@ -39,14 +39,20 @@ public class ClientesService(IClientesRepository clientesRepository, IMapper map
 
     public async Task UpdateCliente(Guid id, ClienteRequest cliente)
     {
+        
+        var cli = await clientesRepository.GetCliente(id);
+        if (cli is null)
+        {
+            throw new MiddlewareException(HttpStatusCode.NotFound, new { message = "Cliente no existe" });
+        }
+        var exist = await clientesRepository.FindByEmail(cliente.Email);
+        if (exist is not null && exist.Id != cli.Id)
+        {
+            throw new MiddlewareException(HttpStatusCode.BadRequest, new { message = "El email ya pertenece a otro cliente" });
+        }
+
         try
         {
-            var cli = await clientesRepository.GetCliente(id);
-            if (cli is null)
-            {
-                throw new MiddlewareException(HttpStatusCode.NotFound, new { message = "Cliente no existe" });
-            }
-
             var client = mapper.ClienteRequestToEntity(cliente);
             await clientesRepository.UpdateCliente(id, client);
         }

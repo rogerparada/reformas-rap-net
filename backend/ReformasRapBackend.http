@@ -1,6 +1,7 @@
 @Api_URL = http://localhost:5173
 @user_mail = "mail@mail.com"
 @user_pass = "ElPasswordMasLargoPosible2026!"
+@id_cliente = 019d781c-ae55-741a-9940-b03bbe147ec7
 
 ### Create User
 POST {{Api_URL}}/api/Auth/register/
@@ -30,7 +31,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 ### Get Cliente by Id
-GET {{Api_URL}}/api/Client/1
+GET {{Api_URL}}/api/Client/{{id_cliente}}
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -40,12 +41,26 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "email": "mail@mail2.com",
+  "email": "mail@mail.com",
   "name": "Roger",
   "city": "Madrid",
-  "phone": "6633",
+  "phone": "600000000",
   "address": "Calle Falsa",
   "nif": null
+}
+
+### Update cliente
+PUT {{Api_URL}}/api/Client/{{id_cliente}}
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "email": "mail@mail.com",
+  "name": "Roger",
+  "city": "Madrid",
+  "phone": "611111111",
+  "address": "Calle Falsa 123",
+  "nif": "0000000X"
 }
 
 ### Get Documentos
@@ -56,6 +71,7 @@ Authorization: Bearer {{auth_token}}
 ### Create Documento
 POST {{Api_URL}}/api/Document
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "numeroDocumento": "PRES-002",
@@ -63,7 +79,7 @@ Content-Type: application/json
   "fecha": null,
   "estado": 1,
   "iva": null,
-  "idCliente": 1
+  "idCliente": "{{id_cliente}}"
 }
 
 ### Create Document whit Items
@@ -74,11 +90,11 @@ Authorization: Bearer {{auth_token}}
 
 {
   "numeroDocumento": "PRE-001",
-  "tipoDocumento": 0,
+  "tipoDocumento": 1,
   "fecha": null,
   "estado": 1,
   "iva": null,
-  "idCliente": 1,
+  "idCliente": "{{id_cliente}}",
   "items": [
     {
       "descripcion": "Llaves de paso",
@@ -90,14 +106,15 @@ Authorization: Bearer {{auth_token}}
 ### Create Documento con Items
 POST {{Api_URL}}/api/Document
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
-  "numeroDocumento": "PRES-001",
-  "tipoDocumento": 1,
+  "numeroDocumento": "PRE-002",
+  "tipoDocumento": "Presupuesto",
   "fecha": null,
   "estado": 1,
   "iva": null,
-  "idCliente": 1,
+  "idCliente": "{{id_cliente}}",
   "items": [    
     {
       "descripcion": "Botes de pintura",
@@ -116,20 +133,20 @@ Content-Type: application/json
 }
 
 ### Edit Document
-@doc = 019d674d-53eb-75c1-8369-5f15cd4e92b6
+@doc = 019d782e-2ea6-741d-9798-1f8e272ae30a
 PUT {{Api_URL}}/api/Document/{{doc}}
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "numeroDocumento": "FAC-001",
-  "tipoDocumento": 2,
+  "tipoDocumento": "Factura",
   "fecha": "2026-04-07T09:36:54.24196Z",
   "estado": 1,
-  "iva": false,
-  "idCliente": 1,
+  "iva": true,
+  "idCliente": "{{id_cliente}}",
   "items": [
     {
-      "id": 2,
       "descripcion": "Maderas",
       "precio": 500.0,
       "cantidad": 2
@@ -143,4 +160,8 @@ Content-Type: application/json
 
 ### Get Documents info
 GET http://{{Api_URL}}/api/Document/info?tipo=Factura
+Authorization: Bearer {{auth_token}}
+
+### Get Documents info Presupuesto
+GET http://{{Api_URL}}/api/Document/info?tipo=Presupuesto
 Authorization: Bearer {{auth_token}}
