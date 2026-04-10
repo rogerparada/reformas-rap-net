@@ -44,7 +44,7 @@ public class DocumentosService(
     }
     public async Task<List<DocumentoInfoResponse>> GetDocumentosInfoByType(TipoDocumento tipoDocumento)
     {
-        var docs = await documentosRepository.GetDocumentosByType(tipoDocumento);
+        var docs = await documentosRepository.GetFullDocumentosByType(tipoDocumento);
         var documentos = docs as IList<Documento> ?? docs.ToList();
         return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToInfoResponse).ToList();
     }

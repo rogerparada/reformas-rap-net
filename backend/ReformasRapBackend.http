@@ -135,3 +135,7 @@ Content-Type: application/json
     }
   ]
 }
+
+### Get Documents info
+GET http://{{Api_URL}}/api/Document/info?tipo=Factura
+Authorization: Bearer {{auth_token}}

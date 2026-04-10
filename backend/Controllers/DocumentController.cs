@@ -14,7 +14,7 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     [HttpGet]
     [EndpointSummary("Lista de Documentos")]
     [EndpointDescription("Lista de Documentos, admite el filtrado por tipo")]
-    public async Task<List<DocumentoResponse>> GetByType([FromQuery] TipoDocumento? tipo) => tipo is null
+    public async Task<List<DocumentoResponse>> Get([FromQuery] TipoDocumento? tipo) => tipo is null
         ? await documentosService.GetDocumentos()
         : await documentosService.GetDocumentosByType(tipo.Value);
     
