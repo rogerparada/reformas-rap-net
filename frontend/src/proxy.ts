@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { validateToken } from "./utils";
 
-const API_URL = process.env.STRAPI_API_URL || "http://localhost:1337";
 const protectedRoutes = ["/gestion"];
 
 function checkIsProtectedRoute(path: string) {
@@ -20,21 +20,13 @@ export async function proxy(request: NextRequest) {
 		const jwt = cookieStore.get("jwt")?.value;
 
 		if (!jwt) return NextResponse.redirect(new URL("/login", request.url));
-		// const response = await fetch(`${API_URL}/api/User/me`, {
-		// 	headers: {
-		// 		Authorization: `Bearer ${jwt}`,
-		// 		"Content-Type": "application/json",
-		// 	},
-		// });
 
-		// if (response.status === 401) {
-		// 	return NextResponse.redirect(new URL("/login", request.url));
-		// }
+		const isValid = validateToken(jwt);
 
-		// const userResponse = await response.json();
-
-		// if (!userResponse) return NextResponse.redirect(new URL("/login", request.url));
-		// if (!userResponse?.confirmed) return NextResponse.redirect(new URL("/", request.url));
+		if (!isValid) {
+			cookieStore.delete("jwt");
+			return NextResponse.redirect(new URL("/login", request.url));
+		}
 
 		return NextResponse.next();
 	} catch (error) {
