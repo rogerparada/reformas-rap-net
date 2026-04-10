@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { ClientInfo, EditableDocument } from "@/types";
+import { ClienteResponse, EditableDocument } from "@/types";
 import { setDocumentState } from "@/utils/editDocument";
 import InfoDocumento from "../cards/info-documento";
 import DocumentResume from "../cards/document-resume";
@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 type Props = {
 	doc?: EditableDocument;
 	clear?: boolean;
-	clients?: ClientInfo[];
+	clients?: ClienteResponse[];
 };
 
 export default function DocumentForm({ doc, clear, clients }: Props) {

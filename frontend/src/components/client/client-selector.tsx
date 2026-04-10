@@ -1,10 +1,10 @@
 "use client";
 import { useAppStore } from "@/store/useAppStore";
-import { ClientInfo } from "@/types";
+import { ClienteResponse } from "@/types";
 import NewClientModal from "../modal/new-client-modal";
 
 type ClientSelectorProps = {
-	options?: ClientInfo[];
+	options?: ClienteResponse[];
 };
 
 export default function ClientSelector({ options }: ClientSelectorProps) {
@@ -12,7 +12,7 @@ export default function ClientSelector({ options }: ClientSelectorProps) {
 	const client = useAppStore((state) => state.client);
 	const handleChangeSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
-		const client = options?.find((c) => c.documentId === value);
+		const client = options?.find((c) => c.id === +value);
 		setClient(client ?? { name: "" });
 	};
 
@@ -29,11 +29,11 @@ export default function ClientSelector({ options }: ClientSelectorProps) {
 		<div className="form-control">
 			<label htmlFor="cliente">Cliente:</label>
 			<div className="gap-2">
-				<select id="cliente" name="cliente" value={client?.documentId || ""} onChange={handleChangeSelection}>
+				<select id="cliente" name="cliente" value={client?.id || ""} onChange={handleChangeSelection}>
 					<option value="">Seleccione un cliente</option>
 					{options &&
 						options.map((option) => (
-							<option key={option.documentId} value={option.documentId}>
+							<option key={option.id} value={option.id}>
 								{option.name}
 							</option>
 						))}

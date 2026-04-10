@@ -1,12 +1,12 @@
 "use client";
 import { useAppStore } from "@/store/useAppStore";
-import { ClientInfo, DocumentInfo } from "@/types";
+import { ClienteResponse, FullDocumentResponse } from "@/types";
 import ActionButton from "../ui/button/action-button";
 import DocumentNumberCreator from "../forms/document-number-creator";
 import ClientSelector from "../client/client-selector";
 
 type InfoDocumentoProps = {
-	options?: ClientInfo[];
+	options?: ClienteResponse[];
 };
 
 export default function InfoDocumento({ options }: InfoDocumentoProps) {
@@ -14,8 +14,7 @@ export default function InfoDocumento({ options }: InfoDocumentoProps) {
 	const clear = useAppStore((state) => state.clearDocument);
 	const changeDocumentAttribute = useAppStore((state) => state.changeDocumentAttribute);
 
-	const handleChangeDocumentAttribute = (key: keyof DocumentInfo, value: string | boolean) => {
-		console.log(key, value);
+	const handleChangeDocumentAttribute = (key: keyof FullDocumentResponse, value: string | boolean) => {
 		changeDocumentAttribute(key, value);
 	};
 
