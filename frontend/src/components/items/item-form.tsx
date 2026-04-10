@@ -26,14 +26,14 @@ export default function ItemForm({ item }: ItemFormProps) {
 			</div>
 
 			<div className={`newItem ${!pxu ? "hidden collapse md:block md:invisible" : ""}`}>
-				<input id="price" name="price" type="number" min={0} defaultValue={item?.price} placeholder="Precio" />
+				<input id="price" name="price" type="number" min={0} step={0.01} defaultValue={item?.price} placeholder="Precio" />
 			</div>
 			<div className={`newItem ${!pxu ? "hidden collapse md:block md:invisible" : ""}`}>
-				<input id="quantity" name="quantity" type="number" min={0} defaultValue={item?.quantity} placeholder="Cantidad" />
+				<input id="quantity" name="quantity" type="number" min={0} step={0.01} defaultValue={item?.quantity} placeholder="Cantidad" />
 			</div>
 
 			<div className={`newItem ${pxu ? "hidden collapse md:block md:invisible" : "col-span-2 md:col-span-1"}`}>
-				<input id="total" name="total" type="number" min={0} defaultValue={item?.total} placeholder="Importe" />
+				<input id="total" name="total" type="number" min={0} step={0.01} defaultValue={item?.total} placeholder="Importe" />
 			</div>
 		</>
 	);

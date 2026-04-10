@@ -7,11 +7,9 @@ export default async function Documents() {
 	const jwt = await auth.isAuthenticated();
 	if (!jwt) return;
 
-	// const { data } = await api.documents.getFullDocuments(jwt);
-	const facturas = await api.documents.getFullDocumentsByType(jwt, "Factura");
-	const presupuestos = await api.documents.getFullDocumentsByType(jwt, "Presupuesto");
-
-	if ((!facturas.data && !presupuestos.data) || (facturas.data?.length === 0 && presupuestos.data?.length === 0)) {
+	const facturas = await api.documents.getDocumentsInfoByType(jwt, "Factura");
+	const presupuestos = await api.documents.getDocumentsInfoByType(jwt, "Presupuesto");
+	if ((!facturas && !presupuestos) || (facturas?.length === 0 && presupuestos?.length === 0)) {
 		return <AddData tipo="documentos" url="/gestion/documentos/new?clear=true" />;
 	}
 
@@ -21,8 +19,8 @@ export default async function Documents() {
 				<LinkButton icon="doc_add" link="/gestion/documentos/new?clear=true" text="Nuevo documento" />
 			</div>
 			<div className="space-y-10">
-				{facturas.data && <DocumentTable data={facturas.data} title="Facturas" />}
-				{presupuestos.data && <DocumentTable data={presupuestos.data} title="Presupuestos" />}
+				{facturas && <DocumentTable data={facturas} title="Facturas" />}
+				{presupuestos && <DocumentTable data={presupuestos} title="Presupuestos" />}
 			</div>
 		</div>
 	);

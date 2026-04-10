@@ -1,13 +1,11 @@
 "use client";
 
-import { DocumentResponse } from "@/types/description";
-import { formatCurrency } from "@/utils";
+import { DocumentInfoResponse } from "@/types/description";
+import { formatCurrency, toLocalDate } from "@/utils";
 import Link from "next/link";
-import { useMemo } from "react";
 
-export default function DocumentItem({ item }: { item: DocumentResponse }) {
-	const { fecha, documentId: id, numeroDocumento: numero, cliente, items, iva } = item;
-	const total = useMemo(() => items.reduce((acc, item) => (acc += item.total), 0), [items]);
+export default function DocumentItem({ item }: { item: DocumentInfoResponse }) {
+	const { fecha, idDocumento: id, numeroDocumento: numero, iva, cliente, valor } = item;
 
 	return (
 		<tr className="fila_cliente">
@@ -19,9 +17,9 @@ export default function DocumentItem({ item }: { item: DocumentResponse }) {
 					<span className="flex-1">{numero}</span>
 				</div>
 			</td>
-			<td>{fecha}</td>
-			<td>{cliente?.name}</td>
-			<td>{iva ? formatCurrency(total + total * 0.21) : formatCurrency(total)}</td>
+			<td>{toLocalDate(fecha)}</td>
+			<td>{cliente}</td>
+			<td>{iva ? formatCurrency(valor + valor * 0.21) : formatCurrency(valor)}</td>
 		</tr>
 	);
 }

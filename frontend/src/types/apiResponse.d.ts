@@ -1,5 +1,4 @@
 import { StrapiError } from "./forms";
-import { DocumentResponse } from "./description";
 
 export type ApiResponse = {
 	success?: boolean;
@@ -21,10 +20,4 @@ export type ApiError = {
 	name: string;
 	message: string;
 	details?: Record<string, StrapiError[]>;
-};
-
-export type DocumentFullResponse = {
-	data?: DocumentResponse[] | null;
-	error?: ApiError;
-	meta?: ApiMeta;
 };
