@@ -12,6 +12,7 @@ public class ClientesRepository(AppDbContext context) : IClientesRepository
     public async Task<Cliente?> GetCliente(Guid id) =>
         await context.Clientes
             .Include(c => c.Documentos)
+            .ThenInclude(d => d.Items)
             .FirstOrDefaultAsync(c => c.Id == id);
 
     public async Task<Cliente?> FindByEmail(string email) =>

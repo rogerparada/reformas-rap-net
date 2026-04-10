@@ -1,11 +1,12 @@
 "use client";
 
 import { DocumentInfoResponse } from "@/types";
-import { formatCurrency } from "@/utils";
+import { formatCurrency, toLocalDate } from "@/utils";
 import Link from "next/link";
 
 export default function ClientDocumentItem({ item }: { item: DocumentInfoResponse }) {
 	const { tipoDocumento: tipo, fecha, idDocumento: id, numeroDocumento: numero, iva, valor } = item;
+	console.log(item);
 
 	return (
 		<tr className="fila_cliente">
@@ -18,7 +19,7 @@ export default function ClientDocumentItem({ item }: { item: DocumentInfoRespons
 				</div>
 			</td>
 			<td>{numero}</td>
-			<td>{fecha}</td>
+			<td>{toLocalDate(fecha)}</td>
 			<td>{iva ? formatCurrency(valor + valor * 0.21) : formatCurrency(valor)}</td>
 		</tr>
 	);
