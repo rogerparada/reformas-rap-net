@@ -1,3 +1,5 @@
+import { DocumentResponse } from "./description";
+
 export type ApiResponse = {
 	success?: boolean;
 	message?: string;
@@ -16,4 +18,11 @@ export type ApiMeta = {
 export type ApiError = {
 	status: number;
 	error: string | null;
+};
+
+export type ApiDocumentResponse = {
+	success: boolean;
+	status: number;
+	data: { id: string } | DocumentResponse | null;
+	errors: string[] | null;
 };

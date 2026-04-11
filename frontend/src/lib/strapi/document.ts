@@ -1,4 +1,4 @@
-import { DocumentInfoResponse, DocumentResponse, FullDocumentResponse } from "@/types";
+import { ApiDocumentResponse, DocumentInfoResponse, DocumentResponse, FullDocumentResponse } from "@/types";
 import { DocumentInput } from "@/validations/document-validator";
 
 const STRAPI_URL = process.env.STRAPI_API_URL || "http://localhost:1337";
@@ -119,7 +119,7 @@ export const getDocumentById = async (jwt: string, id: string) => {
 	}
 };
 
-export const createDocument = async (jwt: string, data: DocumentInput) => {
+export const createDocument = async (jwt: string, data: DocumentInput): Promise<ApiDocumentResponse> => {
 	try {
 		const resp = await fetch(API_URL, {
 			method: "POST",
@@ -127,14 +127,20 @@ export const createDocument = async (jwt: string, data: DocumentInput) => {
 				Authorization: `Bearer ${jwt}`,
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ data }),
+			body: JSON.stringify(data),
 		});
 
 		const result = await resp.json();
-		console.log("API:", result);
-		return result;
+
+		return {
+			success: resp.ok,
+			status: result.status,
+			data: !resp.ok ? null : result,
+			errors: !resp.ok ? [result.errors.message] : null,
+		};
 	} catch (error) {
 		console.error(`Error getting Document`, error);
+		throw new Error("Error al obtener el documento");
 	}
 };
 

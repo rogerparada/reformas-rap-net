@@ -3,16 +3,16 @@ export type DocumentResponse = {
 	numeroDocumento: string;
 	tipoDocumento: "Factura" | "Presupuesto" | "CuentaCobro";
 	fecha: string;
-	estado: "borrador" | "enviada" | "editada";
+	estado: "Borrador" | "Editado" | "Enviado";
 	iva: boolean;
-	idCliente: number;
+	idCliente: string;
 };
 export type DocumentInfoResponse = {
 	idDocumento: string;
 	numeroDocumento: string;
 	tipoDocumento: "Factura" | "Presupuesto" | "CuentaCobro";
 	fecha: string;
-	estado: "borrador" | "enviada" | "editada";
+	estado: "Borrador" | "Editado" | "Enviado";
 	iva: boolean;
 	cliente: string;
 	valor: number;

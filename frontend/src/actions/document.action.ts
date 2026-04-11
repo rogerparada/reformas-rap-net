@@ -1,53 +1,40 @@
 "use server";
 
 import { api, auth } from "../lib";
-import { DocumentInfo, SaveDocumentInput } from "../types";
+import { ApiDocumentResponse, DocumentResponse, SaveDocumentInput } from "../types";
 import { processDetails } from "../utils";
 import { documentSchema } from "../validations/document-validator";
 
-export async function createDocumentAction(documentInput: SaveDocumentInput) {
-	const { document, cliente, items } = documentInput;
+export async function createDocumentAction(documentInput: SaveDocumentInput): Promise<ApiDocumentResponse> {
+	const { document, idCliente, items } = documentInput;
 	const doc = {
 		...document,
-		cliente,
+		idCliente,
 		items,
 	};
 
 	const result = documentSchema.safeParse(doc);
 	if (!result.success) {
+		console.log(result.error.issues);
 		return {
 			success: false,
+			status: 400,
+			data: null,
 			errors: result.error.issues.map((issue) => `${issue.message}`),
 		};
 	}
 
 	const token = (await auth.isAuthenticated()) ?? "";
-
-	const { data, error } = await api.documents.createDocument(token, result.data);
-
-	if (!data) {
-		const errors = processDetails(error.details?.errors);
-		return {
-			success: false,
-			errors,
-		};
-	}
-
-	console.log(data);
-
-	return {
-		success: true,
-		errors: [],
-		data,
-	};
+	return await api.documents.createDocument(token, result.data);
 }
 
 export async function editDocumentAction(documentInput: SaveDocumentInput) {
 	const doc = {
 		...documentInput.document,
-		cliente: documentInput.cliente,
+		idCliente: documentInput.idCliente,
 		items: documentInput.items,
 	};
+	console.log(doc);
 
 	const result = documentSchema.safeParse(doc);
 	if (!result.success) {
@@ -76,7 +63,7 @@ export async function editDocumentAction(documentInput: SaveDocumentInput) {
 	};
 }
 
-export async function deleteDocumentAction(id: DocumentInfo["documentId"]) {
+export async function deleteDocumentAction(id: DocumentResponse["idDocumento"]) {
 	if (id?.length !== 24) {
 		return {
 			success: false,

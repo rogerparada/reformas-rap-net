@@ -8,11 +8,12 @@ export const documentSchema = z.object({
 	fecha: z
 		.string()
 		.regex(/^\d{4}-\d{2}-\d{2}$/, { message: "El formato de la fecha debe ser YYYY-MM-DD" })
-		.refine((val) => !isNaN(new Date(val).getTime()), { message: "La fecha no es válida" }),
+		.refine((val) => !isNaN(new Date(val).getTime()), { message: "La fecha no es válida" })
+		.transform((val) => new Date(val).toISOString()),
 
 	tipoDocumento: z.enum(["Factura", "Presupuesto"]),
 	iva: z.boolean(),
-	cliente: z.string().length(24, { message: "La id del cliente no es valida" }),
+	idCliente: z.string().length(36, { message: "La id del cliente no es valida" }),
 	items: z
 		.array(
 			z.object({
@@ -20,7 +21,7 @@ export const documentSchema = z.object({
 				price: z.number().gte(0, { message: "El precio no puede ser negativo" }),
 				quantity: z.number().gte(0, { message: "La cantidad no puede ser negativa" }),
 				total: z.number().gt(0, { message: "El importe tiene que ser mayor a 0" }),
-			})
+			}),
 		)
 		.min(1, { message: "El documento debe tener al menos un elemento" }),
 });

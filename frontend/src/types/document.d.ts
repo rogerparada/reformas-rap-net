@@ -11,8 +11,8 @@ export type FullDocument = {
 export type EditableDocument = Omit<FullDocument, "company">;
 
 export type SaveDocumentInput = {
-	id?: DocumentInfo["documentId"];
+	id?: DocumentInfo["idDocumento"];
 	document: DocumentInfo;
-	cliente: ClientInfo["documentId"];
+	idCliente: ClientInfo["id"];
 	items: ItemTable[];
 };

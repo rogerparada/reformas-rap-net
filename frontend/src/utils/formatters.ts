@@ -59,3 +59,13 @@ export const toLocalDate = (isoString: string): string => {
 		year: "numeric",
 	}).format(date);
 };
+
+export const toISOString = (dateString: string): string => {
+	const date = new Date(dateString);
+
+	if (isNaN(date.getTime())) {
+		throw new Error(`Fecha inválida: ${dateString}`);
+	}
+
+	return date.toISOString();
+};

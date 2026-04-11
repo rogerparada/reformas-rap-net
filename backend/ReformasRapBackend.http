@@ -68,7 +68,7 @@ GET {{Api_URL}}/api/Document
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
-### Create Documento
+### Create Documento in item
 POST {{Api_URL}}/api/Document
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
@@ -88,13 +88,19 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "numeroDocumento": "Fact-002",
+  "numeroDocumento": "Fact-00611",
+  "fecha": "2026-04-10T00:00:00.000Z",
   "tipoDocumento": "Factura",
-  "fecha": "2026-04-10",
-  "estado": "borrador",
   "iva": true,
-  "cliente": "019d7899-14d6-77f9-937f-32fec274eaca",
-  "items": [ { "description": "Algo", "price": 0, "quantity": 0, "total": 200.05 } ]
+  "idCliente": "019d7be9-2f6b-7f5d-b743-14107df070e1",
+  "items": [
+    {
+      "description": "Algo",
+      "price": 0,
+      "quantity": 0,
+      "total": 200.05
+    }
+  ]
 }
 
 ### Create Document whit Items
@@ -112,8 +118,8 @@ Authorization: Bearer {{auth_token}}
   "idCliente": "{{id_cliente}}",
   "items": [
     {
-      "descripcion": "Llaves de paso",
-      "importe": 500
+      "description": "Llaves de paso",
+      "total": 500
     }
   ]
 }
@@ -132,16 +138,16 @@ Authorization: Bearer {{auth_token}}
   "idCliente": "{{id_cliente}}",
   "items": [    
     {
-      "descripcion": "Botes de pintura",
-      "importe": 500,
-      "precio": null,
-      "cantidad": null
+      "description": "Botes de pintura",
+      "total": 500,
+      "price": null,
+      "quantity": null
     },
     {
-      "descripcion": "Paletinas",
-      "importe": null,
-      "precio": 12.5,
-      "cantidad": 12
+      "description": "Paletinas",
+      "total": null,
+      "price": 12.5,
+      "quantity": 12
     }
     
   ]

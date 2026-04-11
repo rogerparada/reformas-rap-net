@@ -14,7 +14,7 @@ public interface IDocumentosService
     Task<DocumentoResponse> GetDocumento(string idDocumento);
     Task<FullDocumentoResponse> GetDocumento(Guid idDocumento);
     
-    Task CreateDocumento(DocumentoRequest documento);
+    Task<Guid> CreateDocumento(DocumentoRequest documento);
     
     Task DeleteDocumento(string idDocumento);
     Task UpdateDocumento(Guid id, DocumentoRequest documento);

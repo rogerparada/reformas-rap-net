@@ -12,7 +12,7 @@ export default function ClientSelector({ options }: ClientSelectorProps) {
 	const client = useAppStore((state) => state.client);
 	const handleChangeSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
-		const client = options?.find((c) => c.id === +value);
+		const client = options?.find((c) => c.id === value);
 		setClient(client ?? { name: "" });
 	};
 

@@ -31,10 +31,9 @@ export default function SaveDocumentModal({ document, draw = false, icon = "save
 		const val = !edit ? await actions.document.createDocumentAction(document) : await actions.document.editDocumentAction(document);
 		setValidating(false);
 		setValidated(val.success);
-		setErrors(val.errors);
+		setErrors(val.errors ?? []);
 		if (val.data) {
-			console.log(val.data);
-			setId(val.data.documentId);
+			setId(val.data.id);
 		}
 		return;
 	};
@@ -45,7 +44,7 @@ export default function SaveDocumentModal({ document, draw = false, icon = "save
 		setOpen(false);
 		setErrors([]);
 		const url = !draw ? `${route}/${id}` : route;
-		console.log(url);
+
 		if (err.length === 0) router.push(url);
 	};
 

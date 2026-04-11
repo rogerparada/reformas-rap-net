@@ -5,7 +5,7 @@ import { useAppStore } from "@/store/useAppStore";
 
 export default function NewDocumentOptions() {
 	const document = useAppStore((state) => state.document);
-	const cliente = useAppStore((state) => state.client.documentId);
+	const idCliente = useAppStore((state) => state.client.id);
 	const items = useAppStore((state) => state.items);
 	return (
 		<>
@@ -14,9 +14,9 @@ export default function NewDocumentOptions() {
 					route="/gestion/documentos"
 					text={`Crear ${document.tipoDocumento}`}
 					icon="doc_add"
-					document={{ document, cliente, items }}
+					document={{ document, idCliente, items }}
 				/>
-				<SaveDocumentModal route="/gestion/documentos" text="Guardar Borrador" draw document={{ document, cliente, items }} />
+				<SaveDocumentModal route="/gestion/documentos" text="Guardar Borrador" draw document={{ document, idCliente, items }} />
 			</div>
 		</>
 	);

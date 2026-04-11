@@ -14,10 +14,13 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     [HttpGet]
     [EndpointSummary("Lista de Documentos")]
     [EndpointDescription("Lista de Documentos, admite el filtrado por tipo")]
-    public async Task<List<DocumentoResponse>> Get([FromQuery] TipoDocumento? tipo) => tipo is null
+    // public async Task<List<DocumentoResponse>> Get([FromQuery] TipoDocumento? tipo) => tipo is null
+    //     ? await documentosService.GetDocumentos()
+    //     : await documentosService.GetDocumentosByType(tipo.Value);
+    public async Task<ActionResult<List<DocumentoResponse>>> Get([FromQuery] TipoDocumento? tipo) => tipo is null
         ? await documentosService.GetDocumentos()
         : await documentosService.GetDocumentosByType(tipo.Value);
-    
+
     [HttpGet("info")]
     [EndpointSummary("Lista de informacion de los Documentos")]
     [EndpointDescription("Lista de Documentos, admite el filtrado por tipo")]
@@ -42,8 +45,8 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post([FromBody] DocumentoRequest documento)
     {
-        await documentosService.CreateDocumento(documento);
-        return Created();
+        var idDocumento = await documentosService.CreateDocumento(documento);
+        return Created("Client", new { id = idDocumento });
     }
 
     [HttpPut("{id}")]

@@ -71,7 +71,7 @@ public class DocumentosService(
             : mapper.FullDocumentoToResponse(doc);
     }
 
-    public async Task CreateDocumento(DocumentoRequest documento)
+    public async Task<Guid> CreateDocumento(DocumentoRequest documento)
     {
         var cliente = await clientesRepository.GetCliente(documento.IdCliente);
         if (cliente == null)
@@ -104,6 +104,8 @@ public class DocumentosService(
         {
             throw new MiddlewareException(HttpStatusCode.InternalServerError, new { message = e.Message });
         }
+        
+        return result.IdDocumento;
     }
 
     public async Task DeleteDocumento(string idDocumento)
