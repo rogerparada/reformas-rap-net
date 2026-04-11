@@ -16,6 +16,8 @@ namespace ReformasRapBackend.Data
         
         public DbSet<Documento> Documentos { get; set; }
         
-        public DbSet<Item>  Items { get; set; }    
+        public DbSet<Item>  Items { get; set; }
+        
+        public DbSet<Company>  Companies { get; set; }
     }
 }

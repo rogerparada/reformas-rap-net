@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReformasRapBackend.Data.Dto;
 using ReformasRapBackend.Enums;
+using ReformasRapBackend.Models;
 using ReformasRapBackend.Services.Documentos;
 
 namespace ReformasRapBackend.Controllers;
@@ -14,10 +15,7 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     [HttpGet]
     [EndpointSummary("Lista de Documentos")]
     [EndpointDescription("Lista de Documentos, admite el filtrado por tipo")]
-    // public async Task<List<DocumentoResponse>> Get([FromQuery] TipoDocumento? tipo) => tipo is null
-    //     ? await documentosService.GetDocumentos()
-    //     : await documentosService.GetDocumentosByType(tipo.Value);
-    public async Task<ActionResult<List<DocumentoResponse>>> Get([FromQuery] TipoDocumento? tipo) => tipo is null
+    public async Task<List<DocumentoResponse>> Get([FromQuery] TipoDocumento? tipo) => tipo is null
         ? await documentosService.GetDocumentos()
         : await documentosService.GetDocumentosByType(tipo.Value);
 
@@ -66,4 +64,7 @@ public class DocumentController(IDocumentosService documentosService) : Controll
         await documentosService.DeleteDocumento(id);
         return Ok(new { message = "Se ha eliminado el documento" });
     }
+
+    [HttpGet("company")]
+    public Task<Company> CompanyInfo() => documentosService.GetCompanyInfo();
 }

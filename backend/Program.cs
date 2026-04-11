@@ -11,6 +11,7 @@ using ReformasRapBackend.Mappers;
 using ReformasRapBackend.Middleware;
 using ReformasRapBackend.Models;
 using ReformasRapBackend.Repository.Clientes;
+using ReformasRapBackend.Repository.Companies;
 using ReformasRapBackend.Repository.Documentos;
 using ReformasRapBackend.Repository.Items;
 using ReformasRapBackend.Services.Clientes;
@@ -63,6 +64,7 @@ builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IDocumentosRepository, DocumentosRepository>();
 builder.Services.AddScoped<IDocumentosService, DocumentosService>();
 builder.Services.AddScoped<IClientesService, ClientesService>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IMapper, Mapper>();
 
 builder.Services.AddAuthorization();

@@ -1,5 +1,6 @@
 using ReformasRapBackend.Data.Dto;
 using ReformasRapBackend.Enums;
+using ReformasRapBackend.Models;
 
 namespace ReformasRapBackend.Services.Documentos;
 
@@ -18,4 +19,5 @@ public interface IDocumentosService
     
     Task DeleteDocumento(string idDocumento);
     Task UpdateDocumento(Guid id, DocumentoRequest documento);
+    Task<Company> GetCompanyInfo();
 }

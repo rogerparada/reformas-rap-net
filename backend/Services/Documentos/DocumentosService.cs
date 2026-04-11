@@ -5,6 +5,7 @@ using ReformasRapBackend.Mappers;
 using ReformasRapBackend.Middleware;
 using ReformasRapBackend.Models;
 using ReformasRapBackend.Repository.Clientes;
+using ReformasRapBackend.Repository.Companies;
 using ReformasRapBackend.Repository.Documentos;
 using ReformasRapBackend.Repository.Items;
 
@@ -14,6 +15,7 @@ public class DocumentosService(
     IDocumentosRepository documentosRepository,
     IItemsRepository itemsRepository,
     IClientesRepository clientesRepository,
+    ICompanyRepository companyRepository,
     IMapper mapper)
     : IDocumentosService
 {
@@ -141,4 +143,6 @@ public class DocumentosService(
                 new { message = "Error al actualizar el documento" });
         }
     }
+
+    public async Task<Company> GetCompanyInfo()=> await companyRepository.GetCompanyInfo();
 }
