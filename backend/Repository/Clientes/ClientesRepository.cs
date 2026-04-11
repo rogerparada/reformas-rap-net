@@ -20,6 +20,7 @@ public class ClientesRepository(AppDbContext context) : IClientesRepository
 
     public async Task AddCliente(Cliente cliente)
     {
+        cliente.Created = DateTime.UtcNow;
         var client = await context.Clientes.AddAsync(cliente);
         await context.SaveChangesAsync();
     }
@@ -35,6 +36,7 @@ public class ClientesRepository(AppDbContext context) : IClientesRepository
             client.Name = cliente.Name;
             client.Nif = cliente.Nif;
             client.Phone = cliente.Phone;
+            client.Updated = DateTime.UtcNow;
 
             await context.SaveChangesAsync();
         }

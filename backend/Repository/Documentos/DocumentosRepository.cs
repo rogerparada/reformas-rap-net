@@ -37,6 +37,7 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
 
     public async Task<Documento?> CreateDocumento(Documento doc)
     {
+        doc.Created = DateTime.UtcNow;
         var result = await context.Documentos.AddAsync(doc);
         return result.Entity;
     }
@@ -62,6 +63,7 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
             doc.Fecha = documento.Fecha;
             doc.TipoDocumento = documento.TipoDocumento;
             doc.Iva = documento.Iva;
+            doc.Updated = DateTime.UtcNow;
 
             context.Documentos.Update(doc);
             await context.SaveChangesAsync();

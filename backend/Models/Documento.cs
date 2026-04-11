@@ -16,6 +16,9 @@ public class Documento
     
     public List<Item> Items { get; set; } = [];
     public Guid IdCliente { get; set; }
+    
+    public DateTime Created { get; set; }
+    public DateTime? Updated { get; set; }
 
     [ForeignKey("IdCliente")] public virtual Cliente? Cliente { get; set; }
 }

@@ -3,20 +3,20 @@ namespace ReformasRapBackend.Data.Dto;
 public class ItemResponse
 {
     public int Id { get; set; }
-    public required string Descripcion { get; set; }
-    public decimal? Precio { get; set; }
-    public decimal? Importe { get; set; }
-    public int? Cantidad { get; set; }
+    public required string Descrition { get; set; }
+    public decimal? Price { get; set; }
+    public decimal? Total { get; set; }
+    public int? Quantity { get; set; }
 
-    public decimal Total => GetTotal();
+    //public decimal Value => GetTotal();
 
-    private decimal GetTotal()
-    {
-        if(!Importe.HasValue && Precio.HasValue && Cantidad.HasValue)
-        {
-            return Precio.Value * Cantidad.Value;
-        }
-        
-        return Importe ?? 0.0M;
-    }
+    // private decimal GetTotal()
+    // {
+    //     if(!Importe.HasValue && Price.HasValue && Quantity.HasValue)
+    //     {
+    //         return Price.Value * Quantity.Value;
+    //     }
+    //     
+    //     return Importe ?? 0.0M;
+    // }
 }

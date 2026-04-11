@@ -35,6 +35,7 @@ public class ItemsRepository(AppDbContext context) : IItemsRepository
         foreach (var item in items)
         {
             item.IdDocumento = documentId;
+            item.Created = DateTime.UtcNow;
             await context.AddAsync(item);
         }
 
@@ -61,14 +62,16 @@ public class ItemsRepository(AppDbContext context) : IItemsRepository
             if (exist is null)
             {
                 item.IdDocumento = documentId;
+                item.Created = DateTime.UtcNow;
                 context.Add(item);
             }
             else
             {
-                exist.Descripcion = item.Descripcion;
-                exist.Importe = item.Importe;
+                exist.Description = item.Description;
+                exist.Total = item.Total;
                 exist.Price = item.Price;
                 exist.Quantity = item.Quantity;
+                exist.Updated = DateTime.UtcNow;
             }
         }
         

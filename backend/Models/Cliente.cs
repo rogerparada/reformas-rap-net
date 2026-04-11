@@ -11,5 +11,7 @@ public class Cliente
     [StringLength(50)] public required string Phone { get; set; }
     [StringLength(100)] public required string Address { get; set; }
     [StringLength(10)] public string? Nif { get; set; } = null;
+    public DateTime Created { get; set; }
+    public DateTime? Updated { get; set; }
     public List<Documento> Documentos { get; set; } = [];
 }
