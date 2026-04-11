@@ -85,25 +85,25 @@ public class Mapper : IMapper
         Fecha = doc.Fecha,
         Iva = doc.Iva,
         Valor = doc.Items.Aggregate(0.0M,
-            (acc, item) => item.Importe > 0 ? acc + item.Importe : acc + (item.Price * item.Quantity)),
+            (acc, item) => item.Total > 0 ? acc + item.Total : acc + (item.Price * item.Quantity)),
         Cliente = doc.Cliente != null ? doc.Cliente.Name : string.Empty,
     };
 
     public Item ItemRequestToEntity(ItemRequest item) => new()
     {
         Id = item.Id ?? 0,
-        Quantity = item.Cantidad ?? 0,
-        Price = item.Precio ?? 0.0M,
-        Importe = item.Importe ?? 0.0M,
-        Descripcion = item.Descripcion,
+        Quantity = item.Quantity ?? 0,
+        Price = item.Price ?? 0.0M,
+        Total = item.Total ?? 0.0M,
+        Description = item.Description,
     };
 
     public ItemResponse ItemToResponse(Item item) => new()
     {
         Id = item.Id,
-        Cantidad = item.Quantity,
-        Precio = item.Price,
-        Importe = item.Importe,
-        Descripcion = item.Descripcion,
+        Quantity = item.Quantity,
+        Price = item.Price,
+        Total = item.Total,
+        Descrition = item.Description,
     };
 }

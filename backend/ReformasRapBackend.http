@@ -1,7 +1,7 @@
 @Api_URL = http://localhost:5173
 @user_mail = "mail@mail.com"
 @user_pass = "ElPasswordMasLargoPosible2026!"
-@id_cliente = 019d781c-ae55-741a-9940-b03bbe147ec7
+@id_cliente = 019d7be9-2f6b-7f5d-b743-14107df070e1
 
 ### Create User
 POST {{Api_URL}}/api/Auth/register/
@@ -80,6 +80,21 @@ Authorization: Bearer {{auth_token}}
   "estado": 1,
   "iva": null,
   "idCliente": "{{id_cliente}}"
+}
+
+### Create Documento
+POST {{Api_URL}}/api/Document
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "numeroDocumento": "Fact-002",
+  "tipoDocumento": "Factura",
+  "fecha": "2026-04-10",
+  "estado": "borrador",
+  "iva": true,
+  "cliente": "019d7899-14d6-77f9-937f-32fec274eaca",
+  "items": [ { "description": "Algo", "price": 0, "quantity": 0, "total": 200.05 } ]
 }
 
 ### Create Document whit Items
