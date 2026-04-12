@@ -2,7 +2,7 @@ import { jsPDF } from "jspdf";
 
 import { FullDocument, ItemTable } from "@/types";
 import { formatCurrency } from "@/utils";
-import { formatDate } from "@/utils/formatters";
+import { formatDate, toLocalDate } from "@/utils/formatters";
 
 export function generarPDF(doc: Omit<FullDocument, "data"> & { items: ItemTable[] }) {
 	const { client, company, document, items } = doc;
@@ -34,7 +34,7 @@ export function generarPDF(doc: Omit<FullDocument, "data"> & { items: ItemTable[
 	pdf.setTextColor(255, 255, 255);
 	pdf.setFont("helvetica", "bold");
 	pdf.setFontSize(11);
-	pdf.addImage("/images/LogoB.png", leftX + 5, y + 2.5, 7, 7);
+	pdf.addImage("/images/LogoB.png", "PNG", leftX + 5, y + 2.5, 7, 7);
 	pdf.text(`eformas RAP | ${tipo}`, leftX + 13, y + 9);
 
 	pdf.setTextColor(0, 0, 0);
@@ -99,7 +99,7 @@ export function generarPDF(doc: Omit<FullDocument, "data"> & { items: ItemTable[
 
 		pdf.setTextColor(0, 0, 0);
 		pdf.text(numero ?? "", 10 + width / 6 - numero.length, y + 16);
-		pdf.text(formatDate(document.fecha), 95, y + 16);
+		pdf.text(toLocalDate(document.fecha), 95, y + 16);
 		pdf.text(company.nif, 158, y + 16);
 	} else {
 		pdf.text(`N° ${tipo}`, width / 4, y + 7);
@@ -112,7 +112,7 @@ export function generarPDF(doc: Omit<FullDocument, "data"> & { items: ItemTable[
 		pdf.line(105, y + 10, 105, y + 20);
 
 		pdf.text(numero ?? "", 10 + width / 4 - numero.length, y + 16);
-		pdf.text(formatDate(fecha), 142.5, y + 16);
+		pdf.text(toLocalDate(fecha), 142.5, y + 16);
 	}
 
 	y = 100;

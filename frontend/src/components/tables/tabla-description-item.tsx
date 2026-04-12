@@ -1,5 +1,5 @@
 "use client";
-import { ItemTable } from "@/types/items";
+import { ItemTable } from "@/types";
 import { formatCurrency } from "@/utils";
 
 type Props = {
@@ -7,6 +7,7 @@ type Props = {
 };
 
 export default function TablaDescripcionItem({ item }: Props) {
+	console.log(item);
 	const { description, price, quantity, total: value } = item;
 
 	const multilineDescription = description.includes("\n") ? (

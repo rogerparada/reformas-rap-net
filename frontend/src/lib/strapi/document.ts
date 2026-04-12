@@ -97,7 +97,7 @@ export const getFullDocumentsByType = async (jwt: string, tipo: DocumentResponse
 	}
 };
 
-export const getDocumentById = async (jwt: string, id: string) => {
+export const getDocumentById = async (jwt: string, id: string): Promise<FullDocumentResponse> => {
 	const url = `${API_URL}/${id}`;
 
 	try {
@@ -107,15 +107,11 @@ export const getDocumentById = async (jwt: string, id: string) => {
 				"Content-Type": "application/json",
 			},
 		});
-
 		const result = await resp.json();
-		return result.data;
+		return result;
 	} catch (error) {
 		console.error(`Error getting Document`, error);
-		return {
-			data: null,
-			error: { status: 500, name: "ForbiddenError", message: "forbidden" },
-		};
+		throw new Error("Error al obtener el documento");
 	}
 };
 
@@ -144,7 +140,7 @@ export const createDocument = async (jwt: string, data: DocumentInput): Promise<
 	}
 };
 
-export const editDocument = async (jwt: string, id: string, data: DocumentInput) => {
+export const editDocument = async (jwt: string, id: string, data: DocumentInput): Promise<ApiDocumentResponse> => {
 	const url = `${API_URL}/${id}`;
 
 	try {
@@ -154,14 +150,20 @@ export const editDocument = async (jwt: string, id: string, data: DocumentInput)
 				Authorization: `Bearer ${jwt}`,
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ data }),
+			body: JSON.stringify(data),
 		});
 
 		const result = await resp.json();
 
-		return result;
+		return {
+			success: resp.ok,
+			status: result.status,
+			data: !resp.ok ? null : result,
+			errors: !resp.ok ? [result.errors.message] : null,
+		};
 	} catch (error) {
 		console.error(`Error edit Document`, error);
+		throw new Error("Error al editar el documento");
 	}
 };
 

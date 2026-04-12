@@ -12,7 +12,7 @@ import jsPDF from "jspdf";
 
 type DocumentOptionsProps = {
 	edit?: boolean;
-	id?: DocumentInfo["documentId"];
+	id?: DocumentInfo["idDocumento"];
 	link: string;
 	pdf?: jsPDF;
 };

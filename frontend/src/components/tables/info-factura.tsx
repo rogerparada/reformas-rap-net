@@ -1,5 +1,6 @@
 "use client";
 import { DocumentInfo } from "@/types";
+import { toLocalDate } from "@/utils";
 
 type InfoFacturaProps = {
 	nif?: string;
@@ -25,7 +26,7 @@ export default function InfoFactura({ nif, data }: InfoFacturaProps) {
 						<td>
 							<span className="w-full text-center">{numeroDocumento}</span>
 						</td>
-						<td>{fecha}</td>
+						<td>{toLocalDate(fecha)}</td>
 						{iva && <td>{nif}</td>}
 					</tr>
 				</tbody>

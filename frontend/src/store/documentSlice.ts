@@ -9,18 +9,23 @@ export type DocumentSlice = {
 };
 
 const initialDocument: DocumentInfo = {
-	id: "",
-	documentId: "",
+	idDocumento: "",
 	tipoDocumento: "Factura",
 	numeroDocumento: "",
 	fecha: new Date().toISOString().substring(0, 10),
 	iva: true,
-	estado: "borrador",
+	estado: "Borrador",
 };
 
 export const createDocumentSlice: StateCreator<DocumentSlice> = (set, get) => ({
 	document: initialDocument,
-	setDocument: (document: DocumentInfo) => set({ document }),
+	setDocument: (document: DocumentInfo) => {
+		const { fecha } = document;
+		if (fecha && fecha.includes("T")) {
+			document.fecha = fecha.split("T")[0];
+		}
+		set({ document });
+	},
 	changeDocumentAttribute: (key, value) => set({ document: { ...get().document, [key]: value } }),
 	clearDocument: () => set({ document: initialDocument }),
 });

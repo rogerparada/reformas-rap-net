@@ -33,7 +33,7 @@ export default function SaveDocumentModal({ document, draw = false, icon = "save
 		setValidated(val.success);
 		setErrors(val.errors ?? []);
 		if (val.data) {
-			setId(val.data.id);
+			setId(val.data.idDocumento);
 		}
 		return;
 	};

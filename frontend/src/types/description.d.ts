@@ -1,3 +1,5 @@
+import { ItemTable } from "./items";
+
 export type DocumentResponse = {
 	idDocumento: string;
 	numeroDocumento: string;
@@ -50,7 +52,7 @@ export type ItemResponse = {
 
 export type FullDocumentResponse = DocumentResponse & {
 	cliente: ClienteResponse;
-	items: ItemResponse[];
+	items: ItemTable[];
 };
 
 export type FullClienteResponse = {
@@ -62,4 +64,23 @@ export type FullClienteResponse = {
 	address: string;
 	nif: string | undefined;
 	documentos: DocumentInfoResponse[];
+};
+
+export type CompanyInfo = {
+	name: string;
+	phone: string;
+	email: string;
+	address: string;
+	city: string;
+	web: string;
+	nif: string;
+};
+
+export type DocumentInfo = {
+	idDocumento: string;
+	tipoDocumento: "Factura" | "Presupuesto" | "CuentaCobro";
+	numeroDocumento: string;
+	fecha: string;
+	iva: boolean;
+	estado: "Borrador" | "Editado" | "Enviado";
 };

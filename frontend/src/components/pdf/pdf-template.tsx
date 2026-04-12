@@ -17,7 +17,7 @@ export default function PdfTemplate({ doc }: { doc: FullDocument }) {
 
 	return (
 		<>
-			<DocumentOptions edit pdf={pdf} link={`/gestion/documentos/edit?id=${document.documentId}`} id={document.documentId} />
+			<DocumentOptions edit pdf={pdf} link={`/gestion/documentos/edit?id=${document.idDocumento}`} id={document.idDocumento} />
 			<div className="preview_document">
 				<div className="container mx-auto md:p-10">
 					<DocumentHeader client={client} company={company} document={document} />

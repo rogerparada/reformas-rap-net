@@ -2,7 +2,6 @@
 
 import { api, auth } from "../lib";
 import { ApiDocumentResponse, DocumentResponse, SaveDocumentInput } from "../types";
-import { processDetails } from "../utils";
 import { documentSchema } from "../validations/document-validator";
 
 export async function createDocumentAction(documentInput: SaveDocumentInput): Promise<ApiDocumentResponse> {
@@ -28,39 +27,26 @@ export async function createDocumentAction(documentInput: SaveDocumentInput): Pr
 	return await api.documents.createDocument(token, result.data);
 }
 
-export async function editDocumentAction(documentInput: SaveDocumentInput) {
+export async function editDocumentAction(documentInput: SaveDocumentInput): Promise<ApiDocumentResponse> {
 	const doc = {
 		...documentInput.document,
 		idCliente: documentInput.idCliente,
 		items: documentInput.items,
 	};
-	console.log(doc);
 
 	const result = documentSchema.safeParse(doc);
 	if (!result.success) {
 		return {
 			success: false,
+			status: 400,
+			data: null,
 			errors: result.error.issues.map((issue) => `${issue.message}`),
 		};
 	}
 
 	const token = (await auth.isAuthenticated()) ?? "";
 
-	const { data, error } = await api.documents.editDocument(token, documentInput.id, result.data);
-
-	if (!data) {
-		const errors = processDetails(error.details?.errors);
-		return {
-			success: false,
-			errors,
-		};
-	}
-
-	return {
-		success: true,
-		errors: [],
-		data,
-	};
+	return await api.documents.editDocument(token, doc.idDocumento, result.data);
 }
 
 export async function deleteDocumentAction(id: DocumentResponse["idDocumento"]) {

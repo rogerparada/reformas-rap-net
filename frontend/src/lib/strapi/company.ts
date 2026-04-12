@@ -19,7 +19,7 @@ export const getCompanyInfo = async (jwt: string): Promise<CompanyInfo | undefin
 	"use cache";
 	if (!jwt) return;
 
-	const url = `${API_URL}/api/company`;
+	const url = `${API_URL}/api/Document/company`;
 
 	try {
 		const response = await fetch(url, {
@@ -28,9 +28,7 @@ export const getCompanyInfo = async (jwt: string): Promise<CompanyInfo | undefin
 				"Content-Type": "application/json",
 			},
 		});
-		const result = await response.json();
-
-		return result.data;
+		return await response.json();
 	} catch (error) {
 		console.error("Home page generation error: ", error);
 	}

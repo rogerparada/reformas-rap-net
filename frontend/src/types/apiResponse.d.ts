@@ -23,6 +23,6 @@ export type ApiError = {
 export type ApiDocumentResponse = {
 	success: boolean;
 	status: number;
-	data: { id: string } | DocumentResponse | null;
+	data: { idDocumento: string } | DocumentResponse | null;
 	errors: string[] | null;
 };
