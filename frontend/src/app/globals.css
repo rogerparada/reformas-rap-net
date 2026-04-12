@@ -309,6 +309,22 @@ textarea {
 		}
 	}
 }
+.newItemsModal {
+	@apply flex flex-col gap-2 justify-center items-center;
+
+	.newItem {
+		@apply w-full;
+		input[type="text"],
+		input[type="number"],
+		select {
+			@apply w-full h-10 text-right pr-2 border border-slate-400 rounded-md;
+		}
+
+		textarea {
+			@apply w-full pl-2 pt-2 min-h-56 border border-slate-400 rounded-md;
+		}
+	}
+}
 
 .action_button_group {
 	@apply flex items-center justify-center py-2 gap-1!;

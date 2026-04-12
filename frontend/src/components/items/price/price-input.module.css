@@ -1,0 +1,38 @@
+.contenedor {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.contenedor label {
+	padding: 2px;
+	font-weight: bold;
+	margin-right: 10px;
+	font-size: var(--text-md);
+}
+
+.contenedor input {
+	text-align: right;
+	padding-right: 2px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: var(--color-slate-400);
+	border-radius: var(--radius-md);
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	height: calc(var(--spacing) * 10);
+}
+
+.contenedor div {
+	padding: 2px;
+	background-color: var(--color-primary-light);
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 40px;
+	font-weight: bold;
+	border-top-right-radius: var(--radius-md);
+	border-bottom-right-radius: var(--radius-md);
+	height: calc(var(--spacing) * 10);
+}

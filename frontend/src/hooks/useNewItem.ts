@@ -15,30 +15,19 @@ export function useNewItem() {
 	const addItemToStore = (formData: FormData) => {
 		const description = formData.get("description") as string;
 		const price = Number(formData.get("price"));
-		const quantity = Number(formData.get("quantity"));
-		const total = !!price && !!quantity ? price * quantity : Number(formData.get("total"));
+		const quantity = Number(formData.get("quantity")) ?? 0;
 
 		if (!description) {
 			createMessage("Por favor rellene la descripción");
 			return;
 		}
 
-		if (!price && !quantity && !total) {
-			createMessage("Por favor rellene el precio, la cantidad o el total");
+		if (!price) {
+			createMessage("Escriba un precio");
 			return;
 		}
 
-		if (price && !quantity) {
-			createMessage("Escriba una cantidad");
-			return;
-		}
-
-		if (!price && quantity) {
-			createMessage("Escriba el precio por unidad");
-			return;
-		}
-
-		addItem({ description, price, quantity, total } as NewItemTable);
+		addItem({ description, price, quantity } as NewItemTable);
 	};
 
 	return { addItemToStore };

@@ -7,6 +7,7 @@ import DocumentResume from "../cards/document-resume";
 import ItemList from "../items/item-list";
 import NewItem from "../items/new-item";
 import { useRouter } from "next/navigation";
+import NewItemModal from "../modal/new-item-modal";
 
 type Props = {
 	doc?: EditableDocument;
@@ -34,8 +35,8 @@ export default function DocumentForm({ doc, clear, clients }: Props) {
 				<InfoDocumento options={clients} />
 				<DocumentResume />
 			</div>
-			<div className="card">
-				<NewItem />
+			<div className="flex justify-end">
+				<NewItemModal />
 			</div>
 			<ItemList />
 		</>
