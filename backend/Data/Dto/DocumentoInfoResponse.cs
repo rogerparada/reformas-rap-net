@@ -11,6 +11,6 @@ public class DocumentoInfoResponse
     public Estado Estado { get; set; }
     public bool Iva { get; set; }
     public Guid IdCliente { get; set; }
-    public decimal Valor { get; set; } = 0.0M;
-    public string Cliente { get; set; }
+    public decimal Total { get; set; } = 0.0M;
+    public string? Cliente { get; set; }
 }

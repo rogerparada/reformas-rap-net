@@ -6,5 +6,5 @@ namespace ReformasRapBackend.Repository.Companies;
 
 public class CompanyRepository(AppDbContext context) : ICompanyRepository
 {
-    public async Task<Company> GetCompanyInfo() => await context.Companies.FirstOrDefaultAsync();
+    public async Task<Company?> GetCompanyInfo() => await context.Companies.FirstOrDefaultAsync();
 }

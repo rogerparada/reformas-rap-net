@@ -35,7 +35,7 @@ public class ClientesService(IClientesRepository clientesRepository, IMapper map
         
         var cli = await clientesRepository.AddCliente(mapper.ClienteRequestToEntity(cliente));
 
-        return cli.Id;
+        return cli?.Id  ?? Guid.Empty;
     }
     
 

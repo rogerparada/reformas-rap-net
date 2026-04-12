@@ -52,7 +52,8 @@ public class ItemsRepository(AppDbContext context) : IItemsRepository
     public async Task UpdateItems(Guid documentId, IEnumerable<Item> items)
     {
         var currentItems = await context.Items.Where(i => i.IdDocumento == documentId).ToListAsync();
-        var ids = items.Select(i => i.Id);
+        var itemsList = items.ToList();
+        var ids = itemsList.Select(i => i.Id);
         var itemsToDelete = currentItems.Where(i => !ids.Contains(i.Id));
         context.RemoveRange(itemsToDelete);
         
@@ -68,7 +69,6 @@ public class ItemsRepository(AppDbContext context) : IItemsRepository
             else
             {
                 exist.Description = item.Description;
-                exist.Total = item.Total;
                 exist.Price = item.Price;
                 exist.Quantity = item.Quantity;
                 exist.Updated = DateTime.UtcNow;

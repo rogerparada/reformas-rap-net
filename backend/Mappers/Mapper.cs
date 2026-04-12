@@ -84,8 +84,8 @@ public class Mapper : IMapper
         Estado = doc.Estado,
         Fecha = doc.Fecha,
         Iva = doc.Iva,
-        Valor = doc.Items.Aggregate(0.0M,
-            (acc, item) => item.Total > 0 ? acc + item.Total : acc + (item.Price * item.Quantity)),
+        Total = doc.Items.Aggregate(0.0M,
+            (acc, item) => acc + (item.Price * item.Quantity)),
         Cliente = doc.Cliente != null ? doc.Cliente.Name : string.Empty,
     };
 
@@ -94,7 +94,6 @@ public class Mapper : IMapper
         Id = item.Id ?? 0,
         Quantity = item.Quantity ?? 0,
         Price = item.Price ?? 0.0M,
-        Total = item.Total ?? 0.0M,
         Description = item.Description,
     };
 
@@ -103,7 +102,7 @@ public class Mapper : IMapper
         Id = item.Id,
         Quantity = item.Quantity,
         Price = item.Price,
-        Total = item.Total,
+        Total = item.Quantity * item.Price,
         Description = item.Description,
     };
 }

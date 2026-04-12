@@ -9,5 +9,5 @@ public class FullClienteResponse
     public required string Phone { get; set; }
     public required string Address { get; set; }
     public string? Nif { get; set; }
-    public List<DocumentoInfoResponse> Documentos { get; set; }
+    public List<DocumentoInfoResponse> Documentos { get; set; } = [];
 }
