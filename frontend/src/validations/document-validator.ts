@@ -17,6 +17,7 @@ export const documentSchema = z.object({
 	items: z
 		.array(
 			z.object({
+				id: z.number().optional(),
 				description: z.string().min(1, { message: "La descripción no puede estar vacía" }),
 				price: z.number().gte(0, { message: "El precio no puede ser negativo" }),
 				quantity: z.number().gte(0, { message: "La cantidad no puede ser negativa" }),
