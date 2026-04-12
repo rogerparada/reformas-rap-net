@@ -110,7 +110,7 @@ public class DocumentosService(
         return result.IdDocumento;
     }
 
-    public async Task DeleteDocumento(string idDocumento)
+    public async Task DeleteDocumento(Guid idDocumento)
     {
         var exist = await documentosRepository.DocumentoExists(idDocumento);
         if (!exist)

@@ -63,7 +63,7 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     [EndpointSummary("Eliminar Documento")]
     [ProducesResponseType(StatusCodes.Status200OK, Description = "Se ha eliminado el documento")]
     [ProducesResponseType(StatusCodes.Status404NotFound, Description = "No encontrado")]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         await documentosService.DeleteDocumento(id);
         return Ok(new { message = "Se ha eliminado el documento" });

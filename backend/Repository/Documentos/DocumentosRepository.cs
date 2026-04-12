@@ -42,7 +42,7 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
         return result.Entity;
     }
 
-    public async Task DeleteDocumento(string id)
+    public async Task DeleteDocumento(Guid id)
     {
         var doc = await GetDocumento(id);
         if (doc is not null)

@@ -17,7 +17,7 @@ public interface IDocumentosService
     
     Task<Guid> CreateDocumento(DocumentoRequest documento);
     
-    Task DeleteDocumento(string idDocumento);
+    Task DeleteDocumento(Guid idDocumento);
     Task UpdateDocumento(Guid id, DocumentoRequest documento);
     Task<Company> GetCompanyInfo();
 }
