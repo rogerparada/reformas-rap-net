@@ -3,7 +3,7 @@ namespace ReformasRapBackend.Data.Dto;
 public class ItemResponse
 {
     public int Id { get; set; }
-    public required string Descrition { get; set; }
+    public required string Description { get; set; }
     public decimal? Price { get; set; }
     public decimal? Total { get; set; }
     public int? Quantity { get; set; }
