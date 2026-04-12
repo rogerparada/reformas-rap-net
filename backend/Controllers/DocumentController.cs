@@ -44,7 +44,7 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     public async Task<IActionResult> Post([FromBody] DocumentoRequest documento)
     {
         var idDocumento = await documentosService.CreateDocumento(documento);
-        return Created("Client", new { id = idDocumento });
+        return Created("Client", new { idDocumento });
     }
 
     [HttpPut("{id}")]
@@ -52,7 +52,11 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     public async Task<IActionResult> Put(Guid id, [FromBody] DocumentoRequest documento)
     {
         await documentosService.UpdateDocumento(id, documento);
-        return Ok();
+        return Ok( new
+        {
+            idDocumento = id,
+            message = "Se ha actualizado el documento"
+        });
     }
 
     [HttpDelete("{id}")]
