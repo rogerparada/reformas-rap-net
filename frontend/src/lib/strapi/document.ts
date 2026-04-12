@@ -39,10 +39,7 @@ export const getFullDocuments = async (jwt: string): Promise<FullDocumentRespons
 			},
 		});
 
-		const result = await response.json();
-		if (!result.data) return result;
-
-		return result;
+		return await response.json();
 	} catch (error) {
 		console.error("Get Documents error: ", error);
 		throw new Error("Error al obtener los documentos");
@@ -130,7 +127,7 @@ export const createDocument = async (jwt: string, data: DocumentInput): Promise<
 
 		return {
 			success: resp.ok,
-			status: result.status,
+			status: resp.status,
 			data: !resp.ok ? null : result,
 			errors: !resp.ok ? [result.errors.message] : null,
 		};
@@ -157,7 +154,7 @@ export const editDocument = async (jwt: string, id: string, data: DocumentInput)
 
 		return {
 			success: resp.ok,
-			status: result.status,
+			status: resp.status,
 			data: !resp.ok ? null : result,
 			errors: !resp.ok ? [result.errors.message] : null,
 		};
@@ -167,18 +164,27 @@ export const editDocument = async (jwt: string, id: string, data: DocumentInput)
 	}
 };
 
-export const deleteDocument = async (jwt: string, id: string) => {
+export const deleteDocument = async (jwt: string, id: string): Promise<ApiDocumentResponse> => {
 	const url = `${API_URL}/${id}`;
 
 	try {
-		return await fetch(url, {
+		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
 				Authorization: `Bearer ${jwt}`,
 				"Content-Type": "application/json",
 			},
 		});
+		const result = await response.json();
+		console.log(result);
+		return {
+			success: response.ok,
+			status: response.status,
+			data: !response.ok ? null : result,
+			errors: !response.ok ? [result.errors.message] : null,
+		};
 	} catch (error) {
 		console.error(`Error delete Document`, error);
+		throw new Error("Error al eliminar el documento");
 	}
 };

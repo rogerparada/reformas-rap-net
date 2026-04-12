@@ -14,7 +14,6 @@ export async function createDocumentAction(documentInput: SaveDocumentInput): Pr
 
 	const result = documentSchema.safeParse(doc);
 	if (!result.success) {
-		console.log(result.error.issues);
 		return {
 			success: false,
 			status: 400,
@@ -49,27 +48,20 @@ export async function editDocumentAction(documentInput: SaveDocumentInput): Prom
 	return await api.documents.editDocument(token, doc.idDocumento, result.data);
 }
 
-export async function deleteDocumentAction(id: DocumentResponse["idDocumento"]) {
-	if (id?.length !== 24) {
+export async function deleteDocumentAction(id: DocumentResponse["idDocumento"]): Promise<ApiDocumentResponse> {
+	if (id?.length !== 36) {
 		return {
+			status: 400,
 			success: false,
-			errors: `Error(${id?.length}): La id del documento no es valida`,
+			data: null,
+			errors: [`Error(${id?.length}): La id del documento no es valida`],
 		};
 	}
 
 	const token = (await auth.isAuthenticated()) ?? "";
 
 	const response = await api.documents.deleteDocument(token, id);
+	console.log(response);
 
-	if (response?.status !== 204) {
-		return {
-			success: false,
-			errors: "Error eliminando documento",
-		};
-	}
-
-	return {
-		success: true,
-		errors: undefined,
-	};
+	return response;
 }

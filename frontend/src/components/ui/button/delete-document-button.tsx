@@ -6,7 +6,7 @@ import { actions } from "@/actions";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 
-export default function DeleteDocumentButton({ id }: { id: DocumentInfo["documentId"] }) {
+export default function DeleteDocumentButton({ id }: { id: DocumentInfo["idDocumento"] }) {
 	const router = useRouter();
 	const deleteDocument = () => {
 		Swal.fire({

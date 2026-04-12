@@ -7,7 +7,6 @@ type Props = {
 };
 
 export default function TablaDescripcionItem({ item }: Props) {
-	console.log(item);
 	const { description, price, quantity, total: value } = item;
 
 	const multilineDescription = description.includes("\n") ? (
