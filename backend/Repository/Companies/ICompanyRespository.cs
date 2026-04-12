@@ -4,5 +4,5 @@ namespace ReformasRapBackend.Repository.Companies;
 
 public interface ICompanyRepository
 {
-    Task<Company> GetCompanyInfo();
+    Task<Company?> GetCompanyInfo();
 }

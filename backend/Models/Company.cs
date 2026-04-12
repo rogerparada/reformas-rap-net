@@ -5,11 +5,11 @@ namespace ReformasRapBackend.Models;
 public class Company
 {
     [Key] public Guid id { get; set; }
-    public string Name { get; set; }
-    public string Phone { get; set; }
-    public string Email { get; set; }
-    public string Address { get; set; }
-    public string City { get; set; }
-    public string Web { get; set; }
-    public string Nif { get; set; }
+    public required string Name { get; set; }
+    public required string Phone { get; set; }
+    public required string Email { get; set; }
+    public required string Address { get; set; }
+    public required string City { get; set; }
+    public required string Web { get; set; }
+    public required string Nif { get; set; }
 }

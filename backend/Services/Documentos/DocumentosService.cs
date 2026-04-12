@@ -144,5 +144,5 @@ public class DocumentosService(
         }
     }
 
-    public async Task<Company> GetCompanyInfo()=> await companyRepository.GetCompanyInfo();
+    public async Task<Company?> GetCompanyInfo()=> await companyRepository.GetCompanyInfo();
 }

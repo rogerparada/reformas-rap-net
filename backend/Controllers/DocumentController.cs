@@ -70,5 +70,6 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     }
 
     [HttpGet("company")]
-    public Task<Company> CompanyInfo() => documentosService.GetCompanyInfo();
+    [EndpointSummary("Información de empresa")]
+    public Task<Company?> CompanyInfo() => documentosService.GetCompanyInfo();
 }
