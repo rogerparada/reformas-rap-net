@@ -7,7 +7,7 @@ public interface IClientesRepository
     Task<IEnumerable<Cliente>> GetClientes();
     Task<Cliente?> GetCliente(Guid id);
     Task<Cliente?> FindByEmail(string email); 
-    Task AddCliente(Cliente cliente);
+    Task<Cliente?> AddCliente(Cliente cliente);
     Task UpdateCliente(Guid id, Cliente cliente);
     Task DeleteCliente(Guid id);
 }
