@@ -1,7 +1,6 @@
 @Api_URL = http://localhost:5173
 @user_mail = "mail@mail.com"
 @user_pass = "ElPasswordMasLargoPosible2026!"
-@id_cliente = 019d7be9-2f6b-7f5d-b743-14107df070e1
 
 ### Create User
 POST {{Api_URL}}/api/Auth/register/
@@ -25,16 +24,6 @@ Content-Type: application/json
     client.global.set("auth_token", response.body.token);
 %}
 
-### Get Clientes
-GET {{Api_URL}}/api/Client
-Content-Type: application/json
-Authorization: Bearer {{auth_token}}
-
-### Get Cliente by Id
-GET {{Api_URL}}/api/Client/{{id_cliente}}
-Content-Type: application/json
-Authorization: Bearer {{auth_token}}
-
 ### Create cliente
 POST {{Api_URL}}/api/Client
 Content-Type: application/json
@@ -48,6 +37,22 @@ Authorization: Bearer {{auth_token}}
   "address": "Calle Falsa",
   "nif": null
 }
+
+> {%
+    client.global.set("id_cliente", response.body.idCliente);
+%}
+
+### Get Clientes
+GET {{Api_URL}}/api/Client
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Get Cliente by Id
+GET {{Api_URL}}/api/Client/{{id_cliente}}
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+
 
 ### Update cliente
 PUT {{Api_URL}}/api/Client/{{id_cliente}}
@@ -88,7 +93,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "numeroDocumento": "Fact-00611",
+  "numeroDocumento": "Fact-001",
   "fecha": "2026-04-10T00:00:00.000Z",
   "tipoDocumento": "Factura",
   "iva": true,
