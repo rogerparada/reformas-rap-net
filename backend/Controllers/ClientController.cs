@@ -30,8 +30,8 @@ public class ClientController(IClientesService clientesService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> AddCliente(ClienteRequest cliente)
     {
-        await clientesService.CreateCliente(cliente);
-        return Created();
+        var idCliente = await clientesService.CreateCliente(cliente);
+        return Created("Client", new { idCliente });
     }
 
     [HttpPut("{id}")]

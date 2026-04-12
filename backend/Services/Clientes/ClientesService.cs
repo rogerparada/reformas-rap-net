@@ -25,7 +25,7 @@ public class ClientesService(IClientesRepository clientesRepository, IMapper map
             : mapper.FullClienteEntityToResponse(client);
     }
 
-    public async Task CreateCliente(ClienteRequest cliente)
+    public async Task<Guid> CreateCliente(ClienteRequest cliente)
     {
         var exist = await clientesRepository.FindByEmail(cliente.Email);
         if (exist is not null)
@@ -33,7 +33,9 @@ public class ClientesService(IClientesRepository clientesRepository, IMapper map
             throw new MiddlewareException(HttpStatusCode.BadRequest, new { message = "Email ya registrado" });
         }
         
-        await clientesRepository.AddCliente(mapper.ClienteRequestToEntity(cliente));
+        var cli = await clientesRepository.AddCliente(mapper.ClienteRequestToEntity(cliente));
+
+        return cli.Id;
     }
     
 

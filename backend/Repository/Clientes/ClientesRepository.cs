@@ -18,11 +18,12 @@ public class ClientesRepository(AppDbContext context) : IClientesRepository
     public async Task<Cliente?> FindByEmail(string email) =>
         await context.Clientes.FirstOrDefaultAsync(c => c.Email == email);
 
-    public async Task AddCliente(Cliente cliente)
+    public async Task<Cliente?> AddCliente(Cliente cliente)
     {
         cliente.Created = DateTime.UtcNow;
         var client = await context.Clientes.AddAsync(cliente);
         await context.SaveChangesAsync();
+        return client.Entity;
     }
 
     public async Task UpdateCliente(Guid id, Cliente cliente)
