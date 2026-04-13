@@ -46,7 +46,7 @@ body {
 }
 
 input[type="checkbox"] {
-	@apply w-4 h-4 accent-[#00c951] text-white;
+	@apply w-4 h-4 accent-primary text-white;
 }
 
 textarea {
