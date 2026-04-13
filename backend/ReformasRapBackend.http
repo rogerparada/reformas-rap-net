@@ -97,7 +97,7 @@ Authorization: Bearer {{auth_token}}
   "fecha": "2026-04-10T00:00:00.000Z",
   "tipoDocumento": "Factura",
   "iva": true,
-  "idCliente": "019d7be9-2f6b-7f5d-b743-14107df070e1",
+  "idCliente": "019d7dac-ff5e-79a5-b015-fc611fb33aae",
   "items": [
     {
       "description": "Algo",
@@ -107,6 +107,35 @@ Authorization: Bearer {{auth_token}}
     }
   ]
 }
+
+### Create Documento large items
+POST {{Api_URL}}/api/Document
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+
+{
+  "numeroDocumento": "Pres-006",
+  "fecha": "2026-04-11T00:00:00.000Z",
+  "tipoDocumento": "Presupuesto",
+  "iva": true,
+  "idCliente": "019d7dac-ff5e-79a5-b015-fc611fb33aae",
+  "items": [
+    {
+      "id": 0,
+      "description": "Prueba",
+      "price": 345,
+      "quantity": 1
+    },
+    {
+      "id": 0,
+      "description": "nuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdfnuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdf",
+      "price": 345,
+      "quantity": 1
+    }
+  ]
+}
+
 
 ### Create Document whit Items
 
