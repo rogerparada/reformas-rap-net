@@ -11,7 +11,7 @@ public class ItemsRepository(AppDbContext context) : IItemsRepository
     public async Task<IEnumerable<Item>> GetItemsByDocumentId(Guid documentId) =>
         await context.Items.Where(i => i.IdDocumento == documentId).ToListAsync();
 
-    public Item? GetItem(int id) => context.Items.FirstOrDefault(i => i.Id == id);
+    public Item? GetItem(Guid id) => context.Items.FirstOrDefault(i => i.Id == id);
 
     public async Task AddItem(Item item)
     {
@@ -24,7 +24,7 @@ public class ItemsRepository(AppDbContext context) : IItemsRepository
         throw new NotImplementedException();
     }
 
-    public void DeleteItem(int id)
+    public void DeleteItem(Guid id)
     {
         var item = GetItem(id);
         if (item != null) context.Remove(item);

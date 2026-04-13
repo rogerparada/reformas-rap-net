@@ -91,7 +91,7 @@ public class Mapper : IMapper
 
     public Item ItemRequestToEntity(ItemRequest item) => new()
     {
-        Id = item.Id ?? 0,
+        Id = item.Id ?? Guid.Empty,
         Quantity = item.Quantity,
         Price = item.Price,
         Description = item.Description,
