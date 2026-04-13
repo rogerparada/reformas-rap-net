@@ -17,7 +17,7 @@ export type DocumentInfoResponse = {
 	estado: "Borrador" | "Editado" | "Enviado";
 	iva: boolean;
 	cliente: string;
-	valor: number;
+	total: number;
 };
 
 export type ClienteResponse = {

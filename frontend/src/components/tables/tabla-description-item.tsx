@@ -8,10 +8,9 @@ type Props = {
 
 export default function TablaDescripcionItem({ item }: Props) {
 	const { description, price, quantity, total: value } = item;
-
 	const multilineDescription = description.includes("\n") ? (
 		description.split("\n").map((line, index) => (
-			<p key={index} className="pl-2">
+			<p key={`${line}-${index}`} className="pl-2">
 				{line}
 			</p>
 		))
@@ -22,8 +21,8 @@ export default function TablaDescripcionItem({ item }: Props) {
 	return (
 		<div className="fila_items">
 			<div>{multilineDescription}</div>
-			<div>{price > 0 && formatCurrency(price)}</div>
-			<div>{price > 0 && quantity}</div>
+			<div>{price > 0 && quantity > 0 ? formatCurrency(price) : ""}</div>
+			<div>{quantity > 0 ? quantity : ""}</div>
 			<div>{formatCurrency(value)}</div>
 		</div>
 	);

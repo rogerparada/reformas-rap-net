@@ -5,7 +5,7 @@ import { formatCurrency, toLocalDate } from "@/utils";
 import Link from "next/link";
 
 export default function DocumentItem({ item }: { item: DocumentInfoResponse }) {
-	const { fecha, idDocumento: id, numeroDocumento: numero, iva, cliente, valor } = item;
+	const { fecha, idDocumento: id, numeroDocumento: numero, iva, cliente, total } = item;
 
 	return (
 		<tr className="fila_cliente">
@@ -19,7 +19,7 @@ export default function DocumentItem({ item }: { item: DocumentInfoResponse }) {
 			</td>
 			<td>{toLocalDate(fecha)}</td>
 			<td>{cliente}</td>
-			<td>{iva ? formatCurrency(valor + valor * 0.21) : formatCurrency(valor)}</td>
+			<td>{iva ? formatCurrency(total + total * 0.21) : formatCurrency(total)}</td>
 		</tr>
 	);
 }

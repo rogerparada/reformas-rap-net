@@ -14,7 +14,6 @@ export default function PdfTemplate({ doc }: { doc: FullDocument }) {
 	useEffect(() => {
 		setDocumentState(doc);
 	}, [doc]);
-
 	return (
 		<>
 			<DocumentOptions edit pdf={pdf} link={`/gestion/documentos/edit?id=${document.idDocumento}`} id={document.idDocumento} />
