@@ -11,7 +11,7 @@ export default function PriceInput({ symbol = "€", name, value, placeholder }:
 	return (
 		<div className={styles.contenedor}>
 			<label htmlFor={name}>Precio:</label>
-			<input type="number" name={name} id={name} min={0} step={0.01} defaultValue={value} value={value} placeholder={placeholder} />
+			<input type="number" name={name} id={name} min={0} step={0.01} defaultValue={value} placeholder={placeholder} />
 			<div>{symbol}</div>
 		</div>
 	);

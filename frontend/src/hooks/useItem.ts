@@ -1,5 +1,5 @@
 import { useAppStore } from "../store/useAppStore";
-import { NewItemTable } from "../types/items";
+import { ItemTable, NewItemTable } from "../types/items";
 import Swal from "sweetalert2";
 
 const createMessage = (title: string) => {
@@ -10,8 +10,10 @@ const createMessage = (title: string) => {
 	});
 };
 
-export function useNewItem() {
+export function useItem() {
 	const addItem = useAppStore((state) => state.addItem);
+	const editItem = useAppStore((state) => state.editItem);
+
 	const addItemToStore = (formData: FormData) => {
 		const description = formData.get("description") as string;
 		const price = Number(formData.get("price"));
@@ -30,5 +32,15 @@ export function useNewItem() {
 		addItem({ description, price, quantity } as NewItemTable);
 	};
 
-	return { addItemToStore };
+	const editItemFromStore = (formData: FormData, item: ItemTable) => {
+		const description = formData.get("description") as string;
+		const price = Number(formData.get("price"));
+		const quantity = Number(formData.get("quantity"));
+		const total = !!price && !!quantity ? price * quantity : Number(formData.get("total"));
+
+		editItem({ ...item, description, price, quantity, total } as ItemTable);
+		// cancelAction(false);
+	};
+
+	return { addItemToStore, editItemFromStore };
 }

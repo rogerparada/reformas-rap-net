@@ -21,7 +21,7 @@ export default function ItemForm({ item }: ItemFormProps) {
 				</div>
 				{pxu && (
 					<input
-						className="h-10 rounded-md border border-slate-400 p-2 text-right "
+						className="h-10 rounded-md border border-slate-400 p-2 text-right max-w-56"
 						id="quantity"
 						name="quantity"
 						type="number"

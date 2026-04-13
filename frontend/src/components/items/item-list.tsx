@@ -17,7 +17,7 @@ export default function ItemList() {
 					<div className="item_header">Acciones</div>
 				</div>
 				{items.map((item) => (
-					<ListItem item={item} key={item.id} />
+					<ListItem item={item} key={item.key} />
 				))}
 
 				<ListOptions />

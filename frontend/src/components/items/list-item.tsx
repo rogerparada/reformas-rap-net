@@ -1,45 +1,40 @@
 "use client";
-import { useState } from "react";
+import { useMemo } from "react";
 import { useDeleteItem } from "@/hooks/useDeleteItem";
 import { ItemTable } from "@/types/items";
 import ActionButton from "../ui/button/action-button";
-import EditItem from "./edit-item";
 import { formatCurrency } from "@/utils";
+import EditItemModal from "../modal/edit-item-modal";
 
 type ListItemProps = {
 	item: ItemTable;
 };
 
 export default function ListItem({ item }: ListItemProps) {
-	const [editMode, setEditMode] = useState(false);
 	const { deleteItemById } = useDeleteItem();
 
-	if (editMode) {
-		return <EditItem item={item} cancelAction={() => setEditMode(false)} />;
-	}
+	const { description, price, quantity } = item;
+
+	const total = useMemo(() => (quantity > 0 ? quantity * price : price), [price, quantity]);
+	const formattedDescription = useMemo(
+		() => (description.includes("\n") ? description.split("\n").map((line, index) => <p key={`${line}-${index}`}>{line}</p>) : description),
+		[description],
+	);
 
 	return (
 		<div className="itemsList">
+			<div className="item">{formattedDescription}</div>
 			<div className="item">
-				<p>{item.description}</p>
+				<p>{price > 0 && quantity > 0 ? formatCurrency(price) : ""}</p>
 			</div>
 			<div className="item">
-				<p>{item.price > 0 ? formatCurrency(item.price) : ""}</p>
+				<p>{quantity > 0 ? quantity : ""}</p>
 			</div>
 			<div className="item">
-				<p>{item.quantity > 0 ? item.quantity : ""}</p>
-			</div>
-			<div className="item">
-				<p>{formatCurrency(item.total)}</p>
+				<p>{formatCurrency(total)}</p>
 			</div>
 			<div className="action_button_group item">
-				<ActionButton
-					icon="edit"
-					color="blue"
-					action={() => {
-						setEditMode(true);
-					}}
-				/>
+				<EditItemModal item={item} />
 				<ActionButton
 					icon="delete"
 					color="red"

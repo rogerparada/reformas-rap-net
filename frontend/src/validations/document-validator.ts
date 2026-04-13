@@ -21,7 +21,6 @@ export const documentSchema = z.object({
 				description: z.string().min(1, { message: "La descripción no puede estar vacía" }),
 				price: z.number().gte(0, { message: "El precio no puede ser negativo" }),
 				quantity: z.number().gte(0, { message: "La cantidad no puede ser negativa" }),
-				total: z.number().gt(0, { message: "El importe tiene que ser mayor a 0" }),
 			}),
 		)
 		.min(1, { message: "El documento debe tener al menos un elemento" }),

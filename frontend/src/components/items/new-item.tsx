@@ -1,10 +1,10 @@
 "use client";
 import ItemForm from "./item-form";
-import { useNewItem } from "@/hooks/useNewItem";
+import { useItem } from "@/hooks/useItem";
 import ActionButton from "../ui/button/action-button";
 
 export default function NewItem() {
-	const { addItemToStore } = useNewItem();
+	const { addItemToStore } = useItem();
 
 	const handleAction = (formData: FormData) => {
 		addItemToStore(formData);
