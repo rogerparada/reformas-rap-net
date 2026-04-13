@@ -1,6 +1,5 @@
 export type ItemTable = {
-	id: number;
-	key: string;
+	id: string;
 	description: string;
 	price: number;
 	quantity: number;

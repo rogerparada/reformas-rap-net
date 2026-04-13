@@ -9,7 +9,7 @@ export type ItemsSlice = {
 	setItems: (items: ItemTable[]) => void;
 	addItem: (item: NewItemTable) => void;
 	editItem: (item: ItemTable) => void;
-	removeItem: (id: number) => void;
+	removeItem: (id: string) => void;
 	clearItems: () => void;
 };
 
@@ -33,8 +33,8 @@ export const createItemsSlice: StateCreator<ItemsSlice> = (set, get) => ({
 	},
 
 	addItem: (item: NewItemTable) => {
-		const key = `new-${get().items.length}`;
-		const items: ItemTable[] = [...get().items, { ...item, key, id: 0 }];
+		const id = `new-${get().items.length}`;
+		const items: ItemTable[] = [...get().items, { ...item, id }];
 		const totals = calculateTotals(items);
 
 		set(() => ({ items, ...totals }));
@@ -49,7 +49,7 @@ export const createItemsSlice: StateCreator<ItemsSlice> = (set, get) => ({
 		}
 	},
 
-	removeItem: (id: number) => {
+	removeItem: (id: string) => {
 		const item = get().items.find((i) => i.id === id);
 		if (item) {
 			const items = get().items.filter((i) => i.id !== id);

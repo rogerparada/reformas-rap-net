@@ -4,7 +4,7 @@ import { useAppStore } from "../store/useAppStore";
 export function useDeleteItem() {
 	const deleteItem = useAppStore((state) => state.removeItem);
 
-	const deleteItemById = (id: number) => {
+	const deleteItemById = (id: string) => {
 		Swal.fire({
 			title: "¿Estás seguro?",
 			text: "¡No podrás revertir esto!",
