@@ -102,7 +102,6 @@ public class Mapper : IMapper
         Id = item.Id,
         Quantity = item.Quantity,
         Price = item.Price,
-        Total = item.Quantity * item.Price,
         Description = item.Description,
     };
 }
