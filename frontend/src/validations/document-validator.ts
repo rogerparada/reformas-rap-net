@@ -13,11 +13,14 @@ export const documentSchema = z.object({
 
 	tipoDocumento: z.enum(["Factura", "Presupuesto"]),
 	iva: z.boolean(),
-	idCliente: z.string().length(36, { message: "La id del cliente no es valida" }),
+	idCliente: z.uuid({ message: "La id del cliente no es valida" }),
 	items: z
 		.array(
 			z.object({
-				id: z.number().optional(),
+				id: z
+					.uuid()
+					.nullable()
+					.or(z.string().transform((val) => (val.startsWith("new-") ? null : val))),
 				description: z.string().min(1, { message: "La descripción no puede estar vacía" }),
 				price: z.number().gte(0, { message: "El precio no puede ser negativo" }),
 				quantity: z.number().gte(0, { message: "La cantidad no puede ser negativa" }),

@@ -123,7 +123,6 @@ export const createDocument = async (jwt: string, data: DocumentInput): Promise<
 			body: JSON.stringify(data),
 		});
 		const result = await resp.json();
-		console.log("RESULT", result);
 
 		return {
 			success: resp.ok,

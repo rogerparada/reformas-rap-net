@@ -33,7 +33,7 @@ export const createItemsSlice: StateCreator<ItemsSlice> = (set, get) => ({
 	},
 
 	addItem: (item: NewItemTable) => {
-		const id = `new-${get().items.length}`;
+		const id = `new-${get().items.length + 1}`;
 		const items: ItemTable[] = [...get().items, { ...item, id }];
 		const totals = calculateTotals(items);
 

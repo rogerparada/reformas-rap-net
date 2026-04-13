@@ -14,10 +14,29 @@ export function useItem() {
 	const addItem = useAppStore((state) => state.addItem);
 	const editItem = useAppStore((state) => state.editItem);
 
-	const addItemToStore = (formData: FormData) => {
+	const addItemToStore = (formData: FormData): boolean => {
 		const description = formData.get("description") as string;
 		const price = Number(formData.get("price"));
 		const quantity = Number(formData.get("quantity")) ?? 0;
+
+		if (!description) {
+			createMessage("Por favor rellene la descripción");
+			return false;
+		}
+
+		if (!price) {
+			createMessage("Escriba un precio");
+			return false;
+		}
+
+		addItem({ description, price, quantity } as NewItemTable);
+		return true;
+	};
+
+	const editItemFromStore = (formData: FormData, item: ItemTable) => {
+		const description = formData.get("description") as string;
+		const price = Number(formData.get("price"));
+		const quantity = Number(formData.get("quantity"));
 
 		if (!description) {
 			createMessage("Por favor rellene la descripción");
@@ -29,17 +48,7 @@ export function useItem() {
 			return;
 		}
 
-		addItem({ description, price, quantity } as NewItemTable);
-	};
-
-	const editItemFromStore = (formData: FormData, item: ItemTable) => {
-		const description = formData.get("description") as string;
-		const price = Number(formData.get("price"));
-		const quantity = Number(formData.get("quantity"));
-		const total = !!price && !!quantity ? price * quantity : Number(formData.get("total"));
-
-		editItem({ ...item, description, price, quantity, total } as ItemTable);
-		// cancelAction(false);
+		editItem({ ...item, description, price, quantity } as ItemTable);
 	};
 
 	return { addItemToStore, editItemFromStore };
