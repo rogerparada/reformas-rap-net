@@ -1,20 +1,23 @@
 import { ItemTable } from "./items";
 
+type Estado = "Borrador" | "Editado" | "Enviado";
+type TipoDocumento = "Factura" | "Presupuesto" | "CuentaCobro";
+
 export type DocumentResponse = {
 	idDocumento: string;
 	numeroDocumento: string;
-	tipoDocumento: "Factura" | "Presupuesto" | "CuentaCobro";
+	tipoDocumento: TipoDocumento;
 	fecha: string;
-	estado: "Borrador" | "Editado" | "Enviado";
+	estado: Estado;
 	iva: boolean;
 	idCliente: string;
 };
 export type DocumentInfoResponse = {
 	idDocumento: string;
 	numeroDocumento: string;
-	tipoDocumento: "Factura" | "Presupuesto" | "CuentaCobro";
+	tipoDocumento: TipoDocumento;
 	fecha: string;
-	estado: "Borrador" | "Editado" | "Enviado";
+	estado: Estado;
 	iva: boolean;
 	cliente: string;
 	total: number;
@@ -78,9 +81,25 @@ export type CompanyInfo = {
 
 export type DocumentInfo = {
 	idDocumento: string;
-	tipoDocumento: "Factura" | "Presupuesto" | "CuentaCobro";
+	tipoDocumento: TipoDocumento;
 	numeroDocumento: string;
 	fecha: string;
 	iva: boolean;
-	estado: "Borrador" | "Editado" | "Enviado";
+	estado: Estado;
+};
+
+export type EmailResponse = {
+	id: string;
+	destination: string;
+	subject: string;
+	message: string;
+	status: Estado;
+	attachment: string | null;
+	cc: string | null;
+	cco: string | null;
+	date: string;
+	cliente: {
+		id: string;
+		name: string;
+	};
 };
