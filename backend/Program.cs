@@ -13,9 +13,11 @@ using ReformasRapBackend.Models;
 using ReformasRapBackend.Repository.Clientes;
 using ReformasRapBackend.Repository.Companies;
 using ReformasRapBackend.Repository.Documentos;
+using ReformasRapBackend.Repository.Emails;
 using ReformasRapBackend.Repository.Items;
 using ReformasRapBackend.Services.Clientes;
 using ReformasRapBackend.Services.Documentos;
+using ReformasRapBackend.Services.Emails;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +67,8 @@ builder.Services.AddScoped<IDocumentosRepository, DocumentosRepository>();
 builder.Services.AddScoped<IDocumentosService, DocumentosService>();
 builder.Services.AddScoped<IClientesService, ClientesService>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IEmailsRepository, EmailsRepository>();
+builder.Services.AddScoped<IEmailsService, EmailsService>();
 builder.Services.AddScoped<IMapper, Mapper>();
 
 builder.Services.AddAuthorization();

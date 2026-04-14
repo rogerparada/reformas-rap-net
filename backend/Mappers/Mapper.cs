@@ -104,4 +104,18 @@ public class Mapper : IMapper
         Price = item.Price,
         Description = item.Description,
     };
+
+    public EmailResponse EmailEntityToResponse(Email email) => new()
+    {
+        Id = email.Id,
+        Destination = email.Destination,
+        Subject = email.Subject,
+        Cc = email.Cc,
+        Cco = email.Cco,
+        Message = email.Message,
+        Attachment = email.Attachment,
+        Cliente = email.Cliente != null ?  new ClienteReduced(email.Cliente.Id, email.Cliente.Name) : null,
+        Status = email.Status,
+        Date = email.Updated ?? email.Created,
+    };
 }
