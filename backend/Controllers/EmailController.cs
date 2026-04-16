@@ -6,7 +6,7 @@ using ReformasRapBackend.Services.Emails;
 namespace ReformasRapBackend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [Authorize]
 public class EmailController(IEmailsService emailsService) : ControllerBase
 {
