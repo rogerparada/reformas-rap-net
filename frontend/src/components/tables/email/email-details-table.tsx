@@ -10,11 +10,10 @@ export default function EmailDetailsTable({ emails }: Props) {
 	return (
 		<div className={styles.table}>
 			<div className={styles.header}>
-				<div>Estado</div>
-				<div>Destinatario</div>
-				<div>Asunto</div>
 				<div>Fecha</div>
-				<div>Adjunto</div>
+				<div>Para</div>
+				<div>Asunto</div>
+				<div></div>
 			</div>
 
 			<div className="items">

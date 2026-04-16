@@ -1,6 +1,7 @@
-import { EmailResponse } from "@/types";
+import { ContextMenuItemType, EmailResponse } from "@/types";
 import styles from "./email-details.module.css";
 import { toLocalDate } from "@/utils";
+import MenuButton from "@/components/ui/button/menu-button";
 
 type Props = {
 	email: EmailResponse;
@@ -8,15 +9,41 @@ type Props = {
 
 export default function EmailDetailsItem({ email }: Props) {
 	const { attachment, cliente, destination, date, subject, status } = email;
+
+	const options: ContextMenuItemType[] = [
+		{
+			label: "Ver",
+			icon: "view",
+			url: `/gestion/emails/${email.id}`,
+		},
+		{
+			label: "Editar",
+			icon: "edit",
+			url: `/gestion/emails/edit/${email.id}`,
+		},
+		{
+			label: "Eliminar",
+			icon: "delete",
+			url: `/gestion/emails/delete/${email.id}`,
+		},
+	];
+
 	return (
 		<div className={styles.row}>
-			<div>{status}</div>
-			<div>
+			<div className={styles.rowItem}>{toLocalDate(date)}</div>
+			<div className={styles.rowItem}>
 				{cliente.name} &lt;{destination}&gt;
 			</div>
-			<div>{subject}</div>
-			<div>{toLocalDate(date)}</div>
-			<div>{attachment && <span className="icon-[iconoir--attachment]" />}</div>
+			<div className={styles.rowItem}>
+				<div className="">
+					<div className="">{subject}</div>
+					<div className="">[ {status} ]</div>
+					<div className="">{attachment && <span className="icon-[iconoir--attachment]" />}</div>
+				</div>
+			</div>
+			<div className="h-10 w-full flex items-center justify-center">
+				<MenuButton options={options} />
+			</div>
 		</div>
 	);
 }

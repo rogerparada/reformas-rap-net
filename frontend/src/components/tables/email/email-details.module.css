@@ -1,5 +1,5 @@
 .table {
-	--cols: 0.5fr 1fr 1fr 0.5fr 0.15fr;
+	--cols: 0.25fr 1fr 2fr 50px;
 	border: 2px solid var(--color-primary-dark);
 }
 
@@ -8,7 +8,7 @@
 	grid-template-columns: var(--cols);
 	text-align: center;
 	justify-content: center;
-	background-color: var(--color-primary-dark);
+	background-color: var(--color-primary);
 	color: white;
 	font-weight: bold;
 	height: calc(var(--spacing) * 10);
@@ -23,7 +23,11 @@
 		justify-content: center;
 		width: 100%;
 		padding: 2px;
-		border-right: 1px solid var(--color-primary);
+		border-right: 1px solid var(--color-primary-dark);
+	}
+
+	div:nth-child(3) {
+		border-right: none;
 	}
 }
 
@@ -43,18 +47,21 @@
 	align-items: center;
 	justify-items: center;
 	border-bottom: 1px solid var(--color-primary);
+}
+
+.rowItem {
+	height: calc(var(--spacing) * 10);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 2px;
+	border-right: 1px solid var(--color-primary);
 
 	div {
-		height: calc(var(--spacing) * 10);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 100%;
-		padding: 2px;
-		border-right: 1px solid var(--color-primary);
-	}
-
-	div:last-child {
-		border-right: none;
+		gap: 5px;
 	}
 }
