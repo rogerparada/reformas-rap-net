@@ -19,6 +19,7 @@ export const Icon = {
 	reset: "icon-[system-uicons--reset]",
 	save: "icon-[ps--save]",
 	send: "icon-[tabler--send]",
+	view: "icon-[topcoat--view]",
 };
 
 export const textColor: Record<Colors, string> = {
