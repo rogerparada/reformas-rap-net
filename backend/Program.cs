@@ -14,12 +14,15 @@ using ReformasRapBackend.Repository.Clientes;
 using ReformasRapBackend.Repository.Companies;
 using ReformasRapBackend.Repository.Documentos;
 using ReformasRapBackend.Repository.Items;
+using ReformasRapBackend.Repository.PdfDocuments;
 using ReformasRapBackend.Services.Clientes;
 using ReformasRapBackend.Services.Documentos;
+using ReformasRapBackend.Services.PdfDocuments;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 // Add services to the container.
 
 // 1. DbContext
@@ -65,6 +68,8 @@ builder.Services.AddScoped<IDocumentosRepository, DocumentosRepository>();
 builder.Services.AddScoped<IDocumentosService, DocumentosService>();
 builder.Services.AddScoped<IClientesService, ClientesService>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddTransient<IPdfDocumentsRepository, PdfDocumentsRepository>();
+builder.Services.AddTransient<IPdfDocumentsService, PdfDocumentsService>();
 builder.Services.AddScoped<IMapper, Mapper>();
 
 builder.Services.AddAuthorization();
