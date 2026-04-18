@@ -20,6 +20,7 @@ using ReformasRapBackend.Services.Clientes;
 using ReformasRapBackend.Services.Documentos;
 using ReformasRapBackend.Services.Emails;
 using ReformasRapBackend.Services.PdfDocuments;
+using Resend;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -75,6 +76,11 @@ builder.Services.AddScoped<IEmailsService, EmailsService>();
 builder.Services.AddTransient<IPdfDocumentsRepository, PdfDocumentsRepository>();
 builder.Services.AddTransient<IPdfDocumentsService, PdfDocumentsService>();
 builder.Services.AddScoped<IMapper, Mapper>();
+builder.Services.AddHttpClient<IResend,  ResendClient>();
+builder.Services.Configure<ResendClientOptions>(options =>
+{
+    options.ApiToken = builder.Configuration["Resend:RESEND_API_KEY"];
+});
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers().AddJsonOptions(options =>

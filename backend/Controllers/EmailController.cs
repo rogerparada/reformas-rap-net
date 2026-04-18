@@ -15,6 +15,21 @@ public class EmailController(IEmailsService emailsService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<List<EmailResponse>> GetAll() => await emailsService.GetEmails();
+    public async Task<IActionResult> GetAll()
+    {
+        var response = await emailsService.GetEmails();
+        return Ok(new { data = response });
+    }
 
+    [HttpPost]
+    [EndpointSummary("Nuevo email")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> NewEmail([FromBody] EmailRequest email)
+    {
+        var idEmail = await emailsService.Send(email);
+        return Ok(new { idEmail });
+    }
 }

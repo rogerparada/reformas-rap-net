@@ -14,9 +14,17 @@ public class EmailsRepository(AppDbContext context) : IEmailsRepository
 
     public async Task<Email?> GetEmail(Guid id) => await context.Emails.FindAsync(id);
 
-    public Task<Guid> CreateEmail(Email email)
+    public async Task<Guid?> SaveEmail(Email email)
     {
-        throw new NotImplementedException();
+        var cli = await context.Clientes.FindAsync(email.IdCliente);
+        var doc = await context.Documentos.FindAsync(email.Attachment);
+        ArgumentNullException.ThrowIfNull(cli);
+        ArgumentNullException.ThrowIfNull(doc);
+        email.Created = DateTime.UtcNow;
+        var  id = context.Emails.Add(email);
+        context.SaveChangesAsync();
+
+        return id.Entity.Id;
     }
 
     public Task<Email> UpdateEmail(Guid id, Email email)
