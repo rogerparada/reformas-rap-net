@@ -1,5 +1,5 @@
 .table {
-	--cols: 0.25fr 1fr 2fr 50px;
+	--cols: 0.25fr 1fr 2fr 40px;
 	border: 2px solid var(--color-primary-dark);
 }
 

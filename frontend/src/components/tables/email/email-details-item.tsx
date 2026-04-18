@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function EmailDetailsItem({ email }: Props) {
-	const { attachment, cliente, destination, date, subject, status } = email;
+	const { attachment, cliente, to: destination, date, subject, status } = email;
 
 	const options: ContextMenuItemType[] = [
 		{

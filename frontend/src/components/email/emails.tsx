@@ -5,7 +5,9 @@ export default async function Emails() {
 	const jwt = await auth.isAuthenticated();
 	if (!jwt) return;
 
-	const emails = await api.email.getAllEmails(jwt);
+	const result = await api.email.getAllEmails(jwt);
+	if (!result.isSuccess) return;
+	const emails = result.getValue();
 
 	return (
 		<div>

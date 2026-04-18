@@ -1,36 +1,33 @@
 "use server";
 
-export async function sendPdfByEmail(pdfBlob: Blob, destino: string, formData: FormData) {
-	// try {
-	// 	const fileName = `${formData.get("fileName") || "adjunto"}.pdf`;
-	// 	const { data: uploadData, error: uploadError } = await supabase.storage
-	// 		.from("pdf")
-	// 		.upload(`pdf/${fileName}`, pdfBlob, { cacheControl: "3600", upsert: true });
-	// 	if (uploadError || !uploadData) {
-	// 		console.error("Error subiendo PDF a Supabase:", uploadError);
-	// 		return { message: "Error subiendo PDF", status: 500, success: false };
-	// 	}
-	// 	const pdfPath = uploadData.path;
-	// 	const response = await fetch(`${API_URL}/api/send-email`, {
-	// 		method: "POST",
-	// 		headers: { "Content-Type": "application/json" },
-	// 		body: JSON.stringify({
-	// 			pdfPath,
-	// 			recipient: destino,
-	// 			subject: formData.get("subject") || "",
-	// 			message: formData.get("message") || "",
-	// 		}),
-	// 	});
-	// 	if (!response.ok) {
-	// 		const msg = await response.text();
-	// 		console.error("Error al enviar el email:", msg);
-	// 		return { message: msg || "Error al enviar el email", status: response.status, success: false };
-	// 	}
-	// 	return { message: "Se ha enviado correctamente", status: response.status, success: true };
-	// } catch (error) {
-	// 	console.error("Error del servidor:", error);
-	// 	return { message: `Error del servidor: ${String(error)}`, status: 500, success: false };
-	// }
+import { auth } from "@/lib";
+import { sendEmail } from "@/lib/api/email";
+import { ApiResponse } from "@/types";
+import { EmailInput, emailSchema } from "@/validations/email-validator";
+
+export async function sendPdfByEmail(formData: FormData): Promise<ApiResponse> {
 	//TODO: Implementar el envío de PDF por email
-	return { message: "Se ha enviado correctamente", status: 404, success: false };
+	const message: EmailInput = {
+		to: formData.get("to")?.toString() ?? "",
+		cc: formData.get("cc")?.toString() ?? "",
+		cco: formData.get("cco")?.toString() ?? "",
+		subject: formData.get("subject")?.toString() ?? "",
+		message: formData.get("message")?.toString() ?? "",
+		attachment: formData.get("attachment")?.toString() ?? "",
+		idCliente: formData.get("idCliente")?.toString() ?? "",
+	};
+
+	const validate = emailSchema.safeParse(message);
+	if (!validate.success) {
+		const errors = validate.error.issues.map((issue) => issue.message).join(", ");
+		return { message: "Error al enviar el correo", status: 404, success: false, error: errors };
+	}
+	const token = (await auth.isAuthenticated()) ?? "";
+	const resp = await sendEmail(token, validate.data);
+
+	if (!resp.isSuccess) {
+		return { message: resp.getError().message ?? "Error al enviar el correo", status: 404, success: false };
+	}
+
+	return { message: "Se ha enviado correctamente", status: 200, success: true };
 }
