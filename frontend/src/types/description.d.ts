@@ -90,7 +90,7 @@ export type DocumentInfo = {
 
 export type EmailResponse = {
 	id: string;
-	destination: string;
+	to: string;
 	subject: string;
 	message: string;
 	status: Estado;
