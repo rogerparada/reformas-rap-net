@@ -19,3 +19,31 @@ Content-Type: application/json
 GET {{Api_URL}}/api/Email
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
+
+### Send Email
+POST {{Api_URL}}/api/Email
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "to": "mail@mail.com",
+  "subject": "Presupuesto",
+  "message": "Por favor no responda a este mensaje",
+  "attachment": "019d8617-272f-761b-beb5-3e7d07734a29",
+  "idCliente": "019d8617-22dd-7cd9-adaf-5f5fe79c884b"
+}
+
+### Send Email Cc y CCo
+POST {{Api_URL}}/api/Email
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "to": "mail@mail.com",
+  "subject": "Presupuesto",
+  "message": "Por favor no responda a este mensaje",
+  "attachment": "019d8677-a79f-741c-a0e3-895f589aee59",
+  "idCliente": "019d8617-22dd-7cd9-adaf-5f5fe79c884b",
+  "cc": "mail@mail.com",
+  "cco": "mail1@mail.com,mail2@mail.com"
+}
