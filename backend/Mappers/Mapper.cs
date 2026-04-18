@@ -108,7 +108,7 @@ public class Mapper : IMapper
     public EmailResponse EmailEntityToResponse(Email email) => new()
     {
         Id = email.Id,
-        Destination = email.Destination,
+        To = email.To,
         Subject = email.Subject,
         Cc = email.Cc,
         Cco = email.Cco,
@@ -117,5 +117,16 @@ public class Mapper : IMapper
         Cliente = email.Cliente != null ?  new ClienteReduced(email.Cliente.Id, email.Cliente.Name) : null,
         Status = email.Status,
         Date = email.Updated ?? email.Created,
+    };
+
+    public Email EmailRequestToEntity(EmailRequest email) => new()
+    {
+        To = email.To,
+        Subject = email.Subject,
+        Cc = email.Cc,
+        Cco = email.Cco,
+        Message = email.Message,
+        Attachment = email.Attachment,
+        IdCliente =  email.IdCliente,
     };
 }

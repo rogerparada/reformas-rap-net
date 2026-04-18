@@ -10,9 +10,9 @@ public class Email
     public Guid Id { get; set; }
     [Required]
     [EmailAddress] 
-    public required string Destination { get; set; }
+    public required string To { get; set; }
     public required string Subject { get; set; }
-    public string? Attachment { get; set; }
+    public Guid? Attachment { get; set; }
     public string? Cc { get; set; }
     public string? Cco { get; set; }
     public required string Message { get; set; }
@@ -20,6 +20,10 @@ public class Email
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
     public required Guid IdCliente { get; set; }
+    
+    [ForeignKey(nameof(Attachment))]
+    public virtual Documento? Documento { get; set; }
+    
     [ForeignKey(nameof(IdCliente))]
     public virtual Cliente? Cliente { get; set; }
 }
