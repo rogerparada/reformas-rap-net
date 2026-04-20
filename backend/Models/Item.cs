@@ -6,7 +6,7 @@ namespace ReformasRapBackend.Models;
 public class Item
 {
     [Key] public Guid Id { get; set; }
-    [StringLength(250)] public required string Description { get; set; }
+    [StringLength(1000)] public required string Description { get; set; }
     [Column(TypeName = "decimal(18,2)")] public decimal Price { get; set; }
     public int Quantity { get; set; } = 1;
     public Guid IdDocumento { get; set; }

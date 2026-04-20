@@ -57,7 +57,7 @@ public class ItemsRepository(AppDbContext context) : IItemsRepository
         var itemsToDelete = currentItems.Where(i => !ids.Contains(i.Id));
         context.RemoveRange(itemsToDelete);
         
-        foreach (var item in items)
+        foreach (var item in itemsList)
         {
             var exist = currentItems.FirstOrDefault(i => i.Id == item.Id);
             if (exist is null)
