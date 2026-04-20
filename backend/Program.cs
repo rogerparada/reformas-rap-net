@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 using ReformasRapBackend.Data;
 using ReformasRapBackend.Mappers;
@@ -76,10 +75,10 @@ builder.Services.AddScoped<IEmailsService, EmailsService>();
 builder.Services.AddTransient<IPdfDocumentsRepository, PdfDocumentsRepository>();
 builder.Services.AddTransient<IPdfDocumentsService, PdfDocumentsService>();
 builder.Services.AddScoped<IMapper, Mapper>();
-builder.Services.AddHttpClient<IResend,  ResendClient>();
+builder.Services.AddHttpClient<IResend, ResendClient>();
 builder.Services.Configure<ResendClientOptions>(options =>
 {
-    options.ApiToken = builder.Configuration["Resend:RESEND_API_KEY"];
+    options.ApiToken = builder.Configuration["Resend:RESEND_API_KEY"] ?? "";
 });
 
 builder.Services.AddAuthorization();
@@ -96,7 +95,7 @@ builder.Services.AddOpenApi(options =>
             document.Info.Version = "v1";
             document.Info.Description = "ReformasRap API para la gestion de clientes y documentación";
 
-            
+
             var scheme = new OpenApiSecurityScheme
             {
                 Type = SecuritySchemeType.Http,
@@ -116,13 +115,13 @@ builder.Services.AddOpenApi(options =>
                 }
             };
 
-            document.Security = new List<OpenApiSecurityRequirement>{securityRequirement};
+            document.Security = new List<OpenApiSecurityRequirement> { securityRequirement };
             ;
-            
+
             return Task.CompletedTask;
         });
     }
-    );
+);
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
@@ -133,7 +132,10 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference(options =>
     {
-        options.Title = "ReformasRap API";
+        options
+            .WithTitle("ReformasRap API")
+            .WithTheme(ScalarTheme.BluePlanet)
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
 }
 

@@ -19,7 +19,7 @@ public class Mapper : IMapper
         Documentos = cliente.Documentos.Count,
     };
 
-    public FullClienteResponse FullClienteEntityToResponse(Cliente cliente)=> new()
+    public FullClienteResponse FullClienteEntityToResponse(Cliente cliente) => new()
     {
         Id = cliente.Id,
         Name = cliente.Name,
@@ -113,8 +113,12 @@ public class Mapper : IMapper
         Cc = email.Cc,
         Cco = email.Cco,
         Message = email.Message,
-        Attachment = email.Attachment,
-        Cliente = email.Cliente != null ?  new ClienteReduced(email.Cliente.Id, email.Cliente.Name) : null,
+        Attachment = email.Documento is null
+            ? new DocumentoReduced(email.Attachment!.Value, null) 
+            : new DocumentoReduced(email.Attachment!.Value, email.Documento!.NumeroDocumento),
+        Cliente = email.Cliente is null 
+            ? null 
+            : new ClienteReduced(email.Cliente.Id, email.Cliente.Name),
         Status = email.Status,
         Date = email.Updated ?? email.Created,
     };
@@ -127,6 +131,6 @@ public class Mapper : IMapper
         Cco = email.Cco,
         Message = email.Message,
         Attachment = email.Attachment,
-        IdCliente =  email.IdCliente,
+        IdCliente = email.IdCliente,
     };
 }
