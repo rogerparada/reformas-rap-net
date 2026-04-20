@@ -27,7 +27,7 @@ public class PdfController(IPdfDocumentsService pdfDocumentsService) : Controlle
     {
         var pdfResponse = await pdfDocumentsService.GetPdf(id);
         var (name, document) = pdfResponse;
-        Response.Headers.Add("Content-Disposition", "inline; filename=factura.pdf");
+        Response.Headers.Append("Content-Disposition", "inline; filename=factura.pdf");
         return File(document, "application/pdf", $"{name}.pdf");
     }
 }
