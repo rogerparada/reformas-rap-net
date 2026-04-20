@@ -5,7 +5,6 @@ namespace ReformasRapBackend.Data.Dto;
 
 public class EmailRequest
 {
-    public Guid? Id { get; set; }
     [Required(ErrorMessage = "Se require un destinatario")]
     public required string To { get; set; }
     [Required(ErrorMessage = "Se require un asunto")]
