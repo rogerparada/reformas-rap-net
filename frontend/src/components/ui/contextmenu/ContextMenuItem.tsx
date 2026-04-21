@@ -9,12 +9,12 @@ export default function ContextMenuItem({ icon = "save", label, url, action }: C
 	};
 
 	return url ? (
-		<Link href={url} className={style.active}>
+		<Link href={url} className={style.active} onClick={action}>
 			<span className={Icon[icon]} />
 			<span className="flex-1">{label}</span>
 		</Link>
 	) : (
-		<div className={!action ? style.disabled : `${style.active} cursor-pointer`}>
+		<div className={style.disabled}>
 			<span className={Icon[icon]} />
 			<span className="flex-1 font-light">{label}</span>
 		</div>

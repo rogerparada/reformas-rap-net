@@ -8,8 +8,12 @@ export default async function Emails() {
 	const result = await api.email.getAllEmails(jwt);
 	if (!result.isSuccess) return;
 	const emails = result.getValue();
-
-	return (
+	return emails.length === 0 ? (
+		<div className="w-full flex flex-col gap-5 justify-center items-center text-primary border-2 border-dotted border-primary rounded-lg p-20">
+			<span className="icon-[mdi--email] text-9xl" />
+			<span>No hay emails</span>
+		</div>
+	) : (
 		<div>
 			<h1 className="title">Emails</h1>
 			<hr className="separator mb-5" />

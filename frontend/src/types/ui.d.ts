@@ -15,3 +15,13 @@ export type ContextMenuItemType = {
 	url?: string;
 	action?: () => void;
 };
+
+export type ToolbarButtonType = {
+	action?: () => void;
+	color?: Colors;
+	icon: IconKey;
+	label?: string;
+	showText?: boolean;
+	submit?: boolean;
+	url?: string;
+};

@@ -3,7 +3,7 @@
 import { ContextMenuItemType } from "@/types";
 import styles from "./ContextMenu.module.css";
 import ContextMenuItem from "./ContextMenuItem";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 
 type Props = {
 	position: { x: number; y: number };
@@ -15,9 +15,16 @@ type Props = {
 };
 
 export default function ContextMenu({ setIsToggled, isToggled, position, options = [], refElement, width = 150 }: Props) {
+	const menuRef = useRef<HTMLDivElement>(null);
+
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
-			if (refElement.current && !refElement.current.contains(event.target as Node)) {
+			if (
+				refElement.current &&
+				menuRef.current &&
+				!refElement.current.contains(event.target as Node) &&
+				!menuRef.current.contains(event.target as Node)
+			) {
 				setIsToggled(false);
 			}
 		};
@@ -33,6 +40,7 @@ export default function ContextMenu({ setIsToggled, isToggled, position, options
 
 	return (
 		<div
+			ref={menuRef}
 			className={styles.menu}
 			style={{
 				position: "absolute",
@@ -42,7 +50,7 @@ export default function ContextMenu({ setIsToggled, isToggled, position, options
 			}}
 		>
 			{options.map((item, index) => (
-				<ContextMenuItem key={index} {...item} />
+				<ContextMenuItem key={index} {...item} action={() => setIsToggled(false)} />
 			))}
 		</div>
 	);

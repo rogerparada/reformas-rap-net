@@ -20,6 +20,8 @@ export const Icon = {
 	save: "icon-[ps--save]",
 	send: "icon-[tabler--send]",
 	view: "icon-[topcoat--view]",
+	forward: "icon-[codicon--forward]",
+	forwardAll: "icon-[material-symbols-light--forward]",
 };
 
 export const textColor: Record<Colors, string> = {

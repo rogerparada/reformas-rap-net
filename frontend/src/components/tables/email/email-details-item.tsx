@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function EmailDetailsItem({ email }: Props) {
-	const { attachment, cliente, to: destination, date, subject, status } = email;
+	const { attachment, cliente, to, date, subject, status } = email;
 
 	const options: ContextMenuItemType[] = [
 		{
@@ -19,7 +19,7 @@ export default function EmailDetailsItem({ email }: Props) {
 		{
 			label: "Editar",
 			icon: "edit",
-			url: `/gestion/emails/edit/${email.id}`,
+			url: `/gestion/emails/${email.id}/edit`,
 		},
 		{
 			label: "Eliminar",
@@ -32,7 +32,7 @@ export default function EmailDetailsItem({ email }: Props) {
 		<div className={styles.row}>
 			<div className={styles.rowItem}>{toLocalDate(date)}</div>
 			<div className={styles.rowItem}>
-				{cliente.name} &lt;{destination}&gt;
+				{cliente?.name} &lt;{to}&gt;
 			</div>
 			<div className={styles.rowItem}>
 				<div className="">

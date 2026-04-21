@@ -94,12 +94,15 @@ export type EmailResponse = {
 	subject: string;
 	message: string;
 	status: Estado;
-	attachment: string | null;
-	cc: string | null;
-	cco: string | null;
+	cc?: string;
+	cco?: string;
 	date: string;
-	cliente: {
-		id: string;
+	attachment?: {
+		idDocumento: string;
+		name: string;
+	};
+	cliente?: {
+		idCliente: string;
 		name: string;
 	};
 };
