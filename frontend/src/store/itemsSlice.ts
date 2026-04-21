@@ -43,7 +43,8 @@ export const createItemsSlice: StateCreator<ItemsSlice> = (set, get) => ({
 	editItem: (item: ItemTable) => {
 		const oldItem = get().items.find((i) => i.id === item.id);
 		if (oldItem) {
-			const items = get().items.map((i) => (i.id === item.id ? item : i));
+			const total = item.quantity >= 1 ? item.quantity * item.price : item.price;
+			const items = get().items.map((i) => (i.id === item.id ? { ...item, total } : i));
 			const totals = calculateTotals(items);
 			set(() => ({ items, ...totals }));
 		}
