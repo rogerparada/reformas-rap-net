@@ -47,7 +47,7 @@ public class DocumentController(IDocumentosService documentosService) : Controll
         return Created("Client", new { idDocumento });
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:guid}")]
     [EndpointSummary("Modificar Documento")]
     public async Task<IActionResult> Put(Guid id, [FromBody] DocumentoRequest documento)
     {

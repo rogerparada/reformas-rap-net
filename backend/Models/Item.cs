@@ -13,4 +13,16 @@ public class Item
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
     [ForeignKey("IdDocumento")] public virtual Documento? Documento { get; set; }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null) return false;
+        var item = obj as Item;
+        if (item is null) return false;
+        var description = item.Description == Description;
+        var price = item.Price == Price;
+        var quantity = item.Quantity == Quantity;
+        
+        return description && price && quantity;
+    }
 }
