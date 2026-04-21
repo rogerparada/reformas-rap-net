@@ -68,6 +68,7 @@ public class ItemsRepository(AppDbContext context) : IItemsRepository
             }
             else
             {
+                if (exist.Equals(item)) continue;
                 exist.Description = item.Description;
                 exist.Price = item.Price;
                 exist.Quantity = item.Quantity;
