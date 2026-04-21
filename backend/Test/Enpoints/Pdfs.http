@@ -1,0 +1,30 @@
+@Api_URL = http://localhost:5173
+@user_mail = "mail@mail.com"
+@user_pass = "ElPasswordMasLargoPosible2026!"
+
+### Login
+POST {{Api_URL}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": {{user_mail}},
+  "password": {{user_pass}}
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Get Documentos
+GET {{Api_URL}}/api/Document
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.global.set("document_id", response.body[0].idDocumento)
+ %}
+
+### Get Pdf Document
+GET {{Api_URL}}/api/Pdf/view/{{document_id}}
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
