@@ -84,17 +84,38 @@ public class EmailsService(
             throw new MiddlewareException(HttpStatusCode.InternalServerError, new { message = "Server Error" });
         }
     }
-    public async Task<Guid> SendEditedDraft(EmailRequest email)
+    public async Task<Guid> EditDraft(Guid id,EmailRequest email)
     {
         try
         {
             var mail = mapper.EmailRequestToEntity(email);
-            var toSend = await emailsRepository.UpdateEmail(mail.Id, mail);
+            var toSend = await emailsRepository.UpdateEmail(id, mail);
             if (toSend is null)
             {
                 throw new MiddlewareException(HttpStatusCode.InternalServerError, new { message = "Server Error" });
             }
-
+            return toSend.Id;
+        }
+        catch (ArgumentNullException e)
+        {
+            throw new MiddlewareException(HttpStatusCode.BadRequest, new { message = e.Message });
+        }
+        catch (Exception) {
+            
+            throw new MiddlewareException(HttpStatusCode.InternalServerError, new { message = "Server Error" });
+        }
+    }
+    public async Task<Guid> EditAndSend(Guid id,EmailRequest email)
+    {
+        try
+        {
+            var mail = mapper.EmailRequestToEntity(email);
+            var toSend = await emailsRepository.UpdateEmail(id, mail);
+            if (toSend is null)
+            {
+                throw new MiddlewareException(HttpStatusCode.InternalServerError, new { message = "Server Error" });
+            }
+            
             var doc = await pdfDocumentsRepository.GetPdf(email.Attachment);
 
             if (doc is null)
@@ -118,16 +139,11 @@ public class EmailsService(
 
             await resend.EmailSendAsync(message);
             await emailsRepository.ChangeToSend(toSend.Id);
-
             return toSend.Id;
         }
         catch (ArgumentNullException e)
         {
             throw new MiddlewareException(HttpStatusCode.BadRequest, new { message = e.Message });
-        }
-        catch (ResendException)
-        {
-            throw new MiddlewareException(HttpStatusCode.ExpectationFailed, new { message = "Error en el envío, se ha guardado como borrador" });
         }
         catch (Exception) {
             

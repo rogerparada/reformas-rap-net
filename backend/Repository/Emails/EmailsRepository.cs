@@ -41,6 +41,8 @@ public class EmailsRepository(AppDbContext context) : IEmailsRepository
         mail.Cco = email.Cco;
         mail.Subject = email.Subject;
         mail.Message = email.Message;
+        mail.Updated = DateTime.UtcNow;
+        mail.Status = Estado.Editado;
 
         context.Emails.Update(mail);
         await context.SaveChangesAsync();

@@ -45,14 +45,25 @@ public class EmailController(IEmailsService emailsService) : ControllerBase
         return Ok(new { idEmail });
     }
 
-    [HttpPost("{id:guid}/edit")]
+    [HttpPut("{id:guid}/edit")]
     [EndpointSummary("Editar email")]
     [ProducesResponseType(typeof(ApiResponse<Guid>),StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Guid>>> Edit([FromBody] EmailRequest email)
+    public async Task<ActionResult<ApiResponse<Guid>>> Edit(Guid id, [FromBody] EmailRequest email)
     {
-        var idEmail = await emailsService.SendEditedDraft(email);
+        var idEmail = await emailsService.EditDraft(id, email);
+        return Ok(new { data = idEmail });
+    }
+    
+    [HttpPut("{id:guid}/send")]
+    [EndpointSummary("Editar y enviar email")]
+    [ProducesResponseType(typeof(ApiResponse<Guid>),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<Guid>>> EditSend(Guid id, [FromBody] EmailRequest email)
+    {
+        var idEmail = await emailsService.EditAndSend(id, email);
         return Ok(new { data = idEmail });
     }
 
