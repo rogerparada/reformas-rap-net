@@ -43,7 +43,9 @@ export default function SenMailModal({ showModal, closeModal, attachment }: Prop
 					</button>
 					{!sending && !error && !success && (
 						<form onSubmit={handleSubmit} className="email_form">
-							<EmailInputs email={email} />
+							<div className="mt-10">
+								<EmailInputs to={email} />
+							</div>
 							<div className="attach_field">
 								<div>
 									<span className="icon-[ls--clip]" />
