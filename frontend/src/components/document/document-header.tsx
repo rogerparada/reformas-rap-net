@@ -1,11 +1,12 @@
-import { ClienteInfo, CompanyInfo, DocumentInfo } from "@/types";
+import { CompanyInfo, DocumentInfo } from "@/types";
 import DocumentCompanyInfo from "./document-company-info";
 import ClientDetails from "../tables/client/client-details";
 import InfoFactura from "../tables/info-factura";
 import Image from "next/image";
+import { ClienteResponse } from "@/types/description";
 
 type DocumentHeaderProps = {
-	client: ClienteInfo;
+	client: ClienteResponse;
 	company: CompanyInfo;
 	document: DocumentInfo;
 };

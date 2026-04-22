@@ -10,7 +10,7 @@ type ViewButtonProps = {
 
 export default function ViewButton({ edit, link }: ViewButtonProps) {
 	const tipo = useAppStore((state) => state.document?.tipoDocumento);
-	const client = useAppStore((state) => state.client?.documentId);
+	const client = useAppStore((state) => state.client?.id);
 	if (!client && !edit) {
 		return (
 			<button className="options_button disabled">

@@ -23,7 +23,8 @@ export default function DeleteDocumentButton({ id }: { id: DocumentInfo["idDocum
 				const { success, errors } = await actions.document.deleteDocumentAction(id);
 				if (!success) {
 					Swal.fire({
-						text: errors,
+						title: "Error",
+						text: errors?.join("\n"),
 						confirmButtonColor: "#3085d6",
 						icon: "error",
 					});
