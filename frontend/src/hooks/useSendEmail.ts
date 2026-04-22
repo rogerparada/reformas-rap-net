@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { actions } from "@/actions";
-import { usePDF } from "./usePdf";
+//import { DocumentInfo } from "@/types";
 
-type UseSendEmailProps = {
-	email: string;
-	pdfBlob?: Blob;
-	pdf?: React.RefObject<null>;
-};
+// type UseSendEmailProps = {
+// 	email: string;
+// 	id: DocumentInfo["idDocumento"];
+// 	fileId: string;
+// 	clientId: string;
+// };
 
-export const useSendEmail = ({ email, pdfBlob, pdf }: UseSendEmailProps) => {
-	const { createBlobPdf } = usePDF();
+export const useSendEmail = () => {
 	const [sending, setSending] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [success, setSuccess] = useState<string | null>(null);
@@ -20,13 +20,7 @@ export const useSendEmail = ({ email, pdfBlob, pdf }: UseSendEmailProps) => {
 		setSuccess(null);
 
 		try {
-			const blob = pdf ? await createBlobPdf(pdf) : pdfBlob;
-			if (!blob) {
-				setError("No se pudo generar el PDF.");
-				return { success: false };
-			}
-
-			const resp = await actions.email.sendPdfByEmail(blob, email, formData);
+			const resp = await actions.email.sendPdfByEmail(formData);
 
 			if (resp.success) {
 				setSuccess(resp.message || "Correo enviado correctamente.");

@@ -12,6 +12,7 @@ export default function Navbar({ title }: { title?: string }) {
 		{ icon: "icon-[mdi--home]", text: "Inicio", link: "/gestion" },
 		{ icon: "icon-[ion--document]", text: "Documentos", link: "/gestion/documentos" },
 		{ icon: "icon-[solar--users-group-rounded-bold]", text: "Clientes", link: "/gestion/clientes" },
+		{ icon: "icon-[mdi--email]", text: "Emails", link: "/gestion/emails" },
 	];
 
 	return (

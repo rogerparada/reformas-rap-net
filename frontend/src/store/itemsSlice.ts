@@ -17,7 +17,6 @@ const calculateTotals = (items: ItemTable[]) => {
 	const subtotal = items.reduce((sum, item) => (sum += item.total), 0);
 	const iva = subtotal * 0.21;
 	const total = subtotal + iva;
-
 	return { subtotal, iva, total };
 };
 
@@ -34,7 +33,8 @@ export const createItemsSlice: StateCreator<ItemsSlice> = (set, get) => ({
 
 	addItem: (item: NewItemTable) => {
 		const id = `new-${get().items.length + 1}`;
-		const items: ItemTable[] = [...get().items, { ...item, id }];
+		const total = item.quantity >= 1 ? item.quantity * item.price : item.price;
+		const items: ItemTable[] = [...get().items, { ...item, id, total }];
 		const totals = calculateTotals(items);
 
 		set(() => ({ items, ...totals }));
@@ -43,7 +43,8 @@ export const createItemsSlice: StateCreator<ItemsSlice> = (set, get) => ({
 	editItem: (item: ItemTable) => {
 		const oldItem = get().items.find((i) => i.id === item.id);
 		if (oldItem) {
-			const items = get().items.map((i) => (i.id === item.id ? item : i));
+			const total = item.quantity >= 1 ? item.quantity * item.price : item.price;
+			const items = get().items.map((i) => (i.id === item.id ? { ...item, total } : i));
 			const totals = calculateTotals(items);
 			set(() => ({ items, ...totals }));
 		}
