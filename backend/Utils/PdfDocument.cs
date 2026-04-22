@@ -78,7 +78,7 @@ public class PdfDocument(PdfDoc doc) : IDocument
                 c.Item().IconText(ImagePath("mail"), client.Email);
                 c.Item().IconText(ImagePath("address"), client.Address);
                 c.Item().PaddingLeft(16).Text(client.City);
-                if (string.IsNullOrEmpty(client.Nif))
+                if (!string.IsNullOrEmpty(client.Nif))
                 {
                     c.Item().IconText(ImagePath("id"), client.Nif);
                 }
