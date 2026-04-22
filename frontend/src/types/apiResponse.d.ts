@@ -4,8 +4,6 @@ export type ApiResponse = {
 	success?: boolean;
 	message?: string;
 	status: number;
-	error?: string;
-	data?: unknown;
 };
 
 export type ApiMeta = {

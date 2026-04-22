@@ -1,0 +1,222 @@
+@Api_URL = http://localhost:5173
+@user_mail = "mail@mail.com"
+@user_pass = "ElPasswordMasLargoPosible2026!"
+
+### Create User
+POST {{Api_URL}}/api/Auth/register/
+Content-Type: application/json
+
+{
+  "email": {{user_mail}},
+  "password": {{user_pass}}
+}
+
+### Login
+POST {{Api_URL}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": {{user_mail}},
+  "password": {{user_pass}}
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Create cliente
+POST {{Api_URL}}/api/Client
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "email": "mail@mail.com",
+  "name": "Roger",
+  "city": "Madrid",
+  "phone": "600000000",
+  "address": "Calle Falsa",
+  "nif": null
+}
+
+> {%
+    client.global.set("id_cliente", response.body.idCliente);
+%}
+
+### Get Clientes
+GET {{Api_URL}}/api/Client
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Get Cliente by Id
+GET {{Api_URL}}/api/Client/{{id_cliente}}
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+
+
+### Update cliente
+PUT {{Api_URL}}/api/Client/{{id_cliente}}
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "email": "mail@mail.com",
+  "name": "Roger",
+  "city": "Madrid",
+  "phone": "611111111",
+  "address": "Calle Falsa 123",
+  "nif": "0000000X"
+}
+
+### Get Documentos
+GET {{Api_URL}}/api/Document
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Create Documento in item
+POST {{Api_URL}}/api/Document
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "numeroDocumento": "PRES-002",
+  "tipoDocumento": 1,
+  "fecha": null,
+  "estado": 1,
+  "iva": null,
+  "idCliente": "{{id_cliente}}"
+}
+
+### Create Documento
+POST {{Api_URL}}/api/Document
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "numeroDocumento": "Fact-001",
+  "fecha": "2026-04-10T00:00:00.000Z",
+  "tipoDocumento": "Factura",
+  "iva": true,
+  "idCliente": "019d7dac-ff5e-79a5-b015-fc611fb33aae",
+  "items": [
+    {
+      "description": "Algo",
+      "price": 0,
+      "quantity": 0,
+      "total": 200.05
+    }
+  ]
+}
+
+### Create Documento large items
+POST {{Api_URL}}/api/Document
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+
+{
+  "numeroDocumento": "Pres-006",
+  "fecha": "2026-04-11T00:00:00.000Z",
+  "tipoDocumento": "Presupuesto",
+  "iva": true,
+  "idCliente": "019d7dac-ff5e-79a5-b015-fc611fb33aae",
+  "items": [
+    {
+      "id": 0,
+      "description": "Prueba",
+      "price": 345,
+      "quantity": 1
+    },
+    {
+      "id": 0,
+      "description": "nuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdfnuevo\nsdfjklasdf\nasdfasdf\nnuevo\nsdfjklasdf\nasdfasdf",
+      "price": 345,
+      "quantity": 1
+    }
+  ]
+}
+
+
+### Create Document whit Items
+
+POST {{Api_URL}}/api/Document
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "numeroDocumento": "PRE-001",
+  "tipoDocumento": 1,
+  "fecha": null,
+  "estado": 1,
+  "iva": null,
+  "idCliente": "{{id_cliente}}",
+  "items": [
+    {
+      "description": "Llaves de paso",
+      "total": 500
+    }
+  ]
+}
+
+### Create Documento con Items
+POST {{Api_URL}}/api/Document
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "numeroDocumento": "PRE-002",
+  "tipoDocumento": "Presupuesto",
+  "fecha": null,
+  "estado": 1,
+  "iva": null,
+  "idCliente": "{{id_cliente}}",
+  "items": [    
+    {
+      "description": "Botes de pintura",
+      "total": 500,
+      "price": null,
+      "quantity": null
+    },
+    {
+      "description": "Paletinas",
+      "total": null,
+      "price": 12.5,
+      "quantity": 12
+    }
+    
+  ]
+}
+
+### Edit Document
+@doc = 019d782e-2ea6-741d-9798-1f8e272ae30a
+PUT {{Api_URL}}/api/Document/{{doc}}
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "numeroDocumento": "FAC-001",
+  "tipoDocumento": "Factura",
+  "fecha": "2026-04-07T09:36:54.24196Z",
+  "estado": 1,
+  "iva": true,
+  "idCliente": "{{id_cliente}}",
+  "items": [
+    {
+      "descripcion": "Maderas",
+      "precio": 500.0,
+      "cantidad": 2
+    },
+    {
+      "descripcion": "Maderas de roble",
+      "importe": 200.0
+    }
+  ]
+}
+
+### Get Documents info
+GET http://{{Api_URL}}/api/Document/info?tipo=Factura
+Authorization: Bearer {{auth_token}}
+
+### Get Documents info Presupuesto
+GET http://{{Api_URL}}/api/Document/info?tipo=Presupuesto
+Authorization: Bearer {{auth_token}}

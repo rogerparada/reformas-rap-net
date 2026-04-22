@@ -69,20 +69,3 @@ export const toISOString = (dateString: string): string => {
 
 	return date.toISOString();
 };
-
-export const toDayOfWeekDate = (date: string): string => {
-	const dateObj = new Date(date);
-
-	const dayOfWeekFormatter = new Intl.DateTimeFormat("es-ES", { weekday: "short" });
-
-	const day = dateObj.getDate().toString().padStart(2, "0");
-	const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
-	const year = dateObj.getFullYear();
-	const hours = dateObj.getHours().toString().padStart(2, "0");
-	const minutes = dateObj.getMinutes().toString().padStart(2, "0");
-
-	let dayName = dayOfWeekFormatter.format(dateObj);
-	dayName = dayName.charAt(0).toUpperCase() + dayName.slice(1);
-
-	return `${dayName}. ${day}/${month}/${year} ${hours}:${minutes}`;
-};

@@ -9,9 +9,7 @@ namespace ReformasRapBackend.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<Cliente>().HasMany(c=> c.Documentos).WithOne(c => c.Cliente);
-            builder.Entity<Cliente>().HasMany(c=> c.Emails).WithOne(c => c.Cliente);
-            builder.Entity<Documento>().HasMany(d=> d.Items).WithOne(d => d.Documento);
+            // Additional model configurations can be placed here
         }
         
         public DbSet<Cliente>  Clientes { get; set; }
@@ -21,7 +19,5 @@ namespace ReformasRapBackend.Data
         public DbSet<Item>  Items { get; set; }
         
         public DbSet<Company>  Companies { get; set; }
-        
-        public DbSet<Email>  Emails { get; set; }
     }
 }

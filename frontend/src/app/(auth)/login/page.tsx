@@ -30,7 +30,7 @@ export default function LoginPage() {
 				<div className="login_avatar">
 					<span className="icon-[streamline--user-multiple-circle-solid]" />
 				</div>
-				<FormError error={formState.serverErrors?.toString()} />
+				<FormError error={formState.serverErrors?.message} />
 				<div>
 					<label htmlFor="user">Usuario:</label>
 					<input

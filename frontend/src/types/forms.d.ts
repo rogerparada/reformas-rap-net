@@ -41,28 +41,3 @@ export type EditClientFormState = Omit<ClientFormState, "data"> & {
 		id?: string;
 	};
 };
-
-export type EmailFormState = {
-	success?: boolean;
-	message?: string;
-	data?: {
-		to?: string;
-		cc?: string;
-		cco?: string;
-		subject?: string;
-		message?: string;
-		attachment?: string;
-		attachmentName?: string;
-		idCliente?: string;
-	};
-	serverErrors?: string | string[] | null;
-	errors?: {
-		to?: string[];
-		cc?: string[];
-		cco?: string[];
-		subject?: string[];
-		message?: string[];
-		attachment?: string[];
-		idCliente?: string[];
-	} | null;
-};
