@@ -1,18 +1,18 @@
 import { StateCreator } from "zustand";
-import { ClienteInfo } from "../types/description";
+import { ClienteInfo, ClienteResponse } from "../types/description";
 
 export type ClientSlice = {
-	client: ClienteInfo;
-	setClient: (client: ClienteInfo) => void;
-	changeClientAttribute: (key: keyof ClienteInfo, value: string) => void;
+	client: ClienteResponse;
+	setClient: (client: ClienteResponse) => void;
+	changeClientAttribute: (key: keyof ClienteResponse, value: string) => void;
 	clearClient: () => void;
 };
 
-const initialClient: ClienteInfo = { id: "", name: "", nif: "", email: "", city: "", phone: "", address: "" };
+const initialClient: ClienteResponse = { id: "", name: "", nif: "", email: "", city: "", phone: "", address: "", documentos: 0 };
 
 export const createClientSlice: StateCreator<ClientSlice> = (set) => ({
 	client: initialClient,
-	setClient: (client: ClienteInfo) => {
+	setClient: (client: ClienteResponse) => {
 		set({ client });
 	},
 	changeClientAttribute: (key, value) => {
