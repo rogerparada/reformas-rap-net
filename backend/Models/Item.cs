@@ -16,13 +16,23 @@ public class Item
 
     public override bool Equals(object? obj)
     {
-        if (obj is null) return false;
-        var item = obj as Item;
-        if (item is null) return false;
+        if (obj is not Item item) return false;
         var description = item.Description == Description;
         var price = item.Price == Price;
         var quantity = item.Quantity == Quantity;
-        
+
         return description && price && quantity;
+    }
+
+    protected bool Equals(Item other)
+    {
+        return Id.Equals(other.Id) && Description == other.Description && Price == other.Price &&
+               Quantity == other.Quantity && IdDocumento.Equals(other.IdDocumento) && Created.Equals(other.Created) &&
+               Nullable.Equals(Updated, other.Updated) && Equals(Documento, other.Documento);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id, Description, Price, Quantity, IdDocumento, Created, Updated, Documento);
     }
 }
