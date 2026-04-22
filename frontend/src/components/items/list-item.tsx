@@ -35,13 +35,15 @@ export default function ListItem({ item }: ListItemProps) {
 			</div>
 			<div className="action_button_group item">
 				<EditItemModal item={item} />
-				<ActionButton
-					icon="delete"
-					color="red"
-					action={() => {
-						deleteItemById(item.id);
-					}}
-				/>
+				{item.id && (
+					<ActionButton
+						icon="delete"
+						color="red"
+						action={() => {
+							deleteItemById(item.id!);
+						}}
+					/>
+				)}
 			</div>
 		</div>
 	);

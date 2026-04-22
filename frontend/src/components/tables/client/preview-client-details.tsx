@@ -1,6 +1,6 @@
-import { ClientInfo } from "@/types";
+import { ClienteResponse } from "@/types/description";
 
-export default function PreviewClientDetails({ client }: { client: ClientInfo }) {
+export default function PreviewClientDetails({ client }: { client: ClienteResponse }) {
 	if (!client) return;
 	const { name, phone, email, address, city, nif } = client;
 	return (
