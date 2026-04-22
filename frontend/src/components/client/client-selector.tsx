@@ -13,7 +13,9 @@ export default function ClientSelector({ options }: ClientSelectorProps) {
 	const handleChangeSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
 		const client = options?.find((c) => c.id === value);
-		setClient(client ?? { name: "" });
+		if (client) {
+			setClient(client);
+		}
 	};
 
 	if (!options) {

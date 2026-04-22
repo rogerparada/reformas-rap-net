@@ -14,4 +14,5 @@ public class Cliente
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
     public List<Documento> Documentos { get; set; } = [];
+    public List<Email> Emails { get; set; } = [];
 }

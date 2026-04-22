@@ -1,23 +1,24 @@
 "use client";
 
+import { Dispatch, SetStateAction } from "react";
 import { useSendEmail } from "@/hooks/useSendEmail";
 import { useAppStore } from "@/store/useAppStore";
-import { Dispatch, RefObject, SetStateAction } from "react";
+import { DocumentInfo } from "@/types";
 import ModalMessage from "./modal-message";
+import EmailInputs from "../forms/email-inputs";
 
 type Props = {
-	pdfBlob?: Blob;
-	pdf?: RefObject<null>;
 	showModal: boolean;
 	closeModal: Dispatch<SetStateAction<boolean>>;
+	attachment: DocumentInfo["idDocumento"];
 };
 
-export default function SenMailModal({ pdfBlob, pdf, showModal, closeModal }: Props) {
+export default function SenMailModal({ showModal, closeModal, attachment }: Props) {
 	const email = useAppStore((state) => state.client?.email);
-	const numero = useAppStore((state) => state.document?.numeroDocumento);
-	const fileName = numero;
+	const idCliente = useAppStore((state) => state.client?.id);
+	const fileName = useAppStore((state) => state.document?.numeroDocumento);
 
-	const { sending, error, success, sendEmail, reset } = useSendEmail({ email, pdfBlob, pdf });
+	const { sending, error, success, sendEmail, reset } = useSendEmail();
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -42,10 +43,9 @@ export default function SenMailModal({ pdfBlob, pdf, showModal, closeModal }: Pr
 					</button>
 					{!sending && !error && !success && (
 						<form onSubmit={handleSubmit} className="email_form">
-							<span className="text-base">
-								<b>Para:</b> {email}
-							</span>
-
+							<div className="mt-10">
+								<EmailInputs to={email} />
+							</div>
 							<div className="attach_field">
 								<div>
 									<span className="icon-[ls--clip]" />
@@ -53,7 +53,8 @@ export default function SenMailModal({ pdfBlob, pdf, showModal, closeModal }: Pr
 								<div>
 									<span className="text-base">{fileName}</span>
 								</div>
-								<input type="hidden" name="fileName" value={fileName} />
+								<input type="hidden" name="attachment" value={attachment} />
+								<input type="hidden" name="idCliente" value={idCliente} />
 							</div>
 
 							<div className="input_field">

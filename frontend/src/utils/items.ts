@@ -33,6 +33,7 @@ export function getDocumentInfo(): DocumentInfo {
 	const state = useAppStore.getState();
 
 	return {
+		idDocumento: state.document.idDocumento,
 		tipoDocumento: state.document.tipoDocumento,
 		numeroDocumento: state.document.numeroDocumento,
 		fecha: state.document.fecha,

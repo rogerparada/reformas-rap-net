@@ -14,4 +14,6 @@ public interface IMapper
     DocumentoInfoResponse DocumentoToInfoResponse(Documento doc);
     Item ItemRequestToEntity(ItemRequest item);
     ItemResponse ItemToResponse(Item item);
+    public EmailResponse EmailEntityToResponse(Email email);
+    public Email EmailRequestToEntity(EmailRequest email);
 }

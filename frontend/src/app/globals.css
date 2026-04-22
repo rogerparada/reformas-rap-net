@@ -550,3 +550,24 @@ textarea {
 	@apply bg-primary-light text-white;
 	@apply hover:bg-primary-dark hover:font-bold transition-colors duration-300;
 }
+
+.email_box {
+	@apply flex items-center min-w-96 flex-1;
+
+	> div {
+		@apply w-14 h-10 bg-slate-500 rounded-l-sm border border-r-0 border-slate-500 flex items-center justify-center;
+	}
+
+	> label {
+		@apply text-base font-bold;
+	}
+
+	> input {
+		@apply border border-slate-500 flex-1 h-10 pl-2;
+		@apply read-only:select-none read-only:bg-slate-100;
+	}
+
+	> textarea {
+		@apply w-full border border-slate-500 flex-1 min-h-56 p-2;
+	}
+}

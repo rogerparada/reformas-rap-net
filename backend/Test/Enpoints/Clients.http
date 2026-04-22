@@ -1,0 +1,62 @@
+@Api_URL = http://localhost:5173
+@user_mail = "mail@mail.com"
+@user_pass = "ElPasswordMasLargoPosible2026!"
+
+### Login
+POST {{Api_URL}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": {{user_mail}},
+  "password": {{user_pass}}
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Create cliente
+POST {{Api_URL}}/api/Client
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "email": "mail@mail.com",
+  "name": "Roger",
+  "city": "Madrid",
+  "phone": "600000000",
+  "address": "Calle Falsa",
+  "nif": null
+}
+
+> {%
+    client.global.set("id_cliente", response.body.idCliente);
+%}
+
+### Get Clientes
+GET {{Api_URL}}/api/Client
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.global.set("id_cliente", response.body[0].idCliente);
+%}
+
+### Get Cliente by Id
+GET {{Api_URL}}/api/Client/{{id_cliente}}
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Update cliente
+PUT {{Api_URL}}/api/Client/{{id_cliente}}
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "email": "mail@mail.com",
+  "name": "Roger",
+  "city": "Madrid",
+  "phone": "611111111",
+  "address": "Calle Falsa 123",
+  "nif": "0000000X"
+}

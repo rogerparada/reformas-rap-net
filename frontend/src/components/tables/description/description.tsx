@@ -1,11 +1,11 @@
 "use client";
-import { ClientInfo, CompanyInfo } from "@/types/description";
+import { ClienteResponse, CompanyInfo } from "@/types/description";
 import InfoFactura from "../info-factura";
 import ClientDetails from "../client/client-details";
 
 type DescriptionProps = {
 	data: CompanyInfo;
-	client?: ClientInfo;
+	client?: ClienteResponse;
 };
 
 export default function Description({ data, client }: DescriptionProps) {

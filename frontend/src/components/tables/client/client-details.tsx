@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { ClientInfo } from "@/types";
+import { ClienteResponse } from "@/types/description";
 
-export default function ClientDetails({ client }: { client: ClientInfo }) {
+export default function ClientDetails({ client }: { client: ClienteResponse }) {
 	if (!client) return;
 	const { name, phone, email, address, city, nif } = client;
 	return (
