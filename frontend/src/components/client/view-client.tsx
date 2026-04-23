@@ -8,7 +8,7 @@ export default async function ViewClient({ params }: { params: Promise<{ id: str
 
 	const response = await api.client.getFullClientById(token || "", id);
 
-	if (!response) redirect("/gestion/clientes");
+	if (!response.isSuccess) redirect("/gestion/clientes");
 
-	return <ClientEdit client={response} destination="/gestion/clientes" />;
+	return <ClientEdit client={response.getValue()} destination="/gestion/clientes" />;
 }
