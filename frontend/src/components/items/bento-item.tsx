@@ -5,10 +5,10 @@ export default async function BentoItem() {
 	if (!jwt) return;
 
 	const response = await api.documents.getDocuments(jwt);
-	if (!response) return;
+	if (!response.isSuccess) return;
 
 	const data = { Factura: 0, Presupuesto: 0, CuentaCobro: 0 };
-	response.forEach(({ tipoDocumento }) => {
+	response.getValue().forEach(({ tipoDocumento }) => {
 		data[tipoDocumento]++;
 	});
 

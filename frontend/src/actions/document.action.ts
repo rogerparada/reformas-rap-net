@@ -23,7 +23,18 @@ export async function createDocumentAction(documentInput: SaveDocumentInput): Pr
 	}
 
 	const token = (await auth.isAuthenticated()) ?? "";
-	return await api.documents.createDocument(token, result.data);
+
+	const response = await api.documents.createDocument(token, result.data);
+
+	if (!response.isSuccess) {
+		return {
+			status: 400,
+			success: false,
+			data: null,
+			errors: [response.getError().message],
+		};
+	}
+	return response.getValue();
 }
 
 export async function editDocumentAction(documentInput: SaveDocumentInput): Promise<ApiDocumentResponse> {
@@ -45,7 +56,16 @@ export async function editDocumentAction(documentInput: SaveDocumentInput): Prom
 
 	const token = (await auth.isAuthenticated()) ?? "";
 
-	return await api.documents.editDocument(token, doc.idDocumento, result.data);
+	const response = await api.documents.editDocument(token, doc.idDocumento, result.data);
+	if (!response.isSuccess) {
+		return {
+			status: 400,
+			success: false,
+			data: null,
+			errors: [response.getError().message],
+		};
+	}
+	return response.getValue();
 }
 
 export async function deleteDocumentAction(id: DocumentResponse["idDocumento"]): Promise<ApiDocumentResponse> {
@@ -61,7 +81,14 @@ export async function deleteDocumentAction(id: DocumentResponse["idDocumento"]):
 	const token = (await auth.isAuthenticated()) ?? "";
 
 	const response = await api.documents.deleteDocument(token, id);
-	console.log(response);
+	if (!response.isSuccess) {
+		return {
+			status: 400,
+			success: false,
+			data: null,
+			errors: [response.getError().message],
+		};
+	}
 
-	return response;
+	return response.getValue();
 }

@@ -4,11 +4,17 @@ import { api, auth } from "@/lib";
 export default async function DocumentNew({ params }: { params: Promise<{ clear: boolean }> }) {
 	const { clear } = await params;
 	const token = await auth.isAuthenticated();
-	const clients = await api.client.getClients(token ?? "");
 
-	if (!clear) {
-		return <DocumentForm clients={clients} />;
+	if (!token) return;
+	const clients = await api.client.getClients(token);
+
+	if (!clients.isSuccess) {
+		return;
 	}
 
-	return <DocumentForm clear={clear} clients={clients} />;
+	if (!clear) {
+		return <DocumentForm clients={clients.getValue()} />;
+	}
+
+	return <DocumentForm clear={clear} clients={clients.getValue()} />;
 }

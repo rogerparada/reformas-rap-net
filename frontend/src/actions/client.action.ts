@@ -1,11 +1,10 @@
 "use server";
 
-import z from "zod";
+import { z } from "zod";
 
 import { clientSchema, editClientSchema } from "../validations/client-validator";
 import { ClientFormState, EditClientFormState } from "../types/forms";
 import { api, auth } from "../lib";
-import { redirect } from "next/navigation";
 import { ClienteResponse } from "../types";
 import { updateTag } from "next/cache";
 
@@ -33,19 +32,15 @@ export const createClientAction = async (prevState: ClientFormState, formData: F
 	}
 
 	const jwt = await auth.isAuthenticated();
-	if (!jwt) {
-		return redirect("/login");
-	}
+	const response = await api.client.createClient(jwt!, result.data);
 
-	const response = await api.client.createClient(jwt, result.data);
-
-	if (!response || response.error) {
+	if (!response.isSuccess) {
 		return {
 			...prevState,
 			success: false,
 			message: "Create client error",
 			errors: null,
-			serverErrors: response?.error,
+			serverErrors: [response.getError().message],
 			data: fields,
 		};
 	}
@@ -57,7 +52,7 @@ export const createClientAction = async (prevState: ClientFormState, formData: F
 		success: true,
 		message: "Create client successful",
 		errors: null,
-		serverErrors: response.error,
+		serverErrors: null,
 		data: fields,
 	};
 };
@@ -87,19 +82,16 @@ export const editClientAction = async (prevState: EditClientFormState, formData:
 	}
 
 	const jwt = await auth.isAuthenticated();
-	if (!jwt) {
-		return redirect("/login");
-	}
 
-	const response = await api.client.editClient(jwt, result.data);
+	const response = await api.client.editClient(jwt!, result.data);
 
-	if (!response || response.error) {
+	if (!response.isSuccess) {
 		return {
 			...prevState,
 			success: false,
-			message: "Edit client error",
+			message: "Validation Error",
+			serverErrors: [response.getError().message],
 			errors: null,
-			serverErrors: response.error,
 			data: fields,
 		};
 	}
@@ -111,27 +103,17 @@ export const editClientAction = async (prevState: EditClientFormState, formData:
 		success: true,
 		message: "Edit client successful",
 		errors: null,
-		serverErrors: response.error,
+		serverErrors: null,
 		data: fields,
 	};
 };
 
 export const deleteClientAction = async (id: ClienteResponse["id"]) => {
-	// if (id?.length !== 24) {
-	// 	return {
-	// 		success: false,
-	// 		errors: `Error(${id?.length}): La id del cliente no es valida`,
-	// 	};
-	// }
-
 	const jwt = await auth.isAuthenticated();
-	if (!jwt) {
-		return redirect("/login");
-	}
 
-	const response = await api.client.deleteClient(jwt, id);
+	const response = await api.client.deleteClient(jwt!, id);
 
-	if (response?.status !== 204) {
+	if (!response.isSuccess) {
 		return {
 			success: false,
 			errors: "Error eliminando documento",

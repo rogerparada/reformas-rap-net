@@ -10,11 +10,11 @@ export default async function Clients({ params }: { params: Promise<{ add: boole
 	const { add } = await params;
 
 	const data = await api.client.getClients(jwt);
-	if (!data) {
+	if (!data.isSuccess) {
 		return;
 	}
 
-	if (data.length === 0) return <AddData tipo="Clientes" url="/gestion/client/new?clear=true" />;
+	if (data.getValue().length === 0) return <AddData tipo="Clientes" url="/gestion/client/new?clear=true" />;
 	return (
 		<>
 			<div className="flex justify-end">
@@ -22,7 +22,7 @@ export default async function Clients({ params }: { params: Promise<{ add: boole
 			</div>
 			<h1 className="title">Clientes</h1>
 			<hr className="separator mb-10" />
-			<ClientTable data={data} />
+			<ClientTable data={data.getValue()} />
 		</>
 	);
 }
