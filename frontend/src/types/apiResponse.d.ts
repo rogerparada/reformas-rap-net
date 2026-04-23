@@ -28,3 +28,8 @@ export type ApiDocumentResponse = {
 	data: { idDocumento: string } | DocumentResponse | null;
 	errors: string[] | null;
 };
+
+export type AuthSuccess = {
+	token: string;
+	expiration: string;
+};
