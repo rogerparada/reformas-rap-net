@@ -1,0 +1,75 @@
+
+
+services:
+  reformas_db:
+    image: postgres:16-alpine
+    container_name: reformas_db_server
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - reformas_db_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+  backend:
+    image: reformas-backend:latest
+    pull_policy: never
+    container_name: reformas-api
+    restart: unless-stopped
+    ports:
+      - "8090:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: >
+        Host=reformas_db;
+        Port=5432;
+        Database=${POSTGRES_DB};
+        Username=${POSTGRES_USER};
+        Password=${POSTGRES_PASSWORD};
+        Trust Server Certificate=true;
+        SSL Mode=Prefer;
+        Include Error Detail=true
+      Logging__LogLevel__Default: Information
+      Logging__LogLevel__Microsoft.AspNetCore: Warning
+      AllowedHosts: "*"
+      Jwt__Issuer: "ReformasRapBackend"
+      Jwt__Audience: "ReformasRapApp"
+      Jwt__Key: ${JWT_SECRET_KEY}
+      Resend__RESEND_API_KEY: ${RESEND_API_KEY}
+    depends_on:
+      - reformas_db
+
+  frontend:
+    image: reformas-frontend:latest
+    pull_policy: never
+    container_name: reformas-rap-app
+    restart: unless-stopped
+    environment:
+      BASE_URL: "http://localhost:3000"
+      STRAPI_API_URL: "http://backend:8080"
+    depends_on:
+      - backend
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy_proxy_reformas
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+      - "8444:443"
+    volumes:
+      - reformas_caddy_config_file:/etc/caddy
+      - reformas_caddy_data:/data
+      - reformas_caddy_config:/config
+    depends_on:
+      - reformas_db
+      - backend
+      - frontend
+
+volumes:
+  reformas_db_data:
+  reformas_caddy_data:
+  reformas_caddy_config:
+  reformas_caddy_config_file:
