@@ -9,8 +9,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Construyendo imágenes Docker..."
-                sh 'docker build -t backend-reformas backend/'
-                sh 'docker build -t frontend-reformas frontend/'
+                sh 'docker build -t reformas-backend:latest backend/'
+                sh 'docker build -t reformas-frontend:latest frontend/'
             }
         }        
 
