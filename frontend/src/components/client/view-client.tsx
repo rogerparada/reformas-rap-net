@@ -4,11 +4,11 @@ import ClientEdit from "./client-edit";
 
 export default async function ViewClient({ params }: { params: Promise<{ id: string }> }) {
 	const token = await auth.isAuthenticated();
+	if (!token) return redirect("/login");
+
 	const { id } = await params;
 
-	const response = await api.client.getFullClientById(token || "", id);
+	const response = await api.client.getFullClientById(token, id);
 
-	if (!response.isSuccess) redirect("/gestion/clientes");
-
-	return <ClientEdit client={response.getValue()} destination="/gestion/clientes" />;
+	return <ClientEdit client={response} destination="/gestion/clientes" />;
 }

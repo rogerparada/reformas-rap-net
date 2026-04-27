@@ -7,7 +7,10 @@ namespace ReformasRapBackend.Repository.Clientes;
 public class ClientesRepository(AppDbContext context) : IClientesRepository
 {
     public async Task<IEnumerable<Cliente>> GetClientes() =>
-        await context.Clientes.Include(c => c.Documentos).ToListAsync();
+        await context.Clientes
+            .Include(c => c.Documentos)
+            .OrderBy(c => c.Name)
+            .ToListAsync();
 
     public async Task<Cliente?> GetCliente(Guid id) =>
         await context.Clientes

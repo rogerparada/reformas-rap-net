@@ -6,11 +6,10 @@ import { Result } from "../../shared/core/Result";
 const STRAPI_URL = process.env.STRAPI_API_URL || "http://localhost:1337";
 const API_URL = `${STRAPI_URL}/api/Client`;
 
-export const getClients = async (jwt: string): Promise<Result<ClienteResponse[], Error>> => {
+export const getClients = async (jwt: string) => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("clientes");
-
 	const url = `${API_URL}`;
 
 	const response = await fetch(url, {
@@ -20,12 +19,11 @@ export const getClients = async (jwt: string): Promise<Result<ClienteResponse[],
 		},
 	});
 	if (!response.ok) {
-		return Result.fail(new Error("Error al obtener clientes"));
+		throw new Error("Error al obtener clientes");
 	}
 
 	const result = await response.json();
-
-	return Result.ok(result as ClienteResponse[]);
+	return result as ClienteResponse[];
 };
 
 export const getClientsFullData = async (jwt: string): Promise<Result<ClienteResponse[], Error>> => {
@@ -71,7 +69,7 @@ export const getClientById = async (jwt: string, clientId: string): Promise<Resu
 	return Result.ok(result.data as ClienteResponse);
 };
 
-export const getFullClientById = async (jwt: string, clientId: string): Promise<Result<FullClienteResponse, Error>> => {
+export const getFullClientById = async (jwt: string, clientId: string): Promise<FullClienteResponse> => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("cliente");
@@ -86,12 +84,12 @@ export const getFullClientById = async (jwt: string, clientId: string): Promise<
 	});
 
 	if (!response.ok) {
-		return Result.fail(new Error("Error al obtener cliente"));
+		throw new Error("Error al obtener cliente");
 	}
 
 	const result = await response.json();
 
-	return Result.ok(result.data as FullClienteResponse);
+	return result as FullClienteResponse;
 };
 
 export const createClient = async (jwt: string, data: ClientInput): Promise<Result<ApiResponse, Error>> => {
