@@ -12,6 +12,8 @@ export default async function DocumentView({ params }: { params: Promise<{ id: s
 	const data = await api.documents.getDocumentById(token, id);
 	const company = await api.company.getCompanyInfo(token);
 
+	console.log({ data, company });
+
 	if (!company || !data) return;
 
 	const { cliente: client, items, ...document } = data;

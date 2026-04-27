@@ -50,7 +50,7 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     public async Task<ActionResult<ApiResponse<FullDocumentoResponse>>> Get(Guid id)
     {
         var document = await documentosService.GetDocumento(id);
-        return Ok(new { document });
+        return Ok(new { data = document });
     }
 
     [HttpPost]

@@ -24,14 +24,10 @@ export default async function DocumentEdit({ params }: { params: Promise<{ id: s
 
 	const url = `/gestion/documentos/${id}`;
 
-	if (!clientes.isSuccess) {
-		return;
-	}
-
 	return (
 		<>
 			<DocumentEditOptions link={url} />
-			<DocumentForm doc={fullData} clients={clientes.getValue()} />
+			<DocumentForm doc={fullData} clients={clientes} />
 		</>
 	);
 }
