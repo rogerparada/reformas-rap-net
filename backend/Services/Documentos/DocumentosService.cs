@@ -19,34 +19,16 @@ public class DocumentosService(
     IMapper mapper)
     : IDocumentosService
 {
-    public async Task<List<DocumentoResponse>> GetDocumentos()
+    public async Task<List<DocumentoResponse>> GetDocumentos(TipoDocumento? tipo = null, Order? orderBy = Order.Fecha, bool descending = false)
     {
-        var docs = await documentosRepository.GetDocumentos();
+        var docs = await documentosRepository.GetDocumentos(tipo, orderBy, descending);
         var documentos = docs as IList<Documento> ?? docs.ToList();
         return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToResponse).ToList();
     }
-
-    public async Task<List<DocumentoResponse>> GetDocumentosByType(TipoDocumento tipoDocumento)
+    
+    public async Task<List<DocumentoInfoResponse>> GetDocumentosInfo(TipoDocumento? tipo, Order? orderBy, bool descending )
     {
-        var docs = await documentosRepository.GetDocumentosByType(tipoDocumento);
-        var documentos = docs as IList<Documento> ?? docs.ToList();
-        return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToResponse).ToList();
-    }
-    public async Task<List<FullDocumentoResponse>> GetFullDocumentosByType(TipoDocumento tipoDocumento)
-    {
-        var docs = await documentosRepository.GetDocumentosByType(tipoDocumento);
-        var documentos = docs as IList<Documento> ?? docs.ToList();
-        return !documentos.Any() ? [] : documentos.Select(mapper.FullDocumentoToResponse).ToList();
-    }
-    public async Task<List<DocumentoInfoResponse>> GetDocumentosInfo()
-    {
-        var docs = await documentosRepository.GetFullDocumentos();
-        var documentos = docs as IList<Documento> ?? docs.ToList();
-        return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToInfoResponse).ToList();
-    }
-    public async Task<List<DocumentoInfoResponse>> GetDocumentosInfoByType(TipoDocumento tipoDocumento)
-    {
-        var docs = await documentosRepository.GetFullDocumentosByType(tipoDocumento);
+        var docs = await documentosRepository.GetFullDocumentos(tipo, orderBy, descending);
         var documentos = docs as IList<Documento> ?? docs.ToList();
         return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToInfoResponse).ToList();
     }

@@ -8,7 +8,7 @@ public class DocumentoResponse
     public Guid IdDocumento { get; set; }
     public required string NumeroDocumento { get; set; }
     
-    [JsonConverter(typeof(JsonStringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter<TipoDocumento>))]
     public TipoDocumento TipoDocumento { get; set; }
     public DateTime Fecha { get; set; }
     
