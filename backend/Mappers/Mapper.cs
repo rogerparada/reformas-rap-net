@@ -85,7 +85,10 @@ public class Mapper : IMapper
         Fecha = doc.Fecha,
         Iva = doc.Iva,
         Total = doc.Items.Aggregate(0.0M,
-            (acc, item) => acc + (item.Price * item.Quantity)),
+            (acc, item) => {
+                var price = (item.Quantity == 0) ? item.Price : (item.Price * item.Quantity);
+                return acc + price;
+            }),
         Cliente = doc.Cliente != null ? doc.Cliente.Name : string.Empty,
     };
 
