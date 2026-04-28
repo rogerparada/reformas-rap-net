@@ -12,7 +12,7 @@ type PaginationProps = {
 	url: string;
 };
 
-const MAX_PAGES = 20;
+const MAX_PAGES = 16;
 
 export default function Pagination({ maxItems, url }: PaginationProps) {
 	const searchParams = useSearchParams();
