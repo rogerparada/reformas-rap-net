@@ -8,7 +8,7 @@ namespace ReformasRapBackend.Services.Documentos;
 public interface IDocumentosService
 {
     Task<List<DocumentoResponse>> GetDocumentos(TipoDocumento? tipo = null, DocumentoSort? sortBy = DocumentoSort.Fecha, bool descending = false);
-    Task<DocumentApiResponse<List<DocumentoInfoResponse>>> GetDocumentosInfo(TipoDocumento? tipo = null, DocumentoSort? sortBy = DocumentoSort.Fecha, bool descending = false, int items = 10, int offset = 0);
+    Task<ResultApiResponse<List<DocumentoInfoResponse>>> GetDocumentosInfo(TipoDocumento? tipo = null, DocumentoSort? sortBy = DocumentoSort.Fecha, bool descending = false, int items = 10, int offset = 0);
     Task<DocumentoResponse> GetDocumento(string idDocumento);
     Task<FullDocumentoResponse> GetDocumento(Guid idDocumento);
     Task<Guid> CreateDocumento(DocumentoRequest documento);
