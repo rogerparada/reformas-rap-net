@@ -5,7 +5,8 @@ namespace ReformasRapBackend.Enums;
 [JsonConverter(typeof(JsonStringEnumConverter<TipoDocumento>))]
 public enum TipoDocumento
 {
-    CuentaCobro,
+    None,
     Presupuesto,
-    Factura
+    Factura,
+    CuentaCobro
 }

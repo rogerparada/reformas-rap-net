@@ -21,7 +21,7 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     [ProducesResponseType<ApiResponse<List<DocumentoResponse>>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<ApiResponse<List<DocumentoResponse>>>> Get(
         [FromQuery] TipoDocumento? tipo,
-        [FromQuery] Order? orderBy,
+        [FromQuery] DocumentoSort? orderBy,
         [FromQuery] bool desc
     )
     {
@@ -33,24 +33,24 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     [HttpGet("info")]
     [EndpointSummary("Lista de informacion de los Documentos")]
     [EndpointDescription("Lista de Documentos, admite el filtrado por tipo")]
-    [ProducesResponseType(typeof(List<DocumentoInfoResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<List<DocumentoInfoResponse>>), StatusCodes.Status200OK)]
     public async Task<ActionResult<ApiResponse<List<DocumentoInfoResponse>>>> GetInfo(
-        [FromQuery] TipoDocumento? tipo,
-        [FromQuery] Order? orderBy,
-        [FromQuery] bool desc)
+        [FromQuery] TipoDocumento tipo = TipoDocumento.None,
+        [FromQuery] DocumentoSort sortBy = DocumentoSort.Fecha,
+        [FromQuery] bool desc = false)
     {
-        var data = await documentosService.GetDocumentosInfo(tipo, orderBy, desc);
+        var data = await documentosService.GetDocumentosInfo(tipo, sortBy, desc);
         return Ok(new { data });
     }
 
     [HttpGet("{id:guid}")]
     [EndpointSummary("Buscar documento")]
-    [ProducesResponseType(typeof(FullDocumentoResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<FullDocumentoResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ApiResponse<FullDocumentoResponse>>> Get(Guid id)
     {
-        var document = await documentosService.GetDocumento(id);
-        return Ok(new { data = document });
+        var data = await documentosService.GetDocumento(id);
+        return Ok(new { data });
     }
 
     [HttpPost]
@@ -66,7 +66,7 @@ public class DocumentController(IDocumentosService documentosService) : Controll
 
     [HttpPut("{id:guid}")]
     [EndpointSummary("Modificar Documento")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
     public async Task<ActionResult<ApiResponse>> Put(Guid id, [FromBody] DocumentoRequest documento)
     {
         await documentosService.UpdateDocumento(id, documento);

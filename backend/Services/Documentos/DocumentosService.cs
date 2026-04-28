@@ -19,16 +19,16 @@ public class DocumentosService(
     IMapper mapper)
     : IDocumentosService
 {
-    public async Task<List<DocumentoResponse>> GetDocumentos(TipoDocumento? tipo = null, Order? orderBy = Order.Fecha, bool descending = false)
+    public async Task<List<DocumentoResponse>> GetDocumentos(TipoDocumento? tipo = null, DocumentoSort? sortBy = DocumentoSort.Fecha, bool descending = false)
     {
-        var docs = await documentosRepository.GetDocumentos(tipo, orderBy, descending);
+        var docs = await documentosRepository.GetDocumentos(tipo, sortBy, descending);
         var documentos = docs as IList<Documento> ?? docs.ToList();
         return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToResponse).ToList();
     }
     
-    public async Task<List<DocumentoInfoResponse>> GetDocumentosInfo(TipoDocumento? tipo, Order? orderBy, bool descending )
+    public async Task<List<DocumentoInfoResponse>> GetDocumentosInfo(TipoDocumento? tipo, DocumentoSort? sortBy, bool descending )
     {
-        var docs = await documentosRepository.GetFullDocumentos(tipo, orderBy, descending);
+        var docs = await documentosRepository.GetFullDocumentos(tipo, sortBy, descending);
         var documentos = docs as IList<Documento> ?? docs.ToList();
         return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToInfoResponse).ToList();
     }

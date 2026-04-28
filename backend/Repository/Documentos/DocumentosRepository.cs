@@ -8,7 +8,7 @@ namespace ReformasRapBackend.Repository.Documentos;
 public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
 {
     public async Task<IEnumerable<Documento>> GetDocumentos(TipoDocumento? tipo = null,
-        Order? orderBy = Order.Fecha, bool descending = false)
+        DocumentoSort? sortBy = DocumentoSort.Fecha, bool descending = false)
     {
         IQueryable<Documento> query = context.Documentos;
 
@@ -16,15 +16,15 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
             ? query.Where(d => d.TipoDocumento == tipo)
             : query;
 
-        query = orderBy switch
+        query = sortBy switch
         {
-            Order.Documento => descending
+            DocumentoSort.Documento => descending
                 ? query.OrderByDescending(d => d.NumeroDocumento)
                 : query.OrderBy(d => d.NumeroDocumento),
-            Order.Cliente => descending
+            DocumentoSort.Cliente => descending
                 ? query.OrderByDescending(d => d.Cliente!.Name)
                 : query.OrderBy(d => d.Cliente!.Name),
-            Order.Fecha or _ => descending
+            DocumentoSort.Fecha or _ => descending
                 ? query.OrderByDescending(d => d.Fecha)
                 : query.OrderBy(d => d.Fecha)
         };
@@ -35,25 +35,25 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
     public async Task<IEnumerable<Documento>> GetDocumentosByType(TipoDocumento tipoDocumento) =>
         await context.Documentos.Where(d => d.TipoDocumento == tipoDocumento).ToListAsync();
 
-    public async Task<IEnumerable<Documento>> GetFullDocumentos(TipoDocumento? tipo, Order? orderBy, bool descending)
+    public async Task<IEnumerable<Documento>> GetFullDocumentos(TipoDocumento? tipo, DocumentoSort? sortBy, bool descending)
     {
         IQueryable<Documento> query = context.Documentos
             .Include(d => d.Items)
             .Include(d => d.Cliente);
 
-        query = tipo.HasValue
+        query = tipo is not null and not TipoDocumento.None
             ? query.Where(d => d.TipoDocumento == tipo)
             : query;
 
-        query = orderBy switch
+        query = sortBy switch
         {
-            Order.Documento => descending
+            DocumentoSort.Documento => descending
                 ? query.OrderByDescending(d => d.NumeroDocumento)
                 : query.OrderBy(d => d.NumeroDocumento),
-            Order.Cliente => descending
+            DocumentoSort.Cliente => descending
                 ? query.OrderByDescending(d => d.Cliente!.Name)
                 : query.OrderBy(d => d.Cliente!.Name),
-            Order.Fecha or _ => descending
+            DocumentoSort.Fecha or _ => descending
                 ? query.OrderByDescending(d => d.Fecha)
                 : query.OrderBy(d => d.Fecha)
         };

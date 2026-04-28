@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
 namespace ReformasRapBackend.Enums;
-[JsonConverter(typeof(JsonStringEnumConverter<Order>))]
-public enum Order
+[JsonConverter(typeof(JsonStringEnumConverter<DocumentoSort>))]
+public enum DocumentoSort
 {
     Documento,
     Cliente,
