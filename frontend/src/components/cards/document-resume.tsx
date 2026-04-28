@@ -1,6 +1,6 @@
 "use client";
 import { useAppStore } from "@/store/useAppStore";
-import { formatCurrency } from "@/utils";
+import { formatCurrency } from "@/shared/utils";
 
 export default function DocumentResume() {
 	const subtotal = useAppStore((state) => state.subtotal);

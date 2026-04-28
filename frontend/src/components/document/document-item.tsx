@@ -1,7 +1,7 @@
 "use client";
 
 import { DocumentInfoResponse } from "@/types/description";
-import { formatCurrency, toLocalDate } from "@/utils";
+import { formatCurrency, toLocalDate } from "@/shared/utils";
 import Link from "next/link";
 
 export default function DocumentItem({ item }: { item: DocumentInfoResponse }) {

@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ClienteResponse, EditableDocument } from "@/types";
-import { setDocumentState } from "@/utils/editDocument";
+import { setDocumentState } from "@/shared/utils/editDocument";
 import InfoDocumento from "../cards/info-documento";
 import DocumentResume from "../cards/document-resume";
 import ItemList from "../items/item-list";
