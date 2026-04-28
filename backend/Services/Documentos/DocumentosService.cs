@@ -29,7 +29,7 @@ public class DocumentosService(
         return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToResponse).ToList();
     }
 
-    public async Task<DocumentApiResponse<List<DocumentoInfoResponse>>> GetDocumentosInfo(TipoDocumento? tipo,
+    public async Task<ResultApiResponse<List<DocumentoInfoResponse>>> GetDocumentosInfo(TipoDocumento? tipo,
         DocumentoSort? sortBy, bool descending, int items, int offset)
     {
         var docs = await documentosRepository.GetFullDocumentos(tipo, sortBy, descending, items, offset);
@@ -42,7 +42,7 @@ public class DocumentosService(
         var next = offset + items < count ? $"{url}/api/Document/info?{queryParams}&offset={offset+items}&items={items}" : null;
         var previous = offset > 0 ? $"{url}/api/Document/info?{queryParams}&offset={offset-items}&items={items}" : null;
 
-        return new DocumentApiResponse<List<DocumentoInfoResponse>>(count, next, previous, docsInfo);
+        return new ResultApiResponse<List<DocumentoInfoResponse>>(count, next, previous, docsInfo);
     }
 
     public async Task<DocumentoResponse> GetDocumento(string idDocumento)
