@@ -35,7 +35,7 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
     public async Task<IEnumerable<Documento>> GetDocumentosByType(TipoDocumento tipoDocumento) =>
         await context.Documentos.Where(d => d.TipoDocumento == tipoDocumento).ToListAsync();
 
-    public async Task<IEnumerable<Documento>> GetFullDocumentos(TipoDocumento? tipo, DocumentoSort? sortBy, bool descending)
+    public async Task<IEnumerable<Documento>> GetFullDocumentos(TipoDocumento? tipo, DocumentoSort? sortBy, bool descending, int items, int offset)
     {
         IQueryable<Documento> query = context.Documentos
             .Include(d => d.Items)
@@ -57,8 +57,19 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
                 ? query.OrderByDescending(d => d.Fecha)
                 : query.OrderBy(d => d.Fecha)
         };
+        
+        query = query.Skip(offset).Take(items);
 
         return await query.ToListAsync();
+    }
+
+    public async Task<int> GetDocumentsCount(TipoDocumento? tipo = null)
+    {
+        IQueryable<Documento> query = context.Documentos;
+        query = tipo is not null and not TipoDocumento.None
+            ? query.Where(d => d.TipoDocumento == tipo)
+            : query;
+        return await query.CountAsync();
     }
 
     public async Task<Documento?> GetDocumento(string numeroDocumento) => await

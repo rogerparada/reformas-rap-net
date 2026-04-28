@@ -33,14 +33,16 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     [HttpGet("info")]
     [EndpointSummary("Lista de informacion de los Documentos")]
     [EndpointDescription("Lista de Documentos, admite el filtrado por tipo")]
-    [ProducesResponseType(typeof(ApiResponse<List<DocumentoInfoResponse>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(DocumentApiResponse<List<DocumentoInfoResponse>>), StatusCodes.Status200OK)]
     public async Task<ActionResult<ApiResponse<List<DocumentoInfoResponse>>>> GetInfo(
         [FromQuery] TipoDocumento tipo = TipoDocumento.None,
         [FromQuery] DocumentoSort sortBy = DocumentoSort.Fecha,
-        [FromQuery] bool desc = false)
+        [FromQuery] bool desc = false,
+        [FromQuery] int items =10,
+        [FromQuery] int offset = 0)
     {
-        var data = await documentosService.GetDocumentosInfo(tipo, sortBy, desc);
-        return Ok(new { data });
+        var result = await documentosService.GetDocumentosInfo(tipo, sortBy, desc, items, offset);
+        return Ok(result);
     }
 
     [HttpGet("{id:guid}")]

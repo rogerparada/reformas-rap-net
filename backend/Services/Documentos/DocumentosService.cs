@@ -8,10 +8,12 @@ using ReformasRapBackend.Repository.Clientes;
 using ReformasRapBackend.Repository.Companies;
 using ReformasRapBackend.Repository.Documentos;
 using ReformasRapBackend.Repository.Items;
+using ReformasRapBackend.Utils;
 
 namespace ReformasRapBackend.Services.Documentos;
 
 public class DocumentosService(
+    IConfiguration configuration,
     IDocumentosRepository documentosRepository,
     IItemsRepository itemsRepository,
     IClientesRepository clientesRepository,
@@ -19,18 +21,28 @@ public class DocumentosService(
     IMapper mapper)
     : IDocumentosService
 {
-    public async Task<List<DocumentoResponse>> GetDocumentos(TipoDocumento? tipo = null, DocumentoSort? sortBy = DocumentoSort.Fecha, bool descending = false)
+    public async Task<List<DocumentoResponse>> GetDocumentos(TipoDocumento? tipo = null,
+        DocumentoSort? sortBy = DocumentoSort.Fecha, bool descending = false)
     {
         var docs = await documentosRepository.GetDocumentos(tipo, sortBy, descending);
         var documentos = docs as IList<Documento> ?? docs.ToList();
         return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToResponse).ToList();
     }
-    
-    public async Task<List<DocumentoInfoResponse>> GetDocumentosInfo(TipoDocumento? tipo, DocumentoSort? sortBy, bool descending )
+
+    public async Task<DocumentApiResponse<List<DocumentoInfoResponse>>> GetDocumentosInfo(TipoDocumento? tipo,
+        DocumentoSort? sortBy, bool descending, int items, int offset)
     {
-        var docs = await documentosRepository.GetFullDocumentos(tipo, sortBy, descending);
+        var docs = await documentosRepository.GetFullDocumentos(tipo, sortBy, descending, items, offset);
         var documentos = docs as IList<Documento> ?? docs.ToList();
-        return !documentos.Any() ? [] : documentos.Select(mapper.DocumentoToInfoResponse).ToList();
+        var docsInfo = documentos.Select(mapper.DocumentoToInfoResponse).ToList();
+
+        var queryParams = GetQueryParams(tipo, sortBy, descending);
+        var count = await documentosRepository.GetDocumentsCount(tipo);
+        var url = configuration["ApiSettings:BaseUrl"];
+        var next = offset + items < count ? $"{url}/api/Document/info?{queryParams}&offset={offset+items}&items={items}" : null;
+        var previous = offset > 0 ? $"{url}/api/Document/info?{queryParams}&offset={offset-items}&items={items}" : null;
+
+        return new DocumentApiResponse<List<DocumentoInfoResponse>>(count, next, previous, docsInfo);
     }
 
     public async Task<DocumentoResponse> GetDocumento(string idDocumento)
@@ -88,7 +100,7 @@ public class DocumentosService(
         {
             throw new MiddlewareException(HttpStatusCode.InternalServerError, new { message = e.Message });
         }
-        
+
         return result.IdDocumento;
     }
 
@@ -126,5 +138,14 @@ public class DocumentosService(
         }
     }
 
-    public async Task<Company?> GetCompanyInfo()=> await companyRepository.GetCompanyInfo();
+    public async Task<Company?> GetCompanyInfo() => await companyRepository.GetCompanyInfo();
+
+    private static string GetQueryParams(TipoDocumento? tipo, DocumentoSort? sortBy, bool descending)
+    {
+        List<string> queryParams = [];
+        if(tipo.HasValue && tipo != TipoDocumento.None) queryParams.Add($"tipo={tipo.ToString()}");
+        if (sortBy.HasValue) queryParams.Add($"sortBy={sortBy.ToString()}");
+        if(descending) queryParams.Add("desc=true");
+        return string.Join('&', queryParams);
+    }
 }
