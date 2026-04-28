@@ -22,18 +22,20 @@ export async function createDocumentAction(documentInput: SaveDocumentInput): Pr
 		};
 	}
 
-	const token = (await auth.isAuthenticated()) ?? "";
+	try {
+		const token = (await auth.isAuthenticated()) ?? "";
+		const response = await api.documents.createDocument(token, result.data);
 
-	const response = await api.documents.createDocument(token, result.data);
+		updateTag("documentos");
 
-	if (!response.isSuccess) {
+		return response;
+	} catch {
 		return {
 			status: 400,
 			success: false,
-			errors: [response.getError().message],
+			errors: ["Error: No se pudo crear el documento"],
 		};
 	}
-	return response.getValue();
 }
 
 export async function editDocumentAction(documentInput: SaveDocumentInput): Promise<ApiResponse<string>> {
@@ -65,6 +67,7 @@ export async function editDocumentAction(documentInput: SaveDocumentInput): Prom
 		};
 	}
 
+	updateTag("documentos");
 	updateTag(`document-${id}`);
 	return {
 		success: true,

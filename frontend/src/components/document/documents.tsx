@@ -2,25 +2,23 @@ import { api, auth } from "@/lib";
 import DocumentTable from "./document-table";
 import AddData from "../ui/add-data";
 import DocumentSelector from "./document-selector";
-import { DocumentSortBy, TipoDocumento } from "@/types";
+import { DocumentFilters } from "@/types/filters";
 
 type Props = {
-	params: Promise<{
-		tipo: TipoDocumento;
-		sortBy: DocumentSortBy;
-		desc: boolean;
-	}>;
+	params: Promise<DocumentFilters>;
 };
 
 export default async function Documents({ params }: Props) {
 	const jwt = await auth.isAuthenticated();
 	if (!jwt) return;
-	const { tipo, sortBy, desc } = await params;
+	const filters = await params;
 
-	const documentos = await api.documents.getDocumentsInfo(jwt, tipo, sortBy, desc);
-	const title = tipo === "Factura" ? "Facturas" : tipo === "Presupuesto" ? "Presupuestos" : "Documentos";
+	const response = await api.documents.getDocumentsInfo(jwt, filters);
+	const { data: documentos, count } = response;
 
-	if (!documentos.isSuccess) {
+	const title = filters.tipo === "Factura" ? "Facturas" : filters.tipo === "Presupuesto" ? "Presupuestos" : "Documentos";
+
+	if (documentos.length === 0) {
 		return <AddData tipo="documentos" url="/gestion/documentos/new?clear=true" />;
 	}
 
@@ -28,7 +26,7 @@ export default async function Documents({ params }: Props) {
 		<div className="mt-5">
 			<DocumentSelector />
 			<div className="space-y-10 mt-5">
-				<DocumentTable data={documentos.getValue()} title={title} />
+				<DocumentTable data={documentos} title={title} maxItems={count} />
 			</div>
 		</div>
 	);

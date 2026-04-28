@@ -1,14 +1,7 @@
-import { getQueryString } from "@/shared/api/querys";
+import { getQueryString } from "@/shared/utils/query";
 import { Result } from "@/shared/core/Result";
-import {
-	ApiDocumentResponse,
-	ApiResponse,
-	DocumentInfoResponse,
-	DocumentResponse,
-	DocumentSortBy,
-	FullDocumentResponse,
-	TipoDocumento,
-} from "@/types";
+import { ApiDocumentResponse, ApiResponse, DocumentInfoResponse, DocumentResponse, FullDocumentResponse } from "@/types";
+import { DocumentFilters } from "@/types/filters";
 import { DocumentInput } from "@/validations/document-validator";
 import { cacheTag } from "next/cache";
 
@@ -69,14 +62,13 @@ export const getDocumentsInfoByType = async (
 	return Result.ok<DocumentInfoResponse[], Error>(result.data as DocumentInfoResponse[]);
 };
 
-export const getDocumentsInfo = async (
-	jwt: string,
-	tipo?: TipoDocumento,
-	sortBy?: DocumentSortBy,
-	desc?: boolean,
-): Promise<Result<DocumentInfoResponse[], Error>> => {
-	const queryString = `${API_URL}/info?${getQueryString({ tipo, sortBy, desc })}`;
-	console.log(queryString);
+export const getDocumentsInfo = async (jwt: string, filters: DocumentFilters): Promise<{ data: DocumentInfoResponse[]; count: number }> => {
+	"use cache";
+	cacheTag("documentos");
+	const { page, items, ...query } = filters;
+	const offset = page ? page * items - items : 0;
+	const queryParams = getQueryString({ ...query, offset, items });
+	const queryString = `${API_URL}/info?${queryParams}`;
 
 	const response = await fetch(queryString, {
 		headers: {
@@ -88,10 +80,13 @@ export const getDocumentsInfo = async (
 	const result = await response.json();
 
 	if (!response.ok) {
-		return Result.fail<DocumentInfoResponse[], Error>(new Error(`Error: ${response.status} ${result.errors.message}`));
+		throw new Error(`Error: ${response.status} ${result.errors.message}`);
 	}
 
-	return Result.ok<DocumentInfoResponse[], Error>(result.data as DocumentInfoResponse[]);
+	return {
+		data: result.data,
+		count: result.count,
+	};
 };
 
 export const getFullDocumentsByType = async (jwt: string, tipo: DocumentResponse["tipoDocumento"]): Promise<DocumentResponse[]> => {
@@ -132,7 +127,7 @@ export const getDocumentById = async (jwt: string, id: string): Promise<FullDocu
 	}
 };
 
-export const createDocument = async (jwt: string, data: DocumentInput): Promise<Result<ApiResponse<string>, Error>> => {
+export const createDocument = async (jwt: string, data: DocumentInput): Promise<ApiResponse<string>> => {
 	const response = await fetch(API_URL, {
 		method: "POST",
 		headers: {
@@ -143,14 +138,14 @@ export const createDocument = async (jwt: string, data: DocumentInput): Promise<
 	});
 	const result = await response.json();
 	if (!response.ok) {
-		return Result.fail<ApiResponse<string>, Error>(new Error(`Error: ${response.status} ${result.errors.message}`));
+		throw new Error(`Error: ${response.status} ${result.errors.message}`);
 	}
 
-	return Result.ok<ApiResponse<string>, Error>({
+	return {
 		success: true,
 		status: response.status,
 		data: result.data,
-	});
+	};
 };
 
 export const editDocument = async (jwt: string, id: string, data: DocumentInput): Promise<ApiResponse<string>> => {

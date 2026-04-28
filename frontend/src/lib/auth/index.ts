@@ -1,7 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { LoginFormValues } from "../../validations/auth";
-import { validateToken } from "@/utils";
+import { validateToken } from "@/shared/utils";
 import { Result } from "@/shared/core/Result";
 import { AuthSuccess } from "@/types/apiResponse";
 

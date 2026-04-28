@@ -8,13 +8,9 @@ export default async function DocumentNew({ params }: { params: Promise<{ clear:
 	if (!token) return;
 	const clients = await api.client.getClients(token);
 
-	if (!clients.isSuccess) {
-		return;
-	}
-
 	if (!clear) {
-		return <DocumentForm clients={clients.getValue()} />;
+		return <DocumentForm clients={clients} />;
 	}
 
-	return <DocumentForm clear={clear} clients={clients.getValue()} />;
+	return <DocumentForm clear={clear} clients={clients} />;
 }
