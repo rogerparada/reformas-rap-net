@@ -1,7 +1,6 @@
-import { cacheLife, cacheTag } from "next/cache";
+import { cacheLife, cacheTag, updateTag } from "next/cache";
 import { ClientInput, EditClientInput } from "@/validations/client-validator";
 import { ApiResponse, ClienteResponse, FullClienteResponse } from "@/types";
-import { Result } from "../../shared/core/Result";
 
 const STRAPI_URL = process.env.STRAPI_API_URL || "http://localhost:1337";
 const API_URL = `${STRAPI_URL}/api/Client`;
@@ -26,7 +25,7 @@ export const getClients = async (jwt: string) => {
 	return result as ClienteResponse[];
 };
 
-export const getClientsFullData = async (jwt: string): Promise<Result<ClienteResponse[], Error>> => {
+export const getClientsFullData = async (jwt: string): Promise<ClienteResponse[]> => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("clientes");
@@ -39,14 +38,14 @@ export const getClientsFullData = async (jwt: string): Promise<Result<ClienteRes
 	});
 
 	if (!response.ok) {
-		return Result.fail(new Error("Error al obtener clientes"));
+		throw new Error("Error al obtener clientes");
 	}
 	const result = await response.json();
 
-	return Result.ok(result as ClienteResponse[]);
+	return result as ClienteResponse[];
 };
 
-export const getClientById = async (jwt: string, clientId: string): Promise<Result<ClienteResponse, Error>> => {
+export const getClientById = async (jwt: string, clientId: string): Promise<ClienteResponse> => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("cliente");
@@ -61,12 +60,12 @@ export const getClientById = async (jwt: string, clientId: string): Promise<Resu
 	});
 
 	if (!response.ok) {
-		return Result.fail(new Error("Error al obtener cliente"));
+		throw new Error("Error al obtener cliente");
 	}
 
 	const result = await response.json();
 
-	return Result.ok(result.data as ClienteResponse);
+	return result.data as ClienteResponse;
 };
 
 export const getFullClientById = async (jwt: string, clientId: string): Promise<FullClienteResponse> => {
@@ -92,7 +91,7 @@ export const getFullClientById = async (jwt: string, clientId: string): Promise<
 	return result as FullClienteResponse;
 };
 
-export const createClient = async (jwt: string, data: ClientInput): Promise<Result<ApiResponse, Error>> => {
+export const createClient = async (jwt: string, data: ClientInput): Promise<ApiResponse<string>> => {
 	const response = await fetch(API_URL, {
 		method: "POST",
 		headers: {
@@ -104,16 +103,17 @@ export const createClient = async (jwt: string, data: ClientInput): Promise<Resu
 
 	if (!response.ok) {
 		const data = await response.json();
-		return Result.fail(new Error(`Error: ${data.errors.message}`));
+		throw new Error(`Error: ${data.errors.message}`);
 	}
 
-	return Result.ok<ApiResponse, Error>({
+	updateTag("clientes");
+	return {
 		status: response.status,
 		message: "Cliente creado correctamente",
-	});
+	};
 };
 
-export const editClient = async (jwt: string, values: EditClientInput): Promise<Result<ApiResponse, Error>> => {
+export const editClient = async (jwt: string, values: EditClientInput): Promise<ApiResponse<string>> => {
 	const { id, ...data } = values;
 	const url = `${API_URL}/${id}`;
 
@@ -128,16 +128,17 @@ export const editClient = async (jwt: string, values: EditClientInput): Promise<
 
 	if (!response.ok) {
 		const data = await response.json();
-		return Result.fail(new Error(`Error: ${data.errors.message}`));
+		throw new Error(`Error: ${data.errors.message}`);
 	}
 
-	return Result.ok<ApiResponse, Error>({
+	updateTag("clientes");
+	return {
 		status: response.status,
 		message: "Cliente editado correctamente",
-	});
+	};
 };
 
-export const deleteClient = async (jwt: string, id: ClienteResponse["id"]): Promise<Result<ApiResponse, Error>> => {
+export const deleteClient = async (jwt: string, id: ClienteResponse["id"]): Promise<ApiResponse<string>> => {
 	const url = `${API_URL}/${id}`;
 
 	const response = await fetch(url, {
@@ -149,11 +150,11 @@ export const deleteClient = async (jwt: string, id: ClienteResponse["id"]): Prom
 	});
 	if (!response.ok) {
 		const data = await response.json();
-		return Result.fail(new Error(`Error: ${data.errors.message}`));
+		throw new Error(`Error: ${data.errors.message}`);
 	}
-
-	return Result.ok<ApiResponse, Error>({
+	updateTag("clientes");
+	return {
 		status: response.status,
 		message: "Cliente eliminado correctamente",
-	});
+	};
 };
