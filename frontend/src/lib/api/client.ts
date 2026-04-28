@@ -1,15 +1,19 @@
-import { cacheLife, cacheTag, updateTag } from "next/cache";
 import { ClientInput, EditClientInput } from "@/validations/client-validator";
-import { ApiResponse, ClienteResponse, FullClienteResponse } from "@/types";
+import { ApiResponse, ClienteResponse, ClientFilters, FullClienteResponse } from "@/types";
+import { getQueryString } from "@/shared/utils";
+import { cacheLife, cacheTag } from "next/cache";
 
 const STRAPI_URL = process.env.STRAPI_API_URL || "http://localhost:1337";
 const API_URL = `${STRAPI_URL}/api/Client`;
 
-export const getClients = async (jwt: string) => {
+export const getClients = async (jwt: string, filters: ClientFilters) => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("clientes");
-	const url = `${API_URL}`;
+	const { page, items, ...query } = filters;
+	const offset = page ? page * items - items : 0;
+	const queryParams = getQueryString({ ...query, offset, items });
+	const url = `${API_URL}?${queryParams}`;
 
 	const response = await fetch(url, {
 		headers: {
@@ -18,18 +22,36 @@ export const getClients = async (jwt: string) => {
 		},
 	});
 	if (!response.ok) {
+		console.log("Error al obtener clientes", response);
 		throw new Error("Error al obtener clientes");
 	}
 
 	const result = await response.json();
-	return result as ClienteResponse[];
+	return result;
 };
 
-export const getClientsFullData = async (jwt: string): Promise<ClienteResponse[]> => {
+export const getClientsInfo = async (jwt: string) => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("clientes");
+	const url = `${API_URL}?offset=0&items=100`;
 
+	const response = await fetch(url, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			"Content-Type": "application/json",
+		},
+	});
+	if (!response.ok) {
+		console.log("Error al obtener clientes", response);
+		throw new Error("Error al obtener clientes");
+	}
+
+	const result = await response.json();
+	return result.data;
+};
+
+export const getClientsFullData = async (jwt: string): Promise<ClienteResponse[]> => {
 	const response = await fetch(API_URL, {
 		headers: {
 			Authorization: `Bearer ${jwt}`,
@@ -49,7 +71,6 @@ export const getClientById = async (jwt: string, clientId: string): Promise<Clie
 	"use cache";
 	cacheLife("hours");
 	cacheTag("cliente");
-
 	const url = `${API_URL}/${clientId}`;
 
 	const response = await fetch(url, {
@@ -69,10 +90,6 @@ export const getClientById = async (jwt: string, clientId: string): Promise<Clie
 };
 
 export const getFullClientById = async (jwt: string, clientId: string): Promise<FullClienteResponse> => {
-	"use cache";
-	cacheLife("hours");
-	cacheTag("cliente");
-
 	const url = `${API_URL}/${clientId}`;
 
 	const response = await fetch(url, {
@@ -106,8 +123,8 @@ export const createClient = async (jwt: string, data: ClientInput): Promise<ApiR
 		throw new Error(`Error: ${data.errors.message}`);
 	}
 
-	updateTag("clientes");
 	return {
+		success: true,
 		status: response.status,
 		message: "Cliente creado correctamente",
 	};
@@ -131,8 +148,8 @@ export const editClient = async (jwt: string, values: EditClientInput): Promise<
 		throw new Error(`Error: ${data.errors.message}`);
 	}
 
-	updateTag("clientes");
 	return {
+		success: true,
 		status: response.status,
 		message: "Cliente editado correctamente",
 	};
@@ -152,8 +169,9 @@ export const deleteClient = async (jwt: string, id: ClienteResponse["id"]): Prom
 		const data = await response.json();
 		throw new Error(`Error: ${data.errors.message}`);
 	}
-	updateTag("clientes");
+
 	return {
+		success: true,
 		status: response.status,
 		message: "Cliente eliminado correctamente",
 	};

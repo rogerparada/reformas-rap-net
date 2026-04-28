@@ -8,16 +8,15 @@ export default function ClientDocumentItem({ item }: { item: DocumentInfoRespons
 	const { tipoDocumento: tipo, fecha, idDocumento: id, numeroDocumento: numero, iva, total } = item;
 
 	return (
-		<tr className="fila_cliente">
+		<tr className="fila_cliente colored_row">
 			<td>
-				<div className="flex w-full">
-					<Link className="link" href={`/gestion/documentos/${id}`}>
-						<span className="icon-[topcoat--view]" />
-					</Link>
-					<span className="flex-1 pt-1">{tipo}</span>
-				</div>
+				<span className="flex-1 pt-1">{tipo}</span>
 			</td>
-			<td>{numero}</td>
+			<td>
+				<Link className="hover:underline" href={`/gestion/documentos/${id}`}>
+					{numero}
+				</Link>
+			</td>
 			<td>{toLocalDate(fecha)}</td>
 			<td>{iva ? formatCurrency(total + total * 0.21) : formatCurrency(total)}</td>
 		</tr>

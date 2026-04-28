@@ -6,7 +6,7 @@ export default async function DocumentNew({ params }: { params: Promise<{ clear:
 	const token = await auth.isAuthenticated();
 
 	if (!token) return;
-	const clients = await api.client.getClients(token);
+	const clients = await api.client.getClientsInfo(token);
 
 	if (!clear) {
 		return <DocumentForm clients={clients} />;

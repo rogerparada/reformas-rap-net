@@ -34,13 +34,13 @@ export const createClientAction = async (prevState: ClientFormState, formData: F
 	const jwt = await auth.isAuthenticated();
 	const response = await api.client.createClient(jwt!, result.data);
 
-	if (!response.isSuccess) {
+	if (!response.success) {
 		return {
 			...prevState,
 			success: false,
 			message: "Create client error",
 			errors: null,
-			serverErrors: [response.getError().message],
+			serverErrors: response.errors,
 			data: fields,
 		};
 	}
@@ -85,16 +85,17 @@ export const editClientAction = async (prevState: EditClientFormState, formData:
 
 	const response = await api.client.editClient(jwt!, result.data);
 
-	if (!response.isSuccess) {
+	if (!response.success) {
 		return {
 			...prevState,
 			success: false,
 			message: "Validation Error",
-			serverErrors: [response.getError().message],
+			serverErrors: response.errors,
 			errors: null,
 			data: fields,
 		};
 	}
+
 	updateTag("clientes");
 	updateTag("cliente");
 
@@ -113,7 +114,7 @@ export const deleteClientAction = async (id: ClienteResponse["id"]) => {
 
 	const response = await api.client.deleteClient(jwt!, id);
 
-	if (!response.isSuccess) {
+	if (!response.success) {
 		return {
 			success: false,
 			errors: "Error eliminando documento",

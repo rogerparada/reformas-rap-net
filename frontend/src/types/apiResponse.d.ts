@@ -1,7 +1,7 @@
 import { DocumentResponse } from "./description";
 
 export type ApiResponse<T> = {
-	success?: boolean;
+	success: boolean;
 	message?: string;
 	status: number;
 	errors?: string[];

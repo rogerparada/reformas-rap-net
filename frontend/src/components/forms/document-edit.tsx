@@ -12,7 +12,7 @@ export default async function DocumentEdit({ params }: { params: Promise<{ id: s
 	if (!token) return;
 
 	const data = await api.documents.getDocumentById(token, id);
-	const clientes = await api.client.getClients(token);
+	const clientes = await api.client.getClientsInfo(token);
 
 	if (!data) return <NoData tipo={"documento"} url="/gestion/documentos" />;
 
