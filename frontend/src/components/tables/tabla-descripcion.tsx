@@ -3,7 +3,7 @@
 import { TableDetails } from "@/types";
 import TablaDescripcionItem from "./tabla-description-item";
 import TablaTotales from "./tabla-totales";
-import { getDataStorage } from "@/utils";
+import { getDataStorage } from "@/shared/utils";
 
 export default function TablaDescripcion({ data }: { data?: TableDetails; local?: string }) {
 	const { items, ...totales } = data ?? getDataStorage();

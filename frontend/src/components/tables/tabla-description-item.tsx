@@ -1,6 +1,6 @@
 "use client";
 import { ItemTable } from "@/types";
-import { formatCurrency } from "@/utils";
+import { formatCurrency } from "@/shared/utils";
 
 type Props = {
 	item: ItemTable;

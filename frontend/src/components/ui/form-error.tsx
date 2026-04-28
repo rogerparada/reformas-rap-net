@@ -1,4 +1,4 @@
-import { processDetails } from "@/utils";
+import { processDetails } from "@/shared/utils";
 
 export function FormError({ error }: { error?: string[] | string | Record<string, string[]> }) {
 	if (!error) return null;

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import DocumentOptions from "./document-options";
 import { FullDocument } from "@/types/document";
 import DocumentHeader from "../document/document-header";
-import { setDocumentState } from "@/utils/editDocument";
+import { setDocumentState } from "@/shared/utils/editDocument";
 
 export default function PdfTemplate({ doc }: { doc: FullDocument }) {
 	const { client, company, data, document } = doc;

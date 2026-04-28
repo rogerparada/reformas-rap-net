@@ -1,6 +1,6 @@
 "use client";
 
-import { formatCurrency } from "@/utils";
+import { formatCurrency } from "@/shared/utils";
 
 type TablaTotalesProps = {
 	subtotal: number;

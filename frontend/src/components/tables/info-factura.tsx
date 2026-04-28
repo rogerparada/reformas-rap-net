@@ -1,6 +1,6 @@
 "use client";
 import { DocumentInfo } from "@/types";
-import { toLocalDate } from "@/utils";
+import { toLocalDate } from "@/shared/utils";
 
 type InfoFacturaProps = {
 	nif?: string;

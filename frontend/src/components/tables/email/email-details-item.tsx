@@ -1,6 +1,6 @@
 import { ContextMenuItemType, EmailResponse } from "@/types";
 import styles from "./email-details.module.css";
-import { toLocalDate } from "@/utils";
+import { toLocalDate } from "@/shared/utils";
 import MenuButton from "@/components/ui/button/menu-button";
 
 type Props = {

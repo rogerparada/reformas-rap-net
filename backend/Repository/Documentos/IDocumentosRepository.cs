@@ -5,11 +5,11 @@ namespace ReformasRapBackend.Repository.Documentos;
 
 public interface IDocumentosRepository
 {
-    Task<IEnumerable<Documento>> GetDocumentos();
-    Task<IEnumerable<Documento>> GetDocumentosByType(TipoDocumento tipoDocumento);
-    Task<IEnumerable<Documento>> GetFullDocumentos();
-    Task<IEnumerable<Documento>> GetFullDocumentosByType(TipoDocumento tipoDocumento);
-    Task<IEnumerable<Documento>> GetDocumentosByIdCliente(Guid idCliente);
+    Task<IEnumerable<Documento>> GetDocumentos(TipoDocumento? tipo = null,
+        DocumentoSort? sortBy = DocumentoSort.Fecha, bool descending = false);
+    Task<IEnumerable<Documento>> GetFullDocumentos(TipoDocumento? tipo = null,
+        DocumentoSort? sortBy = DocumentoSort.Fecha, bool descending = false, int items = 10, int offset = 0);
+    Task<int> GetDocumentsCount(TipoDocumento?  tipo = null);
     Task<Documento?> GetDocumento(string numeroDocumento);
     Task<Documento?> GetDocumento(Guid idDocumento);
     Task<Documento?> CreateDocumento(Documento documento);

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib";
 import { api } from "@/lib";
 import EmailSignature from "./email-signature";
-import { toDayOfWeekDate } from "@/utils";
+import { toDayOfWeekDate } from "@/shared/utils";
 import Link from "next/link";
 import EmailOptions from "./email-options";
 

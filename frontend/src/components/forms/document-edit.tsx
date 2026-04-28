@@ -1,6 +1,6 @@
 import { api, auth } from "@/lib";
 import { EditableDocument, TableDetails } from "@/types";
-import { getItemsDetails } from "@/utils";
+import { getItemsDetails } from "@/shared/utils";
 import DocumentForm from "./document-form";
 import NoData from "../ui/no-data";
 import DocumentEditOptions from "../document/document-edit-options";
@@ -12,7 +12,7 @@ export default async function DocumentEdit({ params }: { params: Promise<{ id: s
 	if (!token) return;
 
 	const data = await api.documents.getDocumentById(token, id);
-	const clientes = await api.client.getClients(token);
+	const clientes = await api.client.getClientsInfo(token);
 
 	if (!data) return <NoData tipo={"documento"} url="/gestion/documentos" />;
 

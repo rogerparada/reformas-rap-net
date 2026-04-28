@@ -1,20 +1,33 @@
 using System.Net;
 using ReformasRapBackend.Data.Dto;
+using ReformasRapBackend.Enums;
 using ReformasRapBackend.Mappers;
 using ReformasRapBackend.Middleware;
 using ReformasRapBackend.Models;
 using ReformasRapBackend.Repository.Clientes;
+using ReformasRapBackend.Utils;
 
 namespace ReformasRapBackend.Services.Clientes;
 
-public class ClientesService(IClientesRepository clientesRepository, IMapper mapper) : IClientesService
+public class ClientesService(IClientesRepository clientesRepository,IConfiguration configuration, IMapper mapper) : IClientesService
 {
-    public async Task<List<ClienteResponse>> GetAllClientes()
+    public async Task<ResultApiResponse<List<ClienteResponse>>> GetAllClientes(ClienteSort? sortBy = null, bool desc = false, int items = 10, int offset = 0)
     {
-        var clients = await clientesRepository.GetClientes();
+        var clients = await clientesRepository.GetClientes(sortBy, desc, items, offset);
         var clientes = clients as IList<Cliente> ?? clients.ToList();
-        return !clientes.Any() ? [] : clientes.Select(mapper.ClienteEntityToResponse).ToList();
+        var clientesResponse = !clientes.Any() 
+            ? [] 
+            : clientes.Select(mapper.ClienteEntityToResponse).ToList();
+        
+        var count = await clientesRepository.GetClientesCount(sortBy, desc);
+        var queryParams = GetQueryParams(sortBy, desc);
+        var url = configuration["ApiSettings:BaseUrl"];
+        var next = offset + items < count ? $"{url}/api/Document/info?{queryParams}&offset={offset+items}&items={items}" : null;
+        var previous = offset > 0 ? $"{url}/api/Document/info?{queryParams}&offset={offset-items}&items={items}" : null;
+        return new ResultApiResponse<List<ClienteResponse>>(count,next, previous, clientesResponse);
     }
+
+   
 
     public async Task<FullClienteResponse> GetClienteById(Guid id)
     {
@@ -69,5 +82,13 @@ public class ClientesService(IClientesRepository clientesRepository, IMapper map
     {
         await GetClienteById(id);
         await clientesRepository.DeleteCliente(id);
+    }
+    
+    private string GetQueryParams(ClienteSort? sortBy, bool descending)
+    {
+        List<string> queryParams = [];
+        if (sortBy.HasValue) queryParams.Add($"sortBy={sortBy.ToString()}");
+        if(descending) queryParams.Add("desc=true");
+        return string.Join('&', queryParams);
     }
 }

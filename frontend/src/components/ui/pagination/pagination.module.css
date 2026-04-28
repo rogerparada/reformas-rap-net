@@ -1,0 +1,40 @@
+.pagination {
+	display: flex;
+	justify-content: end;
+
+	a:first-child {
+		border-radius: calc(var(--spacing) * 1.5) 0 0 calc(var(--spacing) * 1.5);
+		border-left: 1px solid var(--color-primary);
+	}
+
+	a:last-child {
+		border-radius: 0 calc(var(--spacing) * 1.5) calc(var(--spacing) * 1.5) 0;
+	}
+}
+
+.page {
+	width: calc(var(--spacing) * 10);
+	height: calc(var(--spacing) * 10);
+	border: 1px solid var(--color-primary);
+	border-left: none;
+	color: var(--color-primary-light);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+
+	&.active {
+		border: 1px solid var(--color-primary);
+		border-left: none;
+		background-color: var(--color-primary);
+		color: white;
+		pointer-events: none;
+	}
+}
+
+.page:hover {
+	background-color: var(--color-primary);
+	color: white;
+	transition: all 0.5s ease;
+	font-weight: 600;
+}

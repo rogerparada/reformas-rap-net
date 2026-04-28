@@ -1,26 +1,32 @@
 import { api, auth } from "@/lib";
 import DocumentTable from "./document-table";
 import AddData from "../ui/add-data";
-import LinkButton from "../ui/button/link-button";
+import DocumentSelector from "./document-selector";
+import { DocumentFilters } from "@/types/filters";
 
-export default async function Documents() {
+type Props = {
+	params: Promise<DocumentFilters>;
+};
+
+export default async function Documents({ params }: Props) {
 	const jwt = await auth.isAuthenticated();
 	if (!jwt) return;
+	const filters = await params;
 
-	const facturas = await api.documents.getDocumentsInfoByType(jwt, "Factura");
-	const presupuestos = await api.documents.getDocumentsInfoByType(jwt, "Presupuesto");
-	if ((!facturas && !presupuestos) || (facturas?.length === 0 && presupuestos?.length === 0)) {
+	const response = await api.documents.getDocumentsInfo(jwt, filters);
+	const { data: documentos, count } = response;
+
+	const title = filters.tipo === "Factura" ? "Facturas" : filters.tipo === "Presupuesto" ? "Presupuestos" : "Documentos";
+
+	if (documentos.length === 0) {
 		return <AddData tipo="documentos" url="/gestion/documentos/new?clear=true" />;
 	}
 
 	return (
 		<div className="mt-5">
-			<div className="w-full flex justify-end">
-				<LinkButton icon="doc_add" link="/gestion/documentos/new?clear=true" text="Nuevo documento" />
-			</div>
-			<div className="space-y-10">
-				{facturas && <DocumentTable data={facturas} title="Facturas" />}
-				{presupuestos && <DocumentTable data={presupuestos} title="Presupuestos" />}
+			<DocumentSelector />
+			<div className="space-y-10 mt-5">
+				<DocumentTable data={documentos} title={title} maxItems={count} />
 			</div>
 		</div>
 	);

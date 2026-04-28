@@ -26,19 +26,19 @@ export const loginUserAction = async (prevState: FormState, formData: FormData):
 
 	const response = await auth.loginUserService(result.data);
 
-	if (!response || response.errors) {
+	if (!response.isSuccess) {
 		return {
 			success: false,
 			message: "Login Error",
 			errors: null,
-			serverErrors: response.errors,
+			serverErrors: [response.getError().message],
 			data: fields,
 		};
 	}
 
 	const cookieStore = await cookies();
 
-	cookieStore.set("jwt", response.token, {
+	cookieStore.set("jwt", response.getValue().token, {
 		maxAge: 60 * 60 * 24 * 7, // 1 week,
 		path: "/",
 		httpOnly: true,

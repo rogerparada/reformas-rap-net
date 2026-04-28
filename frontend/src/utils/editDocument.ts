@@ -1,5 +1,5 @@
-import { useAppStore } from "../store/useAppStore";
-import { EditableDocument } from "../types";
+import { useAppStore } from "@/store/useAppStore";
+import { EditableDocument } from "@/types";
 
 export function setDocumentState(doc?: EditableDocument) {
 	const state = useAppStore.getState();

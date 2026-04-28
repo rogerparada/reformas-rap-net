@@ -1,183 +1,178 @@
-import { cacheLife, cacheTag } from "next/cache";
 import { ClientInput, EditClientInput } from "@/validations/client-validator";
-import { ApiError, ClienteResponse, FullClienteResponse } from "@/types";
+import { ApiResponse, ClienteResponse, ClientFilters, FullClienteResponse } from "@/types";
+import { getQueryString } from "@/shared/utils";
+import { cacheLife, cacheTag } from "next/cache";
 
 const STRAPI_URL = process.env.STRAPI_API_URL || "http://localhost:1337";
 const API_URL = `${STRAPI_URL}/api/Client`;
 
-export const getClients = async (jwt: string): Promise<ClienteResponse[] | undefined> => {
+export const getClients = async (jwt: string, filters: ClientFilters) => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("clientes");
+	const { page, items, ...query } = filters;
+	const offset = page ? page * items - items : 0;
+	const queryParams = getQueryString({ ...query, offset, items });
+	const url = `${API_URL}?${queryParams}`;
 
-	if (!jwt) return;
-
-	const url = `${API_URL}`;
-
-	try {
-		const response = await fetch(url, {
-			headers: {
-				Authorization: `Bearer ${jwt}`,
-				"Content-Type": "application/json",
-			},
-		});
-		return await response.json();
-	} catch (error) {
-		console.error("Get Clients error: ", error);
+	const response = await fetch(url, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			"Content-Type": "application/json",
+		},
+	});
+	if (!response.ok) {
+		console.log("Error al obtener clientes", response);
+		throw new Error("Error al obtener clientes");
 	}
+
+	const result = await response.json();
+	return result;
 };
 
-export const getClientsFullData = async (jwt: string): Promise<ClienteResponse[] | undefined> => {
+export const getClientsInfo = async (jwt: string) => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("clientes");
+	const url = `${API_URL}?offset=0&items=100`;
 
-	if (!jwt) return;
-
-	try {
-		const response = await fetch(API_URL, {
-			headers: {
-				Authorization: `Bearer ${jwt}`,
-				"Content-Type": "application/json",
-			},
-		});
-		const result = await response.json();
-
-		return result;
-	} catch (error) {
-		console.error("Get Clients error: ", error);
+	const response = await fetch(url, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			"Content-Type": "application/json",
+		},
+	});
+	if (!response.ok) {
+		console.log("Error al obtener clientes", response);
+		throw new Error("Error al obtener clientes");
 	}
+
+	const result = await response.json();
+	return result.data;
 };
 
-export const getClientById = async (jwt: string, clientId: string): Promise<ClienteResponse | undefined> => {
+export const getClientsFullData = async (jwt: string): Promise<ClienteResponse[]> => {
+	const response = await fetch(API_URL, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			"Content-Type": "application/json",
+		},
+	});
+
+	if (!response.ok) {
+		throw new Error("Error al obtener clientes");
+	}
+	const result = await response.json();
+
+	return result as ClienteResponse[];
+};
+
+export const getClientById = async (jwt: string, clientId: string): Promise<ClienteResponse> => {
 	"use cache";
 	cacheLife("hours");
 	cacheTag("cliente");
-
-	if (!jwt) return;
-
 	const url = `${API_URL}/${clientId}`;
 
-	try {
-		const response = await fetch(url, {
-			headers: {
-				Authorization: `Bearer ${jwt}`,
-				"Content-Type": "application/json",
-			},
-		});
-		const result = await response.json();
+	const response = await fetch(url, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			"Content-Type": "application/json",
+		},
+	});
 
-		return result.data;
-	} catch (error) {
-		console.error("Get Client By ID error: ", error);
+	if (!response.ok) {
+		throw new Error("Error al obtener cliente");
 	}
+
+	const result = await response.json();
+
+	return result.data as ClienteResponse;
 };
 
 export const getFullClientById = async (jwt: string, clientId: string): Promise<FullClienteResponse> => {
-	"use cache";
-	cacheLife("hours");
-	cacheTag("cliente");
-
-	if (!jwt) throw new Error("No autenticado");
-
 	const url = `${API_URL}/${clientId}`;
 
-	try {
-		const response = await fetch(url, {
-			headers: {
-				Authorization: `Bearer ${jwt}`,
-				"Content-Type": "application/json",
-			},
-		});
+	const response = await fetch(url, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			"Content-Type": "application/json",
+		},
+	});
 
-		return await response.json();
-	} catch (error) {
-		console.error("Get Client By ID error: ", error);
-		throw new Error("Error al obtener el cliente");
+	if (!response.ok) {
+		throw new Error("Error al obtener cliente");
 	}
+
+	const result = await response.json();
+
+	return result as FullClienteResponse;
 };
 
-export const createClient = async (jwt: string, data: ClientInput) => {
-	if (!jwt) return;
+export const createClient = async (jwt: string, data: ClientInput): Promise<ApiResponse<string>> => {
+	const response = await fetch(API_URL, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(data),
+	});
 
-	try {
-		const response = await fetch(API_URL, {
-			method: "POST",
-			headers: {
-				Authorization: `Bearer ${jwt}`,
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		});
-
-		if (!response.ok) {
-			const data = await response.json();
-			return {
-				status: data.status,
-				error: data.errors,
-			};
-		}
-
-		return {
-			status: response.status,
-			message: "Cliente creado correctamente",
-			error: null,
-		};
-	} catch (error) {
-		console.error("Create client error: ", error);
-		throw error;
+	if (!response.ok) {
+		const data = await response.json();
+		throw new Error(`Error: ${data.errors.message}`);
 	}
+
+	return {
+		success: true,
+		status: response.status,
+		message: "Cliente creado correctamente",
+	};
 };
 
-export const editClient = async (jwt: string, values: EditClientInput): Promise<ApiError> => {
-	if (!jwt) throw new Error("No autenticado");
-
+export const editClient = async (jwt: string, values: EditClientInput): Promise<ApiResponse<string>> => {
 	const { id, ...data } = values;
 	const url = `${API_URL}/${id}`;
 
-	try {
-		const response = await fetch(url, {
-			method: "PUT",
-			headers: {
-				Authorization: `Bearer ${jwt}`,
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		});
+	const response = await fetch(url, {
+		method: "PUT",
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(data),
+	});
 
-		if (response.status === 200) {
-			return {
-				status: response.status,
-				error: null,
-			};
-		}
-
-		const responseData = await response.json();
-
-		return {
-			status: responseData.status,
-			error: responseData.errors.message,
-		};
-	} catch (error) {
-		console.error("Create client error: ", error);
-		throw error;
+	if (!response.ok) {
+		const data = await response.json();
+		throw new Error(`Error: ${data.errors.message}`);
 	}
+
+	return {
+		success: true,
+		status: response.status,
+		message: "Cliente editado correctamente",
+	};
 };
 
-export const deleteClient = async (jwt: string, id: ClienteResponse["id"]) => {
-	if (!jwt) return;
-
+export const deleteClient = async (jwt: string, id: ClienteResponse["id"]): Promise<ApiResponse<string>> => {
 	const url = `${API_URL}/${id}`;
 
-	try {
-		return await fetch(url, {
-			method: "DELETE",
-			headers: {
-				Authorization: `Bearer ${jwt}`,
-				"Content-Type": "application/json",
-			},
-		});
-	} catch (error) {
-		console.error(`Error delete Client`, error);
+	const response = await fetch(url, {
+		method: "DELETE",
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			"Content-Type": "application/json",
+		},
+	});
+	if (!response.ok) {
+		const data = await response.json();
+		throw new Error(`Error: ${data.errors.message}`);
 	}
+
+	return {
+		success: true,
+		status: response.status,
+		message: "Cliente eliminado correctamente",
+	};
 };

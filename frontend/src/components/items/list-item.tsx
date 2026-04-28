@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useDeleteItem } from "@/hooks/useDeleteItem";
 import { ItemTable } from "@/types/items";
 import ActionButton from "../ui/button/action-button";
-import { formatCurrency } from "@/utils";
+import { formatCurrency } from "@/shared/utils";
 import EditItemModal from "../modal/edit-item-modal";
 
 type ListItemProps = {

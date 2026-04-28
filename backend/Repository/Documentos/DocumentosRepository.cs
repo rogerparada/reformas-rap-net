@@ -7,23 +7,70 @@ namespace ReformasRapBackend.Repository.Documentos;
 
 public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
 {
-    public async Task<IEnumerable<Documento>> GetDocumentos() => await context.Documentos.ToListAsync();
+    public async Task<IEnumerable<Documento>> GetDocumentos(TipoDocumento? tipo = null,
+        DocumentoSort? sortBy = DocumentoSort.Fecha, bool descending = false)
+    {
+        IQueryable<Documento> query = context.Documentos;
+
+        query = tipo.HasValue
+            ? query.Where(d => d.TipoDocumento == tipo)
+            : query;
+
+        query = sortBy switch
+        {
+            DocumentoSort.Documento => descending
+                ? query.OrderByDescending(d => d.NumeroDocumento)
+                : query.OrderBy(d => d.NumeroDocumento),
+            DocumentoSort.Cliente => descending
+                ? query.OrderByDescending(d => d.Cliente!.Name)
+                : query.OrderBy(d => d.Cliente!.Name),
+            DocumentoSort.Fecha or _ => descending
+                ? query.OrderByDescending(d => d.Fecha)
+                : query.OrderBy(d => d.Fecha)
+        };
+        
+        return await query.ToListAsync();
+    }
 
     public async Task<IEnumerable<Documento>> GetDocumentosByType(TipoDocumento tipoDocumento) =>
         await context.Documentos.Where(d => d.TipoDocumento == tipoDocumento).ToListAsync();
-    public async Task<IEnumerable<Documento>> GetFullDocumentos() =>
-        await context.Documentos
-            .Include(d => d.Items)
-            .Include(d => d.Cliente)
-            .ToListAsync();
-    public async Task<IEnumerable<Documento>> GetFullDocumentosByType(TipoDocumento tipoDocumento) =>
-        await context.Documentos
-            .Include(d => d.Items)
-            .Include(d => d.Cliente)
-            .Where(d => d.TipoDocumento == tipoDocumento).ToListAsync();
 
-    public async Task<IEnumerable<Documento>> GetDocumentosByIdCliente(Guid idCliente) =>
-        await context.Documentos.Where(d => d.IdCliente == idCliente).ToListAsync();
+    public async Task<IEnumerable<Documento>> GetFullDocumentos(TipoDocumento? tipo, DocumentoSort? sortBy, bool descending, int items, int offset)
+    {
+        IQueryable<Documento> query = context.Documentos
+            .Include(d => d.Items)
+            .Include(d => d.Cliente);
+
+        query = tipo is not null and not TipoDocumento.None
+            ? query.Where(d => d.TipoDocumento == tipo)
+            : query;
+
+        query = sortBy switch
+        {
+            DocumentoSort.Documento => descending
+                ? query.OrderByDescending(d => d.NumeroDocumento)
+                : query.OrderBy(d => d.NumeroDocumento),
+            DocumentoSort.Cliente => descending
+                ? query.OrderByDescending(d => d.Cliente!.Name)
+                : query.OrderBy(d => d.Cliente!.Name),
+            DocumentoSort.Fecha or _ => descending
+                ? query.OrderByDescending(d => d.Fecha)
+                : query.OrderBy(d => d.Fecha)
+        };
+        
+        query = query.Skip(offset).Take(items);
+
+        return await query.ToListAsync();
+    }
+
+    public async Task<int> GetDocumentsCount(TipoDocumento? tipo = null)
+    {
+        IQueryable<Documento> query = context.Documentos;
+        query = tipo is not null and not TipoDocumento.None
+            ? query.Where(d => d.TipoDocumento == tipo)
+            : query;
+        return await query.CountAsync();
+    }
 
     public async Task<Documento?> GetDocumento(string numeroDocumento) => await
         context.Documentos.FirstOrDefaultAsync(d => d.NumeroDocumento == numeroDocumento);

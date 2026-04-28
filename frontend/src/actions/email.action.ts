@@ -7,7 +7,7 @@ import { api } from "@/lib";
 import { ApiResponse, EmailFormState } from "@/types";
 import { EmailInput, emailSchema } from "@/validations/email-validator";
 
-export async function sendPdfByEmail(formData: FormData): Promise<ApiResponse> {
+export async function sendPdfByEmail(formData: FormData): Promise<ApiResponse<string>> {
 	const message: EmailInput = {
 		to: formData.get("to")?.toString() ?? "",
 		cc: formData.get("cc")?.toString() ?? "",
@@ -21,7 +21,7 @@ export async function sendPdfByEmail(formData: FormData): Promise<ApiResponse> {
 	const validate = emailSchema.safeParse(message);
 	if (!validate.success) {
 		const errors = validate.error.issues.map((issue) => issue.message).join(", ");
-		return { message: "Error al enviar el correo", status: 404, success: false, error: errors };
+		return { message: "Error al enviar el correo", status: 404, success: false, errors: [errors] };
 	}
 	const token = (await auth.isAuthenticated()) ?? "";
 	const resp = await api.email.sendEmail(token, validate.data);
@@ -33,7 +33,7 @@ export async function sendPdfByEmail(formData: FormData): Promise<ApiResponse> {
 	return { message: "Se ha enviado correctamente", status: 200, success: true };
 }
 
-export async function forwardEmail(id: string): Promise<ApiResponse> {
+export async function forwardEmail(id: string): Promise<ApiResponse<string>> {
 	const token = (await auth.isAuthenticated()) ?? "";
 	const resp = await api.email.forwardEmail(token, id);
 

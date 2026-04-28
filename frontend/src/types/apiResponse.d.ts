@@ -1,11 +1,11 @@
 import { DocumentResponse } from "./description";
 
-export type ApiResponse = {
-	success?: boolean;
+export type ApiResponse<T> = {
+	success: boolean;
 	message?: string;
 	status: number;
-	error?: string;
-	data?: unknown;
+	errors?: string[];
+	data?: T;
 };
 
 export type ApiMeta = {
@@ -27,4 +27,9 @@ export type ApiDocumentResponse = {
 	status: number;
 	data: { idDocumento: string } | DocumentResponse | null;
 	errors: string[] | null;
+};
+
+export type AuthSuccess = {
+	token: string;
+	expiration: string;
 };

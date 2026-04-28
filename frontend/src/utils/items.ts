@@ -1,5 +1,5 @@
-import { DocumentInfo, ItemTable } from "../types";
-import { useAppStore } from "../store/useAppStore";
+import { DocumentInfo, ItemTable } from "@/types";
+import { useAppStore } from "@/store/useAppStore";
 
 export function getDataStorage() {
 	const state = useAppStore.getState();

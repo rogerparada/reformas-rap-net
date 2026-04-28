@@ -30,10 +30,10 @@ export default function SaveDocumentModal({ document, draw = false, icon = "save
 		setValidating(true);
 		const val = !edit ? await actions.document.createDocumentAction(document) : await actions.document.editDocumentAction(document);
 		setValidating(false);
-		setValidated(val.success);
+		setValidated(val.success ?? false);
 		setErrors(val.errors ?? []);
 		if (val.data) {
-			setId(val.data.idDocumento);
+			setId(val.data);
 		}
 		return;
 	};

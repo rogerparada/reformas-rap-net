@@ -1,21 +1,18 @@
 "use client";
 
 import { DocumentInfoResponse } from "@/types/description";
-import { formatCurrency, toLocalDate } from "@/utils";
+import { formatCurrency, toLocalDate } from "@/shared/utils";
 import Link from "next/link";
 
 export default function DocumentItem({ item }: { item: DocumentInfoResponse }) {
 	const { fecha, idDocumento: id, numeroDocumento: numero, iva, cliente, total } = item;
 
 	return (
-		<tr className="fila_cliente">
-			<td>
-				<div className="flex w-full items-center">
-					<Link className="link" href={`/gestion/documentos/${id}`}>
-						<span className="icon-[topcoat--view]" />
-					</Link>
-					<span className="flex-1">{numero}</span>
-				</div>
+		<tr className="fila_cliente colored_row">
+			<td className="">
+				<Link href={`/gestion/documentos/edit?id=${id}`} className="hover:underline">
+					{numero}
+				</Link>
 			</td>
 			<td>{toLocalDate(fecha)}</td>
 			<td>{cliente}</td>

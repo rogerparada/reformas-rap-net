@@ -16,7 +16,7 @@
 @theme {
 	--color-primary: #006630;
 	--color-primary-light: #008236;
-	--color-primary-extra-light: #00a63e;
+	--color-primary-extra-light: #92c2ac;
 	--color-primary-dark: #0d542b;
 	--color-default-red: #fb2d36;
 	--color-default-dark-red: #991b1b;
@@ -570,4 +570,8 @@ textarea {
 	> textarea {
 		@apply w-full border border-slate-500 flex-1 min-h-56 p-2;
 	}
+}
+
+.colored_row {
+	@apply hover:bg-primary-extra-light hover:text-slate-700 transition-all duration-300;
 }
