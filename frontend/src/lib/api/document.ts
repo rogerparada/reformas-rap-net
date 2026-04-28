@@ -1,5 +1,6 @@
+import { getQueryString } from "@/shared/api/querys";
 import { Result } from "@/shared/core/Result";
-import { ApiDocumentResponse, DocumentInfoResponse, DocumentResponse, FullDocumentResponse } from "@/types";
+import { ApiDocumentResponse, DocumentInfoResponse, DocumentResponse, DocumentSortBy, FullDocumentResponse, TipoDocumento } from "@/types";
 import { DocumentInput } from "@/validations/document-validator";
 import { cacheTag } from "next/cache";
 
@@ -43,6 +44,31 @@ export const getDocumentsInfoByType = async (
 	tipo: DocumentInfoResponse["tipoDocumento"],
 ): Promise<Result<DocumentInfoResponse[], Error>> => {
 	const queryString = `${API_URL}/info?tipo=${tipo}`;
+
+	const response = await fetch(queryString, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			"Content-Type": "application/json",
+		},
+	});
+
+	const result = await response.json();
+
+	if (!response.ok) {
+		return Result.fail<DocumentInfoResponse[], Error>(new Error(`Error: ${response.status} ${result.errors.message}`));
+	}
+
+	return Result.ok<DocumentInfoResponse[], Error>(result.data as DocumentInfoResponse[]);
+};
+
+export const getDocumentsInfo = async (
+	jwt: string,
+	tipo?: TipoDocumento,
+	sortBy?: DocumentSortBy,
+	desc?: boolean,
+): Promise<Result<DocumentInfoResponse[], Error>> => {
+	const queryString = `${API_URL}/info?${getQueryString({ tipo, sortBy, desc })}`;
+	console.log(queryString);
 
 	const response = await fetch(queryString, {
 		headers: {

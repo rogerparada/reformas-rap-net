@@ -1,5 +1,5 @@
 import { StateCreator } from "zustand";
-import { ClienteInfo, ClienteResponse } from "../types/description";
+import { ClienteResponse } from "../types/description";
 
 export type ClientSlice = {
 	client: ClienteResponse;

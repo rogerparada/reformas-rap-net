@@ -11,10 +11,12 @@ export default function DocumentItem({ item }: { item: DocumentInfoResponse }) {
 		<tr className="fila_cliente">
 			<td>
 				<div className="flex w-full items-center">
-					<Link className="link" href={`/gestion/documentos/${id}`}>
-						<span className="icon-[topcoat--view]" />
+					<Link
+						href={`/gestion/documentos/edit?id=${id}`}
+						className="flex-1 hover:text-primary hover:underline transition-colors duration-300 ease-in-out"
+					>
+						{numero}
 					</Link>
-					<span className="flex-1">{numero}</span>
 				</div>
 			</td>
 			<td>{toLocalDate(fecha)}</td>

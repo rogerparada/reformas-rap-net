@@ -16,3 +16,5 @@ export type SaveDocumentInput = {
 	idCliente: ClientInfo["id"];
 	items: ItemTable[];
 };
+
+export type DocumentSortBy = "Documento" | "Cliente" | "Fecha";
