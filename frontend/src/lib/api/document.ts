@@ -1,6 +1,14 @@
 import { getQueryString } from "@/shared/api/querys";
 import { Result } from "@/shared/core/Result";
-import { ApiDocumentResponse, DocumentInfoResponse, DocumentResponse, DocumentSortBy, FullDocumentResponse, TipoDocumento } from "@/types";
+import {
+	ApiDocumentResponse,
+	ApiResponse,
+	DocumentInfoResponse,
+	DocumentResponse,
+	DocumentSortBy,
+	FullDocumentResponse,
+	TipoDocumento,
+} from "@/types";
 import { DocumentInput } from "@/validations/document-validator";
 import { cacheTag } from "next/cache";
 
@@ -106,7 +114,7 @@ export const getFullDocumentsByType = async (jwt: string, tipo: DocumentResponse
 
 export const getDocumentById = async (jwt: string, id: string): Promise<FullDocumentResponse> => {
 	"use cache";
-	cacheTag("document", id);
+	cacheTag(`document-${id}`);
 	const url = `${API_URL}/${id}`;
 
 	try {
@@ -124,7 +132,7 @@ export const getDocumentById = async (jwt: string, id: string): Promise<FullDocu
 	}
 };
 
-export const createDocument = async (jwt: string, data: DocumentInput): Promise<Result<ApiDocumentResponse, Error>> => {
+export const createDocument = async (jwt: string, data: DocumentInput): Promise<Result<ApiResponse<string>, Error>> => {
 	const response = await fetch(API_URL, {
 		method: "POST",
 		headers: {
@@ -135,18 +143,17 @@ export const createDocument = async (jwt: string, data: DocumentInput): Promise<
 	});
 	const result = await response.json();
 	if (!response.ok) {
-		return Result.fail<ApiDocumentResponse, Error>(new Error(`Error: ${response.status} ${result.errors.message}`));
+		return Result.fail<ApiResponse<string>, Error>(new Error(`Error: ${response.status} ${result.errors.message}`));
 	}
 
-	return Result.ok<ApiDocumentResponse, Error>({
+	return Result.ok<ApiResponse<string>, Error>({
 		success: true,
 		status: response.status,
-		data: result,
-		errors: null,
+		data: result.data,
 	});
 };
 
-export const editDocument = async (jwt: string, id: string, data: DocumentInput): Promise<Result<ApiDocumentResponse, Error>> => {
+export const editDocument = async (jwt: string, id: string, data: DocumentInput): Promise<ApiResponse<string>> => {
 	const url = `${API_URL}/${id}`;
 
 	const response = await fetch(url, {
@@ -160,15 +167,14 @@ export const editDocument = async (jwt: string, id: string, data: DocumentInput)
 
 	const result = await response.json();
 	if (!response.ok) {
-		return Result.fail<ApiDocumentResponse, Error>(new Error(`Error: ${response.status} ${result.errors.message}`));
+		throw new Error(`Error: ${response.status} No se ha podido editar el documento`);
 	}
 
-	return Result.ok<ApiDocumentResponse, Error>({
+	return {
 		success: true,
 		status: response.status,
 		data: result,
-		errors: null,
-	});
+	};
 };
 
 export const deleteDocument = async (jwt: string, id: string): Promise<Result<ApiDocumentResponse, Error>> => {

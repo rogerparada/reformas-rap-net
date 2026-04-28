@@ -1,10 +1,11 @@
 "use server";
 
+import { updateTag } from "next/cache";
 import { api, auth } from "../lib";
-import { ApiDocumentResponse, DocumentResponse, SaveDocumentInput } from "../types";
+import { ApiDocumentResponse, ApiResponse, DocumentResponse, SaveDocumentInput } from "../types";
 import { documentSchema } from "../validations/document-validator";
 
-export async function createDocumentAction(documentInput: SaveDocumentInput): Promise<ApiDocumentResponse> {
+export async function createDocumentAction(documentInput: SaveDocumentInput): Promise<ApiResponse<string>> {
 	const { document, idCliente, items } = documentInput;
 	const doc = {
 		...document,
@@ -17,7 +18,6 @@ export async function createDocumentAction(documentInput: SaveDocumentInput): Pr
 		return {
 			success: false,
 			status: 400,
-			data: null,
 			errors: result.error.issues.map((issue) => `${issue.message}`),
 		};
 	}
@@ -30,26 +30,26 @@ export async function createDocumentAction(documentInput: SaveDocumentInput): Pr
 		return {
 			status: 400,
 			success: false,
-			data: null,
 			errors: [response.getError().message],
 		};
 	}
 	return response.getValue();
 }
 
-export async function editDocumentAction(documentInput: SaveDocumentInput): Promise<ApiDocumentResponse> {
+export async function editDocumentAction(documentInput: SaveDocumentInput): Promise<ApiResponse<string>> {
 	const doc = {
 		...documentInput.document,
 		idCliente: documentInput.idCliente,
 		items: documentInput.items,
 	};
 
+	const id = doc.idDocumento;
+
 	const result = documentSchema.safeParse(doc);
 	if (!result.success) {
 		return {
 			success: false,
 			status: 400,
-			data: null,
 			errors: result.error.issues.map((issue) => `${issue.message}`),
 		};
 	}
@@ -57,15 +57,20 @@ export async function editDocumentAction(documentInput: SaveDocumentInput): Prom
 	const token = (await auth.isAuthenticated()) ?? "";
 
 	const response = await api.documents.editDocument(token, doc.idDocumento, result.data);
-	if (!response.isSuccess) {
+	if (!response.status) {
 		return {
 			status: 400,
 			success: false,
-			data: null,
-			errors: [response.getError().message],
+			errors: response.errors,
 		};
 	}
-	return response.getValue();
+
+	updateTag(`document-${id}`);
+	return {
+		success: true,
+		data: doc.idDocumento,
+		status: response.status,
+	};
 }
 
 export async function deleteDocumentAction(id: DocumentResponse["idDocumento"]): Promise<ApiDocumentResponse> {
