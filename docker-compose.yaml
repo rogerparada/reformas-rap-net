@@ -1,0 +1,88 @@
+services:
+  reformas_db:
+    image: postgres:16-alpine
+    container_name: reformas_db_server
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: reformas-backend:latest
+    pull_policy: never
+    container_name: reformas-api
+    restart: unless-stopped
+    ports:
+      - "${API_PORT}:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: >
+        Host=reformas_db; 
+        Port=5432; 
+        Database=${POSTGRES_DB};
+        Username=${POSTGRES_USER}; 
+        Password=${POSTGRES_PASSWORD}; 
+        Trust Server Certificate=true; 
+        SSL Mode=Prefer; 
+        Include Error Detail=true
+      Logging__LogLevel__Default: Information
+      Logging__LogLevel__Microsoft.AspNetCore: Warning
+      ApiSettings__BaseUrl: ${API_SETTINGS_BASE_URL}
+      AllowedHosts: "*"
+      Jwt__Issuer: "ReformasRapBackend"
+      Jwt__Audience: "ReformasRapApp"
+      Jwt__Key: ${JWT_SECRET_KEY}
+      Resend__RESEND_API_KEY: ${RESEND_API_KEY}
+    volumes:
+      - aspnet-keys:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      reformas_db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: reformas-frontend:latest
+    pull_policy: never
+    container_name: reformas-rap-app
+    restart: unless-stopped
+    environment:
+      BASE_URL: "http://localhost:8081"
+      STRAPI_API_URL: "http://backend:8080"
+    depends_on:
+      - backend
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy_proxy_reformas
+    restart: unless-stopped
+    ports:
+      - "${CADDY_HTTP_PORT}:80"
+      - "${CADDY_HTTPS_PORT}:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - reformas_db
+      - backend
+      - frontend
+
+volumes:
+  db_data:
+  caddy_data:
+  caddy_config:
+  aspnet-keys:
