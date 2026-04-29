@@ -12,15 +12,12 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 5s
       timeout: 5s
       retries: 5
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
     image: reformas-backend:latest
     pull_policy: never
     container_name: reformas-api
@@ -29,14 +26,9 @@ services:
       - "${API_PORT}:8080"
     environment:
       ConnectionStrings__DefaultConnection: >
-        Host=reformas_db; 
-        Port=5432; 
-        Database=${POSTGRES_DB};
-        Username=${POSTGRES_USER}; 
-        Password=${POSTGRES_PASSWORD}; 
-        Trust Server Certificate=true; 
-        SSL Mode=Prefer; 
-        Include Error Detail=true
+        Host=reformas_db;  Port=5432;  Database=${POSTGRES_DB};
+        Username=${POSTGRES_USER};  Password=${POSTGRES_PASSWORD};  Trust Server
+        Certificate=true;  SSL Mode=Prefer;  Include Error Detail=true
       Logging__LogLevel__Default: Information
       Logging__LogLevel__Microsoft.AspNetCore: Warning
       ApiSettings__BaseUrl: ${API_SETTINGS_BASE_URL}
@@ -52,9 +44,6 @@ services:
         condition: service_healthy
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
     image: reformas-frontend:latest
     pull_policy: never
     container_name: reformas-rap-app
@@ -73,7 +62,7 @@ services:
       - "${CADDY_HTTP_PORT}:80"
       - "${CADDY_HTTPS_PORT}:443"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_config_file:/etc/caddy
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
@@ -85,4 +74,5 @@ volumes:
   db_data:
   caddy_data:
   caddy_config:
+  caddy_config_file:
   aspnet-keys:
