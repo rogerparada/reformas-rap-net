@@ -10,7 +10,7 @@ export default function DocumentItem({ item }: { item: DocumentInfoResponse }) {
 	return (
 		<tr className="fila_cliente colored_row">
 			<td className="">
-				<Link href={`/gestion/documentos/edit?id=${id}`} className="hover:underline">
+				<Link href={`/gestion/documentos/${id}`} className="hover:underline">
 					{numero}
 				</Link>
 			</td>
