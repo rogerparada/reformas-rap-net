@@ -4,12 +4,11 @@ import AddData from "../ui/add-data";
 import { ClientFilters } from "@/types";
 import ItemsSelector from "./items-selector";
 
-export default async function Clients({ params }: { params: Promise<{ add: boolean } & ClientFilters> }) {
+export default async function Clients({ params }: { params: Promise<ClientFilters> }) {
 	const jwt = await auth.isAuthenticated();
 	if (!jwt) return;
 
-	const { add, ...filters } = await params;
-	console.log(add);
+	const { ...filters } = await params;
 
 	const response = await api.client.getClients(jwt, filters as ClientFilters);
 	const { data, count } = response;
@@ -17,7 +16,7 @@ export default async function Clients({ params }: { params: Promise<{ add: boole
 	if (data.length === 0) return <AddData tipo="Clientes" url="/gestion/client/new?clear=true" />;
 	return (
 		<>
-			<ItemsSelector open={add} />
+			<ItemsSelector />
 			<ClientTable data={data} maxItems={count} />
 		</>
 	);
