@@ -4,6 +4,7 @@ import { ClienteResponse, DocumentInfo } from "@/types";
 import ActionButton from "../ui/button/action-button";
 import DocumentNumberCreator from "../forms/document-number-creator";
 import ClientSelector from "../client/client-selector";
+import ClientSelectorModal from "../client/clent-selector-modal";
 
 type InfoDocumentoProps = {
 	options?: ClienteResponse[];
@@ -26,7 +27,7 @@ export default function InfoDocumento({ options }: InfoDocumentoProps) {
 			</div>
 			<hr className="separator" />
 			<div className="space-y-4 mt-5">
-				<ClientSelector options={options} />
+				{options && <ClientSelectorModal clients={options} />}
 				<div className="form-control">
 					<label htmlFor="tipoDocumento"> Tipo: </label>
 					<select id="tipoDocumento" value={documento.tipoDocumento} onChange={(e) => handleChangeDocumentAttribute("tipoDocumento", e.target.value)}>

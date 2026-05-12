@@ -1,3 +1,5 @@
+import { ClienteResponse } from "./description";
+
 export type FormState = {
 	success?: boolean;
 	message?: string;
@@ -34,6 +36,7 @@ export type ClientFormState = {
 		city?: string[];
 		nif?: string[];
 	} | null;
+	response?: ClienteResponse | null;
 };
 
 export type EditClientFormState = Omit<ClientFormState, "data"> & {

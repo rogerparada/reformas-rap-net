@@ -4,7 +4,7 @@ import { ClientFilters, ClientSortBy } from "@/types";
 import { getQueryString } from "@/shared/utils/query";
 import NewClientModal from "../modal/new-client-modal";
 
-export default function ItemsSelector({ open }: { open: boolean }) {
+export default function ItemsSelector() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
@@ -37,7 +37,7 @@ export default function ItemsSelector({ open }: { open: boolean }) {
 				</div>
 			</div>
 
-			<NewClientModal text="Nuevo Cliente" open={open} />
+			<NewClientModal text="Nuevo Cliente" />
 		</div>
 	);
 }

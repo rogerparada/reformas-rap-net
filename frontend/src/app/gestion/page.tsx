@@ -15,9 +15,9 @@ export default function page() {
 			<div className="bento">
 				<div className="bento_1">
 					<ItemData icon="icon-[hugeicons--file-add]" url="/gestion/documentos/new?clear=true" text="Nuevo documento" />
-					<ItemData icon="icon-[wpf--add-user]" url="/gestion/clientes?add=true" text="Nuevo Cliente" />
 					<ItemData icon="icon-[mdi--file-eye-outline]" url="/gestion/documentos" text="Ver documentos" />
 					<ItemData icon="icon-[mdi--account-eye]" url="/gestion/clientes" text="Ver clientes" />
+					<ItemData icon="icon-[mdi--email-check-outline]" url="/gestion/emails" text="Ver Emails" />
 				</div>
 				<Suspense fallback={<SkeletonLoading />}>
 					<BentoItem />
