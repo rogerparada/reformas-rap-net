@@ -9,6 +9,7 @@ export default async function Clients({ params }: { params: Promise<{ add: boole
 	if (!jwt) return;
 
 	const { add, ...filters } = await params;
+	console.log(add);
 
 	const response = await api.client.getClients(jwt, filters as ClientFilters);
 	const { data, count } = response;

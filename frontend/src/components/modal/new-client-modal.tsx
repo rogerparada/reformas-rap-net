@@ -8,16 +8,17 @@ import ActionButton from "../ui/button/action-button";
 type NewClientModalProps = {
 	open?: boolean;
 	text?: string;
+	retrieve?: boolean;
 };
 
-export default function NewClientModal({ open = false, text }: NewClientModalProps) {
+export default function NewClientModal({ open = false, text, retrieve = false }: NewClientModalProps) {
 	const [openModal, setOpenModal] = useState(open);
 
 	return (
 		<>
 			<ActionButton icon="plus" action={() => setOpenModal((prev) => !prev)} text={text} />
 			<Modal open={openModal} close={() => setOpenModal(false)}>
-				<NewClientForm />
+				<NewClientForm retrieve={retrieve} />
 			</Modal>
 		</>
 	);

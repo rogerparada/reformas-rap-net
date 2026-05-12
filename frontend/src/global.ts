@@ -3,16 +3,19 @@ import { Colors } from "./types";
 export const Icon = {
 	avatar: "icon-[streamline--user-multiple-circle-solid]",
 	back: "icon-[lets-icons--back]",
-	confirm: "icon-[typcn--tick]",
 	cancel: "icon-[hugeicons--cancel-01]",
+	change: "icon-[stash--arrows-switch]",
+	confirm: "icon-[typcn--tick]",
 	delete: "icon-[wpf--delete]",
-	edit: "icon-[material-symbols--edit]",
 	doc_add: "icon-[hugeicons--file-add]",
 	doc_pdf: "icon-[teenyicons--pdf-outline]",
 	doc_preview: "icon-[whh--preview]",
 	doc_save: "icon-[si-glyph--document-checked]",
+	edit: "icon-[material-symbols--edit]",
 	erase: "icon-[icon-park-twotone--clear-format]",
 	error: "icon-[codicon--error]",
+	forward: "icon-[codicon--forward]",
+	forwardAll: "icon-[material-symbols-light--forward]",
 	loading: "icon-[line-md--loading-alt-loop]",
 	mail: "icon-[line-md--email]",
 	plus: "icon-[fluent-emoji-high-contrast--plus]",
@@ -20,8 +23,6 @@ export const Icon = {
 	save: "icon-[ps--save]",
 	send: "icon-[tabler--send]",
 	view: "icon-[topcoat--view]",
-	forward: "icon-[codicon--forward]",
-	forwardAll: "icon-[material-symbols-light--forward]",
 };
 
 export const textColor: Record<Colors, string> = {

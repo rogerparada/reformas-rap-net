@@ -40,13 +40,13 @@ public class ClientController(IClientesService clientesService) : ControllerBase
 
     [HttpPost]
     [EndpointSummary("Agregar cliente")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType( typeof(ApiResponse<ClienteResponse>),StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [Consumes("application/json")]
-    public async Task<IActionResult> AddCliente(ClienteRequest cliente)
+    public async Task<ActionResult<ApiResponse<ClienteResponse>>> AddCliente(ClienteRequest cliente)
     {
-        var idCliente = await clientesService.CreateCliente(cliente);
-        return Created("Client", new { idCliente });
+        var data = await clientesService.CreateCliente(cliente);
+        return Created("Client", new { data });
     }
 
     [HttpPut("{id:guid}")]

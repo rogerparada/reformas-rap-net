@@ -108,14 +108,14 @@ export const getFullClientById = async (jwt: string, clientId: string): Promise<
 	return result as FullClienteResponse;
 };
 
-export const createClient = async (jwt: string, data: ClientInput): Promise<ApiResponse<string>> => {
+export const createClient = async (jwt: string, fields: ClientInput): Promise<ApiResponse<ClienteResponse>> => {
 	const response = await fetch(API_URL, {
 		method: "POST",
 		headers: {
 			Authorization: `Bearer ${jwt}`,
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify(data),
+		body: JSON.stringify(fields),
 	});
 
 	if (!response.ok) {
@@ -123,10 +123,12 @@ export const createClient = async (jwt: string, data: ClientInput): Promise<ApiR
 		throw new Error(`Error: ${data.errors.message}`);
 	}
 
+	const result = (await response.json()).data as ClienteResponse;
 	return {
 		success: true,
 		status: response.status,
 		message: "Cliente creado correctamente",
+		data: result,
 	};
 };
 
