@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReformasRapBackend.Data.Dto;
@@ -17,7 +18,9 @@ public class DocumentController(IDocumentosService documentosService) : Controll
 {
     [HttpGet]
     [EndpointSummary("Lista de Documentos")]
-    [EndpointDescription("Lista de Documentos, admite el filtrado por tipo, ser ordenado por nombre, cliente o fecha")]
+    [EndpointDescription(
+        "Lista de Documentos, admite el filtrado por tipo, ser ordenado por nombre, cliente o fecha"
+    )]
     [ProducesResponseType<ApiResponse<List<DocumentoResponse>>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<ApiResponse<List<DocumentoResponse>>>> Get(
         [FromQuery] TipoDocumento? tipo,
@@ -29,17 +32,20 @@ public class DocumentController(IDocumentosService documentosService) : Controll
         return Ok(new { data });
     }
 
-
     [HttpGet("info")]
     [EndpointSummary("Lista de informacion de los Documentos")]
     [EndpointDescription("Lista de Documentos, admite el filtrado por tipo")]
-    [ProducesResponseType(typeof(ResultApiResponse<List<DocumentoInfoResponse>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(
+        typeof(ResultApiResponse<List<DocumentoInfoResponse>>),
+        StatusCodes.Status200OK
+    )]
     public async Task<ActionResult<ApiResponse<List<DocumentoInfoResponse>>>> GetInfo(
         [FromQuery] TipoDocumento tipo = TipoDocumento.None,
         [FromQuery] DocumentoSort sortBy = DocumentoSort.Fecha,
         [FromQuery] bool desc = false,
-        [FromQuery] int items =10,
-        [FromQuery] int offset = 0)
+        [FromQuery] int items = 10,
+        [FromQuery] int offset = 0
+    )
     {
         var result = await documentosService.GetDocumentosInfo(tipo, sortBy, desc, items, offset);
         return Ok(result);
@@ -62,7 +68,8 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ApiResponse<Guid>>> Post([FromBody] DocumentoRequest documento)
     {
-        var idDocumento = await documentosService.CreateDocumento(documento);
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var idDocumento = await documentosService.CreateDocumento(documento, userId!);
         return Created("Client", new { idDocumento });
     }
 
@@ -72,10 +79,7 @@ public class DocumentController(IDocumentosService documentosService) : Controll
     public async Task<ActionResult<ApiResponse>> Put(Guid id, [FromBody] DocumentoRequest documento)
     {
         await documentosService.UpdateDocumento(id, documento);
-        return Ok(new
-        {
-            message = "Se ha actualizado el documento"
-        });
+        return Ok(new { message = "Se ha actualizado el documento" });
     }
 
     [HttpDelete("{id:guid}")]

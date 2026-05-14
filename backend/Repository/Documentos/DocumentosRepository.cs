@@ -7,14 +7,15 @@ namespace ReformasRapBackend.Repository.Documentos;
 
 public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
 {
-    public async Task<IEnumerable<Documento>> GetDocumentos(TipoDocumento? tipo = null,
-        DocumentoSort? sortBy = DocumentoSort.Fecha, bool descending = false)
+    public async Task<IEnumerable<Documento>> GetDocumentos(
+        TipoDocumento? tipo = null,
+        DocumentoSort? sortBy = DocumentoSort.Fecha,
+        bool descending = false
+    )
     {
         IQueryable<Documento> query = context.Documentos;
 
-        query = tipo.HasValue
-            ? query.Where(d => d.TipoDocumento == tipo)
-            : query;
+        query = tipo.HasValue ? query.Where(d => d.TipoDocumento == tipo) : query;
 
         query = sortBy switch
         {
@@ -26,19 +27,25 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
                 : query.OrderBy(d => d.Cliente!.Name),
             DocumentoSort.Fecha or _ => descending
                 ? query.OrderByDescending(d => d.Fecha)
-                : query.OrderBy(d => d.Fecha)
+                : query.OrderBy(d => d.Fecha),
         };
-        
+
         return await query.ToListAsync();
     }
 
     public async Task<IEnumerable<Documento>> GetDocumentosByType(TipoDocumento tipoDocumento) =>
         await context.Documentos.Where(d => d.TipoDocumento == tipoDocumento).ToListAsync();
 
-    public async Task<IEnumerable<Documento>> GetFullDocumentos(TipoDocumento? tipo, DocumentoSort? sortBy, bool descending, int items, int offset)
+    public async Task<IEnumerable<Documento>> GetFullDocumentos(
+        TipoDocumento? tipo,
+        DocumentoSort? sortBy,
+        bool descending,
+        int items,
+        int offset
+    )
     {
-        IQueryable<Documento> query = context.Documentos
-            .Include(d => d.Items)
+        IQueryable<Documento> query = context
+            .Documentos.Include(d => d.Items)
             .Include(d => d.Cliente);
 
         query = tipo is not null and not TipoDocumento.None
@@ -55,9 +62,9 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
                 : query.OrderBy(d => d.Cliente!.Name),
             DocumentoSort.Fecha or _ => descending
                 ? query.OrderByDescending(d => d.Fecha)
-                : query.OrderBy(d => d.Fecha)
+                : query.OrderBy(d => d.Fecha),
         };
-        
+
         query = query.Skip(offset).Take(items);
 
         return await query.ToListAsync();
@@ -72,12 +79,12 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
         return await query.CountAsync();
     }
 
-    public async Task<Documento?> GetDocumento(string numeroDocumento) => await
-        context.Documentos.FirstOrDefaultAsync(d => d.NumeroDocumento == numeroDocumento);
+    public async Task<Documento?> GetDocumento(string numeroDocumento) =>
+        await context.Documentos.FirstOrDefaultAsync(d => d.NumeroDocumento == numeroDocumento);
 
     public async Task<Documento?> GetDocumento(Guid idDocumento) =>
-        await context.Documentos
-            .Include(d => d.Items)
+        await context
+            .Documentos.Include(d => d.Items)
             .Include(d => d.Cliente)
             .AsNoTracking()
             .FirstOrDefaultAsync(d => d.IdDocumento == idDocumento);
@@ -122,4 +129,13 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
 
     public async Task<bool> DocumentoExists(Guid idDocumento) =>
         await context.Documentos.AnyAsync(d => d.IdDocumento == idDocumento);
+
+    public async Task<Documento?> ChangeDocumentoType(Guid id, TipoDocumento tipo)
+    {
+        var doc = await context.Documentos.FindAsync(id);
+        // if (doc is null)
+        //     return null;
+
+        return doc;
+    }
 }
