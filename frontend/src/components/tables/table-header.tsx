@@ -23,7 +23,7 @@ export default function TableHeader({ title, action, desc = false, style = "defa
 		number: {
 			up: "icon-[la--sort-numeric-up]",
 			down: "icon-[la--sort-numeric-down]",
-			sort: "icon-[la--sort-numeric]",
+			sort: "icon-[fa7-solid--sort]",
 		},
 	};
 

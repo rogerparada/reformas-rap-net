@@ -39,7 +39,8 @@ public class PdfDocument(PdfDoc doc) : IDocument
                         .PaddingBottom(4)
                         .AlignBottom()
                         .Text($"eformas RAP | {doc.InfoDocument.Tipo}")
-                        .FontColor(Colors.White).Bold();
+                        .FontColor(Colors.White)
+                        .Bold();
                 });
 
             col.Item().Height(10);
@@ -61,7 +62,7 @@ public class PdfDocument(PdfDoc doc) : IDocument
             .Column(c =>
             {
                 c.Item().Text(company.Name).Bold();
-                c.Item().IconText(ImagePath( "phone"), company.Phone);
+                c.Item().IconText(ImagePath("phone"), company.Phone);
                 c.Item().IconText(ImagePath("mail"), company.Email);
                 c.Item().IconText(ImagePath("address"), company.Address);
                 c.Item().PaddingLeft(16).Text(company.City);
@@ -85,54 +86,14 @@ public class PdfDocument(PdfDoc doc) : IDocument
             });
         return;
 
-        string ImagePath(string icon) => Path.Combine(_baseDir, "Resources", "Images", $"{icon}.png");
+        string ImagePath(string icon) =>
+            Path.Combine(_baseDir, "Resources", "Images", $"{icon}.png");
     }
-    
+
     private void InfoFactura(RowDescriptor row)
     {
-        row.RelativeItem().Column(col =>
-        {
-            col.Item()
-                .Height(8, Unit.Millimetre)
-                .Border(Border, Unit.Millimetre)
-                .BorderColor(DarkGreen)
-                .Background(Green)
-                .AlignCenter()
-                .AlignMiddle()
-                .Text($"Nº {doc.InfoDocument.Tipo}")
-                .FontColor(Colors.White);
-
-            col.Item()
-                .Height(8, Unit.Millimetre)
-                .Border(Border, Unit.Millimetre)
-                .BorderColor(DarkGreen)
-                .AlignCenter().AlignMiddle()
-                .Text(doc.InfoDocument.Numero);
-        });
-
-        row.RelativeItem().Column(col =>
-        {
-            col.Item()
-                .Height(8, Unit.Millimetre)
-                .Border(Border, Unit.Millimetre)
-                .BorderColor(DarkGreen)
-                .Background(Green)
-                .AlignCenter()
-                .AlignMiddle()
-                .Text("Fecha")
-                .FontColor(Colors.White);
-
-            col.Item()
-                .Height(8, Unit.Millimetre)
-                .Border(Border, Unit.Millimetre)
-                .BorderColor(DarkGreen)
-                .AlignCenter().AlignMiddle()
-                .Text(doc.InfoDocument.Fecha.ToShortDateString());
-        });
-
-        if (doc.InfoDocument.Iva)
-        {
-            row.RelativeItem().Column(col =>
+        row.RelativeItem()
+            .Column(col =>
             {
                 col.Item()
                     .Height(8, Unit.Millimetre)
@@ -141,16 +102,63 @@ public class PdfDocument(PdfDoc doc) : IDocument
                     .Background(Green)
                     .AlignCenter()
                     .AlignMiddle()
-                    .Text("DNI")
+                    .Text($"Nº {doc.InfoDocument.Tipo}")
                     .FontColor(Colors.White);
 
                 col.Item()
                     .Height(8, Unit.Millimetre)
                     .Border(Border, Unit.Millimetre)
                     .BorderColor(DarkGreen)
-                    .AlignCenter().AlignMiddle()
-                    .Text(doc.InfoDocument.Nif);
+                    .AlignCenter()
+                    .AlignMiddle()
+                    .Text(doc.InfoDocument.Numero);
             });
+
+        row.RelativeItem()
+            .Column(col =>
+            {
+                col.Item()
+                    .Height(8, Unit.Millimetre)
+                    .Border(Border, Unit.Millimetre)
+                    .BorderColor(DarkGreen)
+                    .Background(Green)
+                    .AlignCenter()
+                    .AlignMiddle()
+                    .Text("Fecha")
+                    .FontColor(Colors.White);
+
+                col.Item()
+                    .Height(8, Unit.Millimetre)
+                    .Border(Border, Unit.Millimetre)
+                    .BorderColor(DarkGreen)
+                    .AlignCenter()
+                    .AlignMiddle()
+                    .Text(doc.InfoDocument.Fecha.ToShortDateString());
+            });
+
+        if (doc.InfoDocument.Iva)
+        {
+            row.RelativeItem()
+                .Column(col =>
+                {
+                    col.Item()
+                        .Height(8, Unit.Millimetre)
+                        .Border(Border, Unit.Millimetre)
+                        .BorderColor(DarkGreen)
+                        .Background(Green)
+                        .AlignCenter()
+                        .AlignMiddle()
+                        .Text("DNI")
+                        .FontColor(Colors.White);
+
+                    col.Item()
+                        .Height(8, Unit.Millimetre)
+                        .Border(Border, Unit.Millimetre)
+                        .BorderColor(DarkGreen)
+                        .AlignCenter()
+                        .AlignMiddle()
+                        .Text(doc.InfoDocument.Nif);
+                });
         }
     }
 
@@ -239,7 +247,8 @@ public class PdfDocument(PdfDoc doc) : IDocument
     {
         container
             .BorderBottom(Border, Unit.Millimetre)
-            .BorderColor(DarkGreen).Table(table =>
+            .BorderColor(DarkGreen)
+            .Table(table =>
             {
                 table.ColumnsDefinition(columns =>
                 {
@@ -247,12 +256,40 @@ public class PdfDocument(PdfDoc doc) : IDocument
                     columns.RelativeColumn(0.4F);
                 });
 
-                table.Cell().Element(FilaTotalsL).Text("BASE IMPONIBLE").Bold();
-                table.Cell().Element(FilaTotalsR).AlignRight().Text(FormatCurrency(doc.Totals.Subtotal)).Bold();
-                table.Cell().Element(FilaTotalsL).Text("21% IVA").Bold();
-                table.Cell().Element(FilaTotalsR).AlignRight().Text(FormatCurrency(doc.Totals.Iva)).Bold();
-                table.Cell().Element(FilaTotalsL).Text("TOTAL").Bold();
-                table.Cell().Element(FilaTotalsR).AlignRight().Text(FormatCurrency(doc.Totals.Total)).Bold();
+                if (doc.InfoDocument.Iva)
+                {
+                    table.Cell().Element(FilaTotalsL).Text("BASE IMPONIBLE").Bold();
+                    table
+                        .Cell()
+                        .Element(FilaTotalsR)
+                        .AlignRight()
+                        .Text(FormatCurrency(doc.Totals.Subtotal))
+                        .Bold();
+                    table.Cell().Element(FilaTotalsL).Text("21% IVA").Bold();
+                    table
+                        .Cell()
+                        .Element(FilaTotalsR)
+                        .AlignRight()
+                        .Text(FormatCurrency(doc.Totals.Iva))
+                        .Bold();
+                    table.Cell().Element(FilaTotalsL).Text("TOTAL").Bold();
+                    table
+                        .Cell()
+                        .Element(FilaTotalsR)
+                        .AlignRight()
+                        .Text(FormatCurrency(doc.Totals.Total))
+                        .Bold();
+                }
+                else
+                {
+                    table.Cell().Element(FilaTotalsL).Text("TOTAL").Bold();
+                    table
+                        .Cell()
+                        .Element(FilaTotalsR)
+                        .AlignRight()
+                        .Text(FormatCurrency(doc.Totals.Subtotal))
+                        .Bold();
+                }
 
                 return;
 
@@ -293,12 +330,14 @@ public class PdfDocument(PdfDoc doc) : IDocument
 
     private void Footer(IContainer container)
     {
-        container.AlignCenter().Text(t =>
-        {
-            t.CurrentPageNumber();
-            t.Span("/");
-            t.TotalPages();
-        });
+        container
+            .AlignCenter()
+            .Text(t =>
+            {
+                t.CurrentPageNumber();
+                t.Span("/");
+                t.TotalPages();
+            });
     }
 
     private static string FormatCurrency(decimal value) => $"{Math.Round(value, 2)} €";

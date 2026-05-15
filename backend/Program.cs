@@ -3,9 +3,11 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using ReformasRapBackend.Data;
+using ReformasRapBackend.Data.Interceptors;
 using ReformasRapBackend.Mappers;
 using ReformasRapBackend.Middleware;
 using ReformasRapBackend.Models;
@@ -25,26 +27,40 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
 // Add services to the container.
+builder.Services.AddScoped<DocumentHistoryInterceptor>();
 
 // 1. DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 Console.WriteLine($"Conectando a: {connectionString}");
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-// 2. Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+builder.Services.AddDbContext<AppDbContext>(
+    (sp, options) =>
     {
-        options.Password.RequireDigit = true;
-        options.Password.RequireLowercase = true;
-        options.Password.RequireUppercase = true;
-        options.Password.RequiredLength = 6;
-    })
+        var interceptor = sp.GetRequiredService<DocumentHistoryInterceptor>();
+        options
+            .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+            .AddInterceptors(interceptor);
+    }
+);
+
+// 2. Identity
+builder
+    .Services.AddIdentity<ApplicationUser, IdentityRole>(
+        (options) =>
+        {
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequiredLength = 6;
+        }
+    )
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
 // 3. Authentication & JWT
-builder.Services.AddAuthentication(options =>
+builder
+    .Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -59,7 +75,9 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+            ),
         };
     });
 
@@ -74,6 +92,8 @@ builder.Services.AddScoped<IEmailsRepository, EmailsRepository>();
 builder.Services.AddScoped<IEmailsService, EmailsService>();
 builder.Services.AddTransient<IPdfDocumentsRepository, PdfDocumentsRepository>();
 builder.Services.AddTransient<IPdfDocumentsService, PdfDocumentsService>();
+builder.Services.AddScoped<IDocumentHistoryRepository, DocumentHistoryRepository>();
+builder.Services.AddScoped<IDocumentHistoryService, DocumentHistoryService>();
 builder.Services.AddScoped<IMapper, Mapper>();
 builder.Services.AddHttpClient<IResend, ResendClient>();
 builder.Services.Configure<ResendClientOptions>(options =>
@@ -82,19 +102,23 @@ builder.Services.Configure<ResendClientOptions>(options =>
 });
 
 builder.Services.AddAuthorization();
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});
+builder
+    .Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi(options =>
-    {
-        options.AddDocumentTransformer((document, context, cancellationToken) =>
+{
+    options.AddDocumentTransformer(
+        (document, context, cancellationToken) =>
         {
             document.Info.Title = "ReformasRap API";
             document.Info.Version = "v1";
-            document.Info.Description = "ReformasRap API para la gestion de clientes y documentación";
-
+            document.Info.Description =
+                "ReformasRap API para la gestion de clientes y documentación";
 
             var scheme = new OpenApiSecurityScheme
             {
@@ -104,24 +128,22 @@ builder.Services.AddOpenApi(options =>
             };
 
             document.Components ??= new OpenApiComponents();
-            document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+            document.Components.SecuritySchemes ??=
+                new Dictionary<string, IOpenApiSecurityScheme>();
             document.Components.SecuritySchemes.TryAdd("Bearer", scheme);
 
             var securityRequirement = new OpenApiSecurityRequirement
             {
-                {
-                    new OpenApiSecuritySchemeReference("Bearer", document),
-                    []
-                }
+                { new OpenApiSecuritySchemeReference("Bearer", document), [] },
             };
 
             document.Security = new List<OpenApiSecurityRequirement> { securityRequirement };
             ;
 
             return Task.CompletedTask;
-        });
-    }
-);
+        }
+    );
+});
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();

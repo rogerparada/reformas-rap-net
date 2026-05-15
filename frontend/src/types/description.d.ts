@@ -106,3 +106,10 @@ export type EmailResponse = {
 		name: string;
 	};
 };
+
+export type DashboardResponse = {
+	documentos: number;
+	clientes: number;
+	emails: number;
+	historial: number;
+};

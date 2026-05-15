@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const phoneRegex = /^[0-9+\s()-]{7,20}$/;
-const nifRegex = /^([0-9]{8}[A-Za-z]|[XYZxyz][0-9]{7}[A-Za-z])$/;
+const nifRegex = /^([0-9]{8}[A-Z]|[XYZ][0-9]{7}[A-Z]|[ABCDEFGHJNPQRSUVW][0-9]{7}[0-9A-J])$/i;
 
 export const clientSchema = z.object({
 	name: z.string().trim().min(1, { message: "El nombre es obligatorio" }).max(100, { message: "El nombre es demasiado largo" }),
@@ -17,7 +17,7 @@ export const clientSchema = z.object({
 				if (!val) return true; // opcional
 				return phoneRegex.test(val);
 			},
-			{ message: "Teléfono inválido" }
+			{ message: "Teléfono inválido" },
 		),
 
 	address: z.string().min(1, { message: "La dirección es obligatoria" }).trim().max(200, { message: "La dirección es demasiado larga" }),
@@ -33,7 +33,7 @@ export const clientSchema = z.object({
 				if (!val) return true; // opcional
 				return nifRegex.test(val);
 			},
-			{ message: "NIF/NIE inválido" }
+			{ message: "NIF/NIE inválido" },
 		),
 });
 

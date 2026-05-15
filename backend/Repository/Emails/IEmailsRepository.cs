@@ -5,6 +5,7 @@ namespace ReformasRapBackend.Repository.Emails;
 public interface IEmailsRepository
 {
     Task<IEnumerable<Email>> GetAllEmails();
+    Task<int> GetAllEmailsCount();
     Task<Email?> GetEmail(Guid id);
     Task<Email?> SaveEmail(Email email);
     Task<Email> UpdateEmail(Guid id, Email email);

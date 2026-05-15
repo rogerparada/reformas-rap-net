@@ -8,14 +8,14 @@ namespace ReformasRapBackend.Repository.Emails;
 
 public class EmailsRepository(AppDbContext context) : IEmailsRepository
 {
-    public async Task<IEnumerable<Email>> GetAllEmails() => await context.Emails
-        .Include(e => e.Cliente)
-        .AsNoTracking()
-        .ToListAsync();
+    public async Task<IEnumerable<Email>> GetAllEmails() =>
+        await context.Emails.Include(e => e.Cliente).AsNoTracking().ToListAsync();
+
+    public async Task<int> GetAllEmailsCount() => await context.Emails.CountAsync();
 
     public async Task<Email?> GetEmail(Guid id) =>
-        await context.Emails
-            .Include(e => e.Cliente)
+        await context
+            .Emails.Include(e => e.Cliente)
             .Include(e => e.Documento)
             .FirstOrDefaultAsync(e => e.Id == id);
 
@@ -52,7 +52,8 @@ public class EmailsRepository(AppDbContext context) : IEmailsRepository
     public async Task DeleteEmail(Guid id)
     {
         var email = await context.Emails.FindAsync(id);
-        if (email is null) return;
+        if (email is null)
+            return;
 
         context.Emails.Remove(email);
         await context.SaveChangesAsync();
@@ -61,17 +62,20 @@ public class EmailsRepository(AppDbContext context) : IEmailsRepository
     public async Task ChangeToSend(Guid id)
     {
         var email = await context.Emails.FindAsync(id);
-        if (email is null) return;
-        
+        if (email is null)
+            return;
+
         email.Status = Estado.Enviado;
         context.Emails.Update(email);
         await context.SaveChangesAsync();
     }
+
     public async Task ChangeDraftToSend(Guid id)
     {
         var email = await context.Emails.FindAsync(id);
-        if (email is null) return;
-        
+        if (email is null)
+            return;
+
         email.Updated = DateTime.UtcNow;
         email.Status = Estado.Enviado;
         context.Emails.Update(email);
