@@ -3,3 +3,4 @@ export * as company from "./company";
 export * as documents from "./document";
 export * as email from "./email";
 export * as pdf from "./pdf";
+export * as history from "./historial";
