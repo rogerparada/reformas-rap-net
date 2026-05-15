@@ -10,6 +10,7 @@ public interface IDocumentosRepository
         DocumentoSort? sortBy = DocumentoSort.Fecha,
         bool descending = false
     );
+    Task<int> GetDocumentosCount();
     Task<IEnumerable<Documento>> GetFullDocumentos(
         TipoDocumento? tipo = null,
         DocumentoSort? sortBy = DocumentoSort.Fecha,

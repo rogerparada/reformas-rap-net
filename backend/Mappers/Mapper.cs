@@ -156,5 +156,6 @@ public class Mapper : IMapper
             Fecha = docHistory.Created,
             NumeroDocumento = docHistory.NumeroDocumento,
             Accion = docHistory.Accion,
+            Tipo = docHistory.Tipo,
         };
 }

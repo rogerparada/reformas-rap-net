@@ -10,7 +10,7 @@ public record DocumentHistoryResponse
     public required string NumeroDocumento { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter<TipoDocumento>))]
-    public TipoDocumento Tipo { get; private set; }
+    public TipoDocumento Tipo { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter<Actions>))]
     public Actions Accion { get; set; }

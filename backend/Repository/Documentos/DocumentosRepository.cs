@@ -33,6 +33,8 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
         return await query.ToListAsync();
     }
 
+    public async Task<int> GetDocumentosCount() => await context.Documentos.CountAsync();
+
     public async Task<IEnumerable<Documento>> GetDocumentosByType(TipoDocumento tipoDocumento) =>
         await context.Documentos.Where(d => d.TipoDocumento == tipoDocumento).ToListAsync();
 
