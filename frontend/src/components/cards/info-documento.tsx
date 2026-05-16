@@ -44,8 +44,8 @@ export default function InfoDocumento({ options }: InfoDocumentoProps) {
 					</select>
 				</div>
 				<div className="form-control">
-					<label htmlFor="date">Fecha:</label>
-					<input id="date" type="date" value={documento.fecha} onChange={handleChangeDocumentAttribute} />
+					<label htmlFor="fecha">Fecha:</label>
+					<input id="fecha" type="date" value={documento.fecha} onChange={handleChangeDocumentAttribute} />
 				</div>
 				<DocumentNumberCreator />
 				<div className="form-control">
