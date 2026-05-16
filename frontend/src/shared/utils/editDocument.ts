@@ -15,4 +15,5 @@ export function setDocumentState(doc?: EditableDocument) {
 	state.setDocument(document);
 	state.setClient(client);
 	state.setItems(data.items);
+	state.setTaxes(data.taxes);
 }

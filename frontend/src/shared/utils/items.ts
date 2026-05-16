@@ -9,22 +9,23 @@ export function getDataStorage() {
 		subtotal: state.subtotal,
 		iva: state.iva,
 		total: state.total,
-		showIva: state.document.iva,
+		taxes: state.document.iva,
+		showIva: state.document.iva > 0,
 	};
 }
 
-export const getItemsDetails = (items: ItemTable[]) => {
+export const getItemsDetails = (items: ItemTable[], iva = 0) => {
 	const subtotal = items.reduce((acc, item) => {
 		return (acc += item.total);
 	}, 0);
 
-	const iva = subtotal * 0.21;
+	const ivaValue = subtotal * iva;
 
 	const total = subtotal + iva;
 
 	return {
 		subtotal,
-		iva,
+		iva: ivaValue,
 		total,
 	};
 };

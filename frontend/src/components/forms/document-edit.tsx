@@ -17,8 +17,9 @@ export default async function DocumentEdit({ params }: { params: Promise<{ id: s
 	if (!data) return <NoData tipo={"documento"} url="/gestion/documentos" />;
 
 	const { cliente: client, items, ...document } = data;
+	const taxes = document.iva;
 
-	const details: TableDetails = { ...getItemsDetails(items), items, showIva: document.tipoDocumento === "Factura" };
+	const details: TableDetails = { ...getItemsDetails(items, taxes / 100), items, showIva: document.tipoDocumento === "Factura", taxes };
 
 	const fullData: EditableDocument = { document, client, data: details };
 
