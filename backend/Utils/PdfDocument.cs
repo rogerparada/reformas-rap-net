@@ -133,7 +133,7 @@ public class PdfDocument(PdfDoc doc) : IDocument
                     .BorderColor(DarkGreen)
                     .AlignCenter()
                     .AlignMiddle()
-                    .Text(doc.InfoDocument.Fecha.ToShortDateString());
+                    .Text(doc.InfoDocument.Fecha.ToString("dd/MM/yyyy"));
             });
 
         if (doc.InfoDocument.Iva > 0)
