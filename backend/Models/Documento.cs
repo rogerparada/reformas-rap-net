@@ -15,7 +15,7 @@ public class Documento
     public TipoDocumento TipoDocumento { get; set; }
     public DateTime Fecha { get; set; }
     public Estado Estado { get; set; }
-    public bool Iva { get; set; }
+    public int Iva { get; set; }
 
     public List<Item> Items { get; set; } = [];
     public Guid IdCliente { get; set; }

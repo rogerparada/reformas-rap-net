@@ -5,11 +5,12 @@ import { formatCurrency } from "@/shared/utils";
 type TablaTotalesProps = {
 	subtotal: number;
 	iva: number;
+	taxes: number;
 	total: number;
 	showIva?: boolean;
 };
 
-export default function TablaTotales({ showIva, subtotal, total, iva }: TablaTotalesProps) {
+export default function TablaTotales({ showIva, subtotal, total, iva, taxes = 0 }: TablaTotalesProps) {
 	return (
 		<>
 			{showIva && (
@@ -20,7 +21,7 @@ export default function TablaTotales({ showIva, subtotal, total, iva }: TablaTot
 					</div>
 
 					<div className="fila_totales">
-						<div>21% IVA</div>
+						<div>{`${taxes}% IVA`}</div>
 						<div>{formatCurrency(iva)}</div>
 					</div>
 				</>

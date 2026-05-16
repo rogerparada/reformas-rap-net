@@ -50,7 +50,7 @@ public class Mapper : IMapper
             IdCliente = doc.IdCliente,
             TipoDocumento = doc.TipoDocumento,
             Fecha = doc.Fecha ?? DateTime.UtcNow,
-            Iva = doc.Iva ?? false,
+            Iva = doc.Iva,
             Estado = doc.Estado ?? Estado.Borrador,
         };
 

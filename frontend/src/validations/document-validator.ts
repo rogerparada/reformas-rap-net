@@ -12,7 +12,7 @@ export const documentSchema = z.object({
 		.transform((val) => new Date(val).toISOString()),
 
 	tipoDocumento: z.enum(["Factura", "Presupuesto"]),
-	iva: z.boolean(),
+	iva: z.number().gte(0, { message: "El iva no puede ser negativo" }).lte(21, { message: "El iva no puede ser mayor a 21" }),
 	idCliente: z.uuid({ message: "La id del cliente no es valida" }),
 	items: z
 		.array(

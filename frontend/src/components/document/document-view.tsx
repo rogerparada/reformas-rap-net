@@ -12,13 +12,12 @@ export default async function DocumentView({ params }: { params: Promise<{ id: s
 	const data = await api.documents.getDocumentById(token, id);
 	const company = await api.company.getCompanyInfo(token);
 
-	console.log({ data, company });
-
 	if (!company || !data) return;
 
 	const { cliente: client, items, ...document } = data;
 
-	const details: TableDetails = { ...getItemsDetails(items), items, showIva: document.iva };
+	const taxes = document.iva;
+	const details: TableDetails = { ...getItemsDetails(items, taxes / 100), items, showIva: document.iva > 0, taxes };
 
 	const fullData: FullDocument = { company, document, client, data: details };
 

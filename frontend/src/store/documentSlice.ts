@@ -4,7 +4,7 @@ import { DocumentInfo } from "../types/description";
 export type DocumentSlice = {
 	document: DocumentInfo;
 	setDocument: (document: DocumentInfo) => void;
-	changeDocumentAttribute: (key: keyof DocumentInfo, value: string | boolean) => void;
+	changeDocumentAttribute: (key: keyof DocumentInfo, value: string | number) => void;
 	clearDocument: () => void;
 };
 
@@ -13,7 +13,7 @@ const initialDocument: DocumentInfo = {
 	tipoDocumento: "Factura",
 	numeroDocumento: "",
 	fecha: new Date().toISOString().substring(0, 10),
-	iva: true,
+	iva: 0,
 	estado: "Borrador",
 };
 
