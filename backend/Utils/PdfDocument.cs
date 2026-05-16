@@ -265,7 +265,7 @@ public class PdfDocument(PdfDoc doc) : IDocument
                         .AlignRight()
                         .Text(FormatCurrency(doc.Totals.Subtotal))
                         .Bold();
-                    table.Cell().Element(FilaTotalsL).Text("21% IVA").Bold();
+                    table.Cell().Element(FilaTotalsL).Text($"{doc.InfoDocument.Iva}% IVA").Bold();
                     table
                         .Cell()
                         .Element(FilaTotalsR)
