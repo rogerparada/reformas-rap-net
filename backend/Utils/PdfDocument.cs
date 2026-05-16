@@ -136,7 +136,7 @@ public class PdfDocument(PdfDoc doc) : IDocument
                     .Text(doc.InfoDocument.Fecha.ToShortDateString());
             });
 
-        if (doc.InfoDocument.Iva)
+        if (doc.InfoDocument.Iva > 0)
         {
             row.RelativeItem()
                 .Column(col =>
@@ -256,7 +256,7 @@ public class PdfDocument(PdfDoc doc) : IDocument
                     columns.RelativeColumn(0.4F);
                 });
 
-                if (doc.InfoDocument.Iva)
+                if (doc.InfoDocument.Iva > 0)
                 {
                     table.Cell().Element(FilaTotalsL).Text("BASE IMPONIBLE").Bold();
                     table
