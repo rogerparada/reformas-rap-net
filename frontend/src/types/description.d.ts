@@ -9,7 +9,7 @@ export type DocumentResponse = {
 	tipoDocumento: TipoDocumento;
 	fecha: string;
 	estado: Estado;
-	iva: boolean;
+	iva: number;
 	idCliente: string;
 };
 export type DocumentInfoResponse = {
@@ -18,7 +18,7 @@ export type DocumentInfoResponse = {
 	tipoDocumento: TipoDocumento;
 	fecha: string;
 	estado: Estado;
-	iva: boolean;
+	iva: number;
 	cliente: string;
 	total: number;
 };
@@ -56,6 +56,7 @@ export type ItemResponse = {
 export type FullDocumentResponse = DocumentResponse & {
 	cliente: ClienteResponse;
 	items: ItemTable[];
+	taxes: number;
 };
 
 export type FullClienteResponse = {
@@ -84,7 +85,7 @@ export type DocumentInfo = {
 	tipoDocumento: TipoDocumento;
 	numeroDocumento: string;
 	fecha: string;
-	iva: boolean;
+	iva: number;
 	estado: Estado;
 };
 

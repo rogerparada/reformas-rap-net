@@ -10,11 +10,10 @@ public class PdfDoc
     public List<TableItem> Items { get; init; }
     public Totals Totals { get; private set; }
 
-    private const decimal Iva = 0.21M;
-
     public PdfDoc(Documento doc, Company company)
     {
         ArgumentNullException.ThrowIfNull(doc.Cliente);
+        var taxes = doc.Iva / 100.0M;
 
         CompanyInfo = new CompanyInfo(
             Name: company.Name,
@@ -22,7 +21,8 @@ public class PdfDoc
             Phone: company.Phone,
             City: company.City,
             Address: company.Address,
-            Web: company.Web);
+            Web: company.Web
+        );
 
         ClientInfo = new ClientInfo(
             Name: doc.Cliente.Name,
@@ -41,7 +41,8 @@ public class PdfDoc
             Fecha: doc.Fecha
         );
 
-        Items = doc.Items.Select(i =>
+        Items = doc
+            .Items.Select(i =>
             {
                 var total = i.Quantity > 0 ? i.Quantity * i.Price : i.Price;
                 return new TableItem(
@@ -50,16 +51,12 @@ public class PdfDoc
                     Quantity: i.Quantity,
                     Total: total
                 );
-            }
-        ).ToList();
+            })
+            .ToList();
 
         var subtotal = Items.Sum(item => item.Total);
-        var iva = subtotal * Iva;
+        var iva = subtotal * taxes;
 
-        Totals = new Totals(
-            Subtotal: subtotal,
-            Iva: iva,
-            Total: subtotal + iva
-        );
+        Totals = new Totals(Subtotal: subtotal, Iva: iva, Total: subtotal + iva);
     }
 }

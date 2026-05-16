@@ -11,6 +11,7 @@ export type TableDetails = {
 	subtotal: number;
 	iva: number;
 	total: number;
+	taxes: number;
 	showIva?: boolean;
 };
 

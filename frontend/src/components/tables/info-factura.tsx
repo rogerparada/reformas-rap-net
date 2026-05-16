@@ -18,7 +18,7 @@ export default function InfoFactura({ nif, data }: InfoFacturaProps) {
 					<tr>
 						<th>N° {tipoDocumento}</th>
 						<th>Fecha</th>
-						{iva && <th>DNI</th>}
+						{iva > 0 && <th>DNI</th>}
 					</tr>
 				</thead>
 				<tbody>
@@ -27,7 +27,7 @@ export default function InfoFactura({ nif, data }: InfoFacturaProps) {
 							<span className="w-full text-center">{numeroDocumento}</span>
 						</td>
 						<td>{toLocalDate(fecha)}</td>
-						{iva && <td>{nif}</td>}
+						{iva > 0 && <td>{nif}</td>}
 					</tr>
 				</tbody>
 			</table>

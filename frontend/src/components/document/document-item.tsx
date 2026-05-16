@@ -16,7 +16,7 @@ export default function DocumentItem({ item }: { item: DocumentInfoResponse }) {
 			</td>
 			<td>{toLocalDate(fecha)}</td>
 			<td>{cliente}</td>
-			<td>{iva ? formatCurrency(total + total * 0.21) : formatCurrency(total)}</td>
+			<td>{iva > 0 ? formatCurrency(total + total * (iva / 100)) : formatCurrency(total)}</td>
 		</tr>
 	);
 }

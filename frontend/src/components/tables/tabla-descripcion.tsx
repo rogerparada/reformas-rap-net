@@ -7,6 +7,7 @@ import { getDataStorage } from "@/shared/utils";
 
 export default function TablaDescripcion({ data }: { data?: TableDetails; local?: string }) {
 	const { items, ...totales } = data ?? getDataStorage();
+	console.log(data);
 
 	return (
 		<div className="table_items">

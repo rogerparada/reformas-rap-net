@@ -14,9 +14,17 @@ export default function InfoDocumento({ options }: InfoDocumentoProps) {
 	const documento = useAppStore((state) => state.document);
 	const clear = useAppStore((state) => state.clearDocument);
 	const changeDocumentAttribute = useAppStore((state) => state.changeDocumentAttribute);
+	const setTaxes = useAppStore((state) => state.setTaxes);
 
-	const handleChangeDocumentAttribute = (key: keyof DocumentInfo, value: string | boolean) => {
-		changeDocumentAttribute(key, value);
+	const handleChangeDocumentAttribute = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+		const { id: key, value } = e.target;
+		changeDocumentAttribute(key as keyof DocumentInfo, value);
+	};
+
+	const handleChangeIva = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const taxes = Number(e.target.value);
+		changeDocumentAttribute("iva", taxes);
+		setTaxes(taxes);
 	};
 
 	return (
@@ -30,24 +38,23 @@ export default function InfoDocumento({ options }: InfoDocumentoProps) {
 				{options && <ClientSelectorModal clients={options} />}
 				<div className="form-control">
 					<label htmlFor="tipoDocumento"> Tipo: </label>
-					<select id="tipoDocumento" value={documento.tipoDocumento} onChange={(e) => handleChangeDocumentAttribute("tipoDocumento", e.target.value)}>
+					<select id="tipoDocumento" value={documento.tipoDocumento} onChange={handleChangeDocumentAttribute}>
 						<option value="Factura">Factura</option>
 						<option value="Presupuesto">Presupuesto</option>
 					</select>
 				</div>
 				<div className="form-control">
 					<label htmlFor="date">Fecha:</label>
-					<input id="date" type="date" value={documento.fecha} onChange={(e) => handleChangeDocumentAttribute("fecha", e.target.value)} />
+					<input id="date" type="date" value={documento.fecha} onChange={handleChangeDocumentAttribute} />
 				</div>
 				<DocumentNumberCreator />
 				<div className="form-control">
 					<label htmlFor="iva">IVA:</label>
-					<input
-						id="iva"
-						type="checkbox"
-						checked={documento?.iva ?? false}
-						onChange={(e) => handleChangeDocumentAttribute("iva", e.target.checked)}
-					/>
+					<select name="iva" id="iva" value={documento.iva} onChange={handleChangeIva}>
+						<option value={0}>Sin Iva</option>
+						<option value={10}>Reducido 10%</option>
+						<option value={21}>Iva 21%</option>
+					</select>
 				</div>
 			</div>
 		</div>
