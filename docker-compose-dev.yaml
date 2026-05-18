@@ -37,6 +37,7 @@ services:
       Jwt__Audience: "ReformasRapApp"
       Jwt__Key: ${JWT_SECRET_KEY}
       Resend__RESEND_API_KEY: ${RESEND_API_KEY}
+      ASPNETCORE_ENVIRONMENT: Development
     volumes:
       - aspnet-keys:/root/.aspnet/DataProtection-Keys
     depends_on:
