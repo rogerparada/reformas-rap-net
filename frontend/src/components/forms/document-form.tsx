@@ -19,10 +19,14 @@ type Props = {
 export default function DocumentForm({ doc, clear, clients, nextNumber }: Props) {
 	const router = useRouter();
 	const changeDocumentAttribute = useAppStore((state) => state.changeDocumentAttribute);
+	const setOriginalDocumentInfo = useAppStore((state) => state.setOriginalDocumentInfo);
 
 	useEffect(() => {
-		if (doc) setDocumentState(doc);
-	}, [doc]);
+		if (doc) {
+			setDocumentState(doc);
+			setOriginalDocumentInfo(doc.document.tipoDocumento, doc.document.numeroDocumento);
+		}
+	}, [doc, setOriginalDocumentInfo]);
 
 	useEffect(() => {
 		if (clear) {
