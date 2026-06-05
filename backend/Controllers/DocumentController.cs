@@ -61,6 +61,16 @@ public class DocumentController(IDocumentosService documentosService) : Controll
         return Ok(new { data });
     }
 
+    [HttpGet("next-number")]
+    [EndpointSummary("Siguiente número de documento")]
+    [EndpointDescription("Devuelve el siguiente número disponible para el tipo de documento indicado")]
+    [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApiResponse<string>>> GetNextNumber([FromQuery] TipoDocumento tipo)
+    {
+        var nextNumber = await documentosService.GetNextDocumentNumber(tipo);
+        return Ok(new { data = nextNumber });
+    }
+
     [HttpPost]
     [EndpointSummary("Crear Documento")]
     [EndpointDescription("Crea un nuevo documento del tipo Factura, Presupuesto o Cuenta de cobro")]

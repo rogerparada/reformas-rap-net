@@ -3,7 +3,6 @@ import { useAppStore } from "@/store/useAppStore";
 import { ClienteResponse, DocumentInfo } from "@/types";
 import ActionButton from "../ui/button/action-button";
 import DocumentNumberCreator from "../forms/document-number-creator";
-import ClientSelector from "../client/client-selector";
 import ClientSelectorModal from "../client/clent-selector-modal";
 
 type InfoDocumentoProps = {
@@ -41,6 +40,7 @@ export default function InfoDocumento({ options }: InfoDocumentoProps) {
 					<select id="tipoDocumento" value={documento.tipoDocumento} onChange={handleChangeDocumentAttribute}>
 						<option value="Factura">Factura</option>
 						<option value="Presupuesto">Presupuesto</option>
+						<option value="CuentaCobro">Cuenta de Cobro</option>
 					</select>
 				</div>
 				<div className="form-control">

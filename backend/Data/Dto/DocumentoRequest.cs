@@ -5,8 +5,7 @@ namespace ReformasRapBackend.Data.Dto;
 
 public class DocumentoRequest
 {
-    [Required(ErrorMessage = "El campo {0} es obligatorio")]
-    public required string NumeroDocumento { get; set; }
+    public string? NumeroDocumento { get; set; }
 
     [EnumDataType(typeof(TipoDocumento))]
     public TipoDocumento TipoDocumento { get; set; }

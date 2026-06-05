@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { CompanyLogo } from "../svg/company-logo";
 
-type Props = {};
-
-export default function AdminMenuBar({}: Props) {
+export default function AdminMenuBar() {
 	const menu = [
 		{
 			title: "Inicio",

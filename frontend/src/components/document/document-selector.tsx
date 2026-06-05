@@ -43,6 +43,7 @@ export default function DocumentSelector() {
 						<option value="">Todos</option>
 						<option value="Factura">Facturas</option>
 						<option value="Presupuesto">Presupuestos</option>
+						<option value="CuentaCobro">Cuenta de Cobro</option>
 					</select>
 				</div>
 				<div className="space-x-2">

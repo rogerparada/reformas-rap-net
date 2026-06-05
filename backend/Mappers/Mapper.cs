@@ -46,7 +46,7 @@ public class Mapper : IMapper
     public Documento DocumentoRequestToEntity(DocumentoRequest doc) =>
         new()
         {
-            NumeroDocumento = doc.NumeroDocumento,
+            NumeroDocumento = doc.NumeroDocumento!,
             IdCliente = doc.IdCliente,
             TipoDocumento = doc.TipoDocumento,
             Fecha = doc.Fecha ?? DateTime.UtcNow,
