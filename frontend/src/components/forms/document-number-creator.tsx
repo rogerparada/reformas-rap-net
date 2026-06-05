@@ -57,6 +57,7 @@ export default function DocumentNumberCreator() {
 					value={numero}
 					readOnly={isNew}
 					onChange={(e) => changeDocumentAttribute("numeroDocumento", `${encabezado}-${e.target.value}`)}
+					disabled
 				/>
 			</div>
 		</div>
