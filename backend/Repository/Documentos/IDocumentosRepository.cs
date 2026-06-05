@@ -27,4 +27,5 @@ public interface IDocumentosRepository
     Task<bool> DocumentoExists(string numeroDocumento);
     Task<bool> DocumentoExists(Guid idDocumento);
     Task<Documento?> ChangeDocumentoType(Guid id, TipoDocumento tipo);
+    Task<string?> GetLastDocumentNumberByType(TipoDocumento tipo);
 }

@@ -76,6 +76,11 @@ export async function editDocumentAction(documentInput: SaveDocumentInput): Prom
 	};
 }
 
+export async function getNextDocumentNumberAction(tipo: string): Promise<string> {
+	const token = (await auth.isAuthenticated()) ?? "";
+	return await api.documents.getNextDocumentNumber(token, tipo);
+}
+
 export async function deleteDocumentAction(id: DocumentResponse["idDocumento"]): Promise<ApiDocumentResponse> {
 	if (id?.length !== 36) {
 		return {

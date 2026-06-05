@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ClienteResponse, EditableDocument } from "@/types";
 import { setDocumentState } from "@/shared/utils/editDocument";
+import { useAppStore } from "@/store/useAppStore";
 import InfoDocumento from "../cards/info-documento";
 import DocumentResume from "../cards/document-resume";
 import ItemList from "../items/item-list";
@@ -12,10 +13,12 @@ type Props = {
 	doc?: EditableDocument;
 	clear?: boolean;
 	clients?: ClienteResponse[];
+	nextNumber?: string;
 };
 
-export default function DocumentForm({ doc, clear, clients }: Props) {
+export default function DocumentForm({ doc, clear, clients, nextNumber }: Props) {
 	const router = useRouter();
+	const changeDocumentAttribute = useAppStore((state) => state.changeDocumentAttribute);
 
 	useEffect(() => {
 		if (doc) setDocumentState(doc);
@@ -27,6 +30,12 @@ export default function DocumentForm({ doc, clear, clients }: Props) {
 			setDocumentState();
 		}
 	}, [clear, router]);
+
+	useEffect(() => {
+		if (!doc && !clear && nextNumber) {
+			changeDocumentAttribute("numeroDocumento", nextNumber);
+		}
+	}, [nextNumber, doc, clear, changeDocumentAttribute]);
 
 	return (
 		<>

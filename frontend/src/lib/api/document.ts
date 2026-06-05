@@ -62,6 +62,17 @@ export const getDocumentsInfoByType = async (
 	return Result.ok<DocumentInfoResponse[], Error>(result.data as DocumentInfoResponse[]);
 };
 
+export const getNextDocumentNumber = async (jwt: string, tipo: string): Promise<string> => {
+	const response = await fetch(`${API_URL}/next-number?tipo=${tipo}`, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+			"Content-Type": "application/json",
+		},
+	});
+	const result = await response.json();
+	return result.data;
+};
+
 export const getDocumentsInfo = async (jwt: string, filters: DocumentFilters): Promise<{ data: DocumentInfoResponse[]; count: number }> => {
 	"use cache";
 	cacheTag("documentos");

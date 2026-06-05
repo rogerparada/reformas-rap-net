@@ -25,4 +25,5 @@ public interface IDocumentosService
     Task DeleteDocumento(Guid idDocumento);
     Task UpdateDocumento(Guid id, DocumentoRequest documento);
     Task<Company?> GetCompanyInfo();
+    Task<string> GetNextDocumentNumber(TipoDocumento tipo);
 }
