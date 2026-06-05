@@ -7,10 +7,11 @@ export default async function DocumentNew({ params }: { params: Promise<{ clear:
 
 	if (!token) return;
 	const clients = await api.client.getClientsInfo(token);
+	const nextNumber = await api.documents.getNextDocumentNumber(token, "Factura");
 
 	if (!clear) {
-		return <DocumentForm clients={clients} />;
+		return <DocumentForm nextNumber={nextNumber} clients={clients} />;
 	}
 
-	return <DocumentForm clear={clear} clients={clients} />;
+	return <DocumentForm clear={clear} nextNumber={nextNumber} clients={clients} />;
 }
