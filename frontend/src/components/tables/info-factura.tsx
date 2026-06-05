@@ -16,7 +16,7 @@ export default function InfoFactura({ nif, data }: InfoFacturaProps) {
 			<table className="table">
 				<thead className="table_header">
 					<tr>
-						<th>N° {tipoDocumento}</th>
+						<th>N° {tipoDocumento === "CuentaCobro" ? " de Documento" : tipoDocumento}</th>
 						<th>Fecha</th>
 						{iva > 0 && <th>DNI</th>}
 					</tr>

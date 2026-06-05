@@ -2,9 +2,7 @@ import Dashboard from "@/components/admin/dashboard";
 import SkeletonLoading from "@/components/ui/skeleton-loading";
 import { Suspense } from "react";
 
-type Props = {};
-
-export default function AdminDashboardPage({}: Props) {
+export default function AdminDashboardPage() {
 	return (
 		<div className="w-full h-screen">
 			<h1 className="title">Administración</h1>
