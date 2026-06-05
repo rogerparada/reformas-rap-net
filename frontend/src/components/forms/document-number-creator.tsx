@@ -6,22 +6,44 @@ export default function DocumentNumberCreator() {
 	const idDocumento = useAppStore((state) => state.document.idDocumento);
 	const tipoDocumento = useAppStore((state) => state.document.tipoDocumento);
 	const numeroDocumento = useAppStore((state) => state.document.numeroDocumento);
+	const originalTipo = useAppStore((state) => state.originalTipoDocumento);
+	const originalNumero = useAppStore((state) => state.originalNumeroDocumento);
 	const changeDocumentAttribute = useAppStore((state) => state.changeDocumentAttribute);
 
 	const isNew = !idDocumento;
 	const lastTipo = useRef(tipoDocumento);
+	const generatedCache = useRef<Record<string, string>>({});
 
 	useEffect(() => {
-		if (!isNew) return;
 		if (lastTipo.current === tipoDocumento) return;
-
 		lastTipo.current = tipoDocumento;
+
+		if (isNew) {
+			getNextDocumentNumberAction(tipoDocumento).then((nextNumber) => {
+				changeDocumentAttribute("numeroDocumento", nextNumber);
+			});
+			return;
+		}
+
+		if (!originalTipo) return;
+
+		if (tipoDocumento === originalTipo) {
+			changeDocumentAttribute("numeroDocumento", originalNumero);
+			return;
+		}
+
+		if (generatedCache.current[tipoDocumento]) {
+			changeDocumentAttribute("numeroDocumento", generatedCache.current[tipoDocumento]);
+			return;
+		}
+
 		getNextDocumentNumberAction(tipoDocumento).then((nextNumber) => {
+			generatedCache.current[tipoDocumento] = nextNumber;
 			changeDocumentAttribute("numeroDocumento", nextNumber);
 		});
-	}, [tipoDocumento, isNew, changeDocumentAttribute]);
+	}, [tipoDocumento, isNew, originalTipo, originalNumero, changeDocumentAttribute]);
 
-	const encabezado = tipoDocumento.slice(0, 4);
+	const encabezado = tipoDocumento.slice(0, 4).toUpperCase();
 	const numero = numeroDocumento.slice(5);
 
 	return (
@@ -35,6 +57,7 @@ export default function DocumentNumberCreator() {
 					value={numero}
 					readOnly={isNew}
 					onChange={(e) => changeDocumentAttribute("numeroDocumento", `${encabezado}-${e.target.value}`)}
+					disabled
 				/>
 			</div>
 		</div>
