@@ -2,9 +2,7 @@ import { auth, api } from "@/lib";
 import Link from "next/link";
 import React from "react";
 
-type Props = {};
-
-export default async function Dashboard({}: Props) {
+export default async function Dashboard() {
 	const jwt = await auth.isAuthenticated();
 	if (!jwt) return;
 
