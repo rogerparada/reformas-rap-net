@@ -126,6 +126,13 @@ public class DocumentosRepository(AppDbContext context) : IDocumentosRepository
         }
     }
 
+    public async Task<string?> GetLastDocumentNumberByType(TipoDocumento tipo) =>
+        await context.Documentos
+            .Where(d => d.TipoDocumento == tipo)
+            .OrderByDescending(d => d.Created)
+            .Select(d => d.NumeroDocumento)
+            .FirstOrDefaultAsync();
+
     public async Task<bool> DocumentoExists(string numeroDocumento) =>
         await context.Documentos.AnyAsync(d => d.NumeroDocumento == numeroDocumento);
 

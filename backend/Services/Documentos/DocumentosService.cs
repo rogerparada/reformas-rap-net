@@ -98,7 +98,14 @@ public class DocumentosService(
             );
         }
 
-        var exist = await documentosRepository.DocumentoExists(documento.NumeroDocumento);
+        var numeroDocumento = documento.NumeroDocumento;
+        if (string.IsNullOrEmpty(numeroDocumento))
+        {
+            numeroDocumento = await GetNextDocumentNumber(documento.TipoDocumento);
+            documento.NumeroDocumento = numeroDocumento;
+        }
+
+        var exist = await documentosRepository.DocumentoExists(numeroDocumento);
         if (exist)
         {
             throw new MiddlewareException(
@@ -180,6 +187,21 @@ public class DocumentosService(
     }
 
     public async Task<Company?> GetCompanyInfo() => await companyRepository.GetCompanyInfo();
+
+    public async Task<string> GetNextDocumentNumber(TipoDocumento tipo)
+    {
+        var lastNumber = await documentosRepository.GetLastDocumentNumberByType(tipo);
+        var prefix = tipo.ToString()[..4].ToUpper();
+
+        if (lastNumber is null)
+            return $"{prefix}-{1:D4}";
+
+        var parts = lastNumber.Split('-');
+        if (parts.Length != 2 || !int.TryParse(parts[^1], out var num))
+            return $"{prefix}-{1:D4}";
+
+        return $"{prefix}-{num + 1:D4}";
+    }
 
     private static string GetQueryParams(
         TipoDocumento? tipo,
