@@ -11,7 +11,7 @@ export const documentSchema = z.object({
 		.refine((val) => !isNaN(new Date(val).getTime()), { message: "La fecha no es válida" })
 		.transform((val) => new Date(val).toISOString()),
 
-	tipoDocumento: z.enum(["Factura", "Presupuesto"]),
+	tipoDocumento: z.enum(["Factura", "Presupuesto", "CuentaCobro"]),
 	iva: z.number().gte(0, { message: "El iva no puede ser negativo" }).lte(21, { message: "El iva no puede ser mayor a 21" }),
 	idCliente: z.uuid({ message: "La id del cliente no es valida" }),
 	items: z

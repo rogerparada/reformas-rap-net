@@ -41,6 +41,7 @@ export default function InfoDocumento({ options }: InfoDocumentoProps) {
 					<select id="tipoDocumento" value={documento.tipoDocumento} onChange={handleChangeDocumentAttribute}>
 						<option value="Factura">Factura</option>
 						<option value="Presupuesto">Presupuesto</option>
+						<option value="CuentaCobro">Cuenta de Cobro</option>
 					</select>
 				</div>
 				<div className="form-control">

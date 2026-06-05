@@ -10,7 +10,7 @@ export default function ClientDocumentItem({ item }: { item: DocumentInfoRespons
 	return (
 		<tr className="fila_cliente colored_row">
 			<td>
-				<span className="flex-1 pt-1">{tipo}</span>
+				<span className="flex-1 pt-1">{tipo === "CuentaCobro" ? "Cuenta de cobro" : tipo}</span>
 			</td>
 			<td>
 				<Link className="hover:underline" href={`/gestion/documentos/${id}`}>
