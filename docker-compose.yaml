@@ -7,10 +7,7 @@ services:
     ports:
       - "${API_PORT}:8080"
     environment:
-      ConnectionStrings__DefaultConnection: >
-        Host=${POSTGRES_HOST};  Port=${POSTGRES_PORT};  Database=${POSTGRES_DB};
-        Username=${POSTGRES_USER};  Password=${POSTGRES_PASSWORD};  Trust Server
-        Certificate=true;  SSL Mode=Prefer;  Include Error Detail=true
+      ConnectionStrings__DefaultConnection: "Host=${POSTGRES_HOST};Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Trust Server Certificate=true;SSL Mode=Prefer;Include Error Detail=true"
       Logging__LogLevel__Default: Information
       Logging__LogLevel__Microsoft.AspNetCore: Warning
       ApiSettings__BaseUrl: ${API_SETTINGS_BASE_URL}
@@ -21,6 +18,9 @@ services:
       Resend__RESEND_API_KEY: ${RESEND_API_KEY}
     volumes:
       - aspnet-keys:/root/.aspnet/DataProtection-Keys
+    networks:
+      - db_network
+      - default
 
   frontend:
     image: reformas-frontend:latest
@@ -30,7 +30,7 @@ services:
     ports:
       - "${FRONTEND_PORT}:3000"
     environment:
-      BASE_URL: "http://localhost:8081"
+      BASE_URL: "http://localhost:${API_PORT}"
       STRAPI_API_URL: "http://backend:8080"
     depends_on:
       - backend
