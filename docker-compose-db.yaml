@@ -1,4 +1,22 @@
 services:
+  reformas_db:
+    image: postgres:16-alpine
+    container_name: reformas_db_server
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   backend:
     image: reformas-backend:latest
     pull_policy: never
@@ -8,7 +26,7 @@ services:
       - "${API_PORT}:8080"
     environment:
       ConnectionStrings__DefaultConnection: >
-        Host=${POSTGRES_HOST};  Port=${POSTGRES_PORT};  Database=${POSTGRES_DB};
+        Host=reformas_db;  Port=5432;  Database=${POSTGRES_DB};
         Username=${POSTGRES_USER};  Password=${POSTGRES_PASSWORD};  Trust Server
         Certificate=true;  SSL Mode=Prefer;  Include Error Detail=true
       Logging__LogLevel__Default: Information
@@ -21,6 +39,9 @@ services:
       Resend__RESEND_API_KEY: ${RESEND_API_KEY}
     volumes:
       - aspnet-keys:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      reformas_db:
+        condition: service_healthy
 
   frontend:
     image: reformas-frontend:latest
@@ -28,7 +49,7 @@ services:
     container_name: reformas-rap-app
     restart: unless-stopped
     ports:
-      - "${FRONTEND_PORT}:3000"
+      - "3000:3000"
     environment:
       BASE_URL: "http://localhost:8081"
       STRAPI_API_URL: "http://backend:8080"
@@ -36,8 +57,5 @@ services:
       - backend
 
 volumes:
+  db_data:
   aspnet-keys:
-
-networks:
-  db_network:
-    external: true
