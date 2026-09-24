@@ -9,6 +9,7 @@ public class PdfDoc
     public InfoDocument InfoDocument { get; init; }
     public List<TableItem> Items { get; init; }
     public Totals Totals { get; private set; }
+    public Notes Notes { get; set; }
 
     public PdfDoc(Documento doc, Company company)
     {
@@ -58,5 +59,13 @@ public class PdfDoc
         var iva = subtotal * taxes;
 
         Totals = new Totals(Subtotal: subtotal, Iva: iva, Total: subtotal + iva);
+
+        Notes = new Notes(
+            Conditions: new Conditions(
+                "Condiciones de pago: ",
+                "Se abonara el 40% al inicio de la obra y el resto al final de la misma."
+            ),
+            Payment: new Payment(Account: company.Account, Bank: "Santander")
+        );
     }
 }
