@@ -25,3 +25,9 @@ public record InfoDocument(string Numero, string Nif, int Iva, TipoDocumento Tip
 public record Totals(decimal Subtotal, decimal Total, decimal Iva);
 
 public record TableItem(string Description, decimal Price, int Quantity, decimal Total);
+
+public record Conditions(string Title, string Description);
+
+public record Payment(string Account, string Bank);
+
+public record Notes(Conditions Conditions, Payment Payment);

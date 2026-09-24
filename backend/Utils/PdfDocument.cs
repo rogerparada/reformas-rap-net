@@ -313,6 +313,63 @@ public class PdfDocument(PdfDoc doc) : IDocument
 
     private void Condiciones(IContainer container)
     {
+        var notes = doc.Notes;
+        var payment = doc.Notes.Payment;
+
+        container
+            .BorderBottom(Border, Unit.Millimetre)
+            .BorderColor(DarkGreen)
+            .Table(table =>
+            {
+                table.ColumnsDefinition(columns =>
+                {
+                    columns.RelativeColumn();
+                });
+
+                table
+                    .Cell()
+                    .Element(FilaCondiciones)
+                    .Text(t =>
+                    {
+                        t.Span(notes.Conditions.Title).Bold();
+                        t.Span(notes.Conditions.Description);
+                    });
+
+                if (doc.InfoDocument.Iva > 0)
+                {
+                    table
+                        .Cell()
+                        .Element(FilaCondiciones)
+                        .Text(t =>
+                        {
+                            t.Span("Cuenta: ").Bold();
+                            t.Span(payment.Account);
+                        });
+                    table
+                        .Cell()
+                        .Element(FilaCondiciones)
+                        .Text(t =>
+                        {
+                            t.Span("Banco: ").Bold();
+                            t.Span(payment.Bank);
+                        });
+                }
+            });
+        return;
+
+        static IContainer FilaCondiciones(IContainer container) =>
+            container
+                // .BorderBottom(Border, Unit.Millimetre)
+                .BorderLeft(Border, Unit.Millimetre)
+                .BorderRight(Border, Unit.Millimetre)
+                .BorderColor(DarkGreen)
+                .PaddingVertical(5)
+                .PaddingHorizontal(5);
+    }
+
+    private void Payment(IContainer container)
+    {
+        var payment = doc.Notes.Payment;
         container
             .Height(1, Unit.Centimetre)
             .BorderLeft(Border, Unit.Millimetre)
@@ -323,8 +380,8 @@ public class PdfDocument(PdfDoc doc) : IDocument
             .AlignMiddle()
             .Text(t =>
             {
-                t.Span("Condiciones de pago: ").Bold();
-                t.Span("Se abonara el 40% al inicio de la obra y el resto al final de la misma.");
+                t.Span("Cuenta: ").Bold();
+                t.Span($"{payment.Account} Banco: {payment.Bank}");
             });
     }
 
